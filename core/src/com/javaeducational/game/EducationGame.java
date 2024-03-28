@@ -15,6 +15,15 @@ public class EducationGame extends ApplicationAdapter {
 		img = new Texture("badlogic.jpg");
 	}
 
+	public void resize () {
+	}
+
+	public void pause () {
+	}
+
+	public void resume () {
+	}
+
 	@Override
 	public void render () {
 		ScreenUtils.clear(1, 0, 0, 1);
