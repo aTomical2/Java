@@ -1,40 +1,62 @@
 package com.javaeducational.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 public class EducationGame extends ApplicationAdapter {
-	SpriteBatch batch;
-	Texture img;
-	
-	@Override
-	public void create () {
-		batch = new SpriteBatch();
-		img = new Texture("badlogic.jpg");
-	}
+    // Sprite batch for rendering
+    private SpriteBatch batch;
 
-	public void resize () {
-	}
+    // Orthographic camera for viewing the world
+    private OrthographicCamera camera;
 
-	public void pause () {
-	}
+    // Tiled map and renderer
+    private TiledMap map;
+    private OrthogonalTiledMapRenderer renderer;
 
-	public void resume () {
-	}
+    // Initialize resources
+    @Override
+    public void create() {
+        // Create sprite batch
+        batch = new SpriteBatch();
 
-	@Override
-	public void render () {
-		ScreenUtils.clear(1, 0, 0, 1);
-		batch.begin();
-		batch.draw(img, 0, 0);
-		batch.end();
-	}
-	
-	@Override
-	public void dispose () {
-		batch.dispose();
-		img.dispose();
-	}
+        // Create camera
+        camera = new OrthographicCamera();
+        camera.setToOrtho(false);
+
+        // Load the map
+        TmxMapLoader mapLoader = new TmxMapLoader();
+        map = mapLoader.load("tilemap1.tmx");;
+
+        // Initialize the renderer
+        renderer = new OrthogonalTiledMapRenderer(map);
+    }
+
+    // Render the game
+    @Override
+    public void render() {
+        // Clear screen
+        ScreenUtils.clear(0, 0, 0, 1);
+
+        // Update camera
+        camera.update();
+        batch.setProjectionMatrix(camera.combined);
+
+        // Render the map
+        renderer.setView(camera);
+        renderer.render();
+    }
+
+    // Dispose of resources
+    @Override
+    public void dispose() {
+        batch.dispose();
+        map.dispose();
+        renderer.dispose();
+    }
 }
