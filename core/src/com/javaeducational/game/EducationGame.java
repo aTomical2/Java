@@ -31,7 +31,7 @@ public class EducationGame extends ApplicationAdapter {
 
         // Load the map
         TmxMapLoader mapLoader = new TmxMapLoader();
-        map = mapLoader.load("tilemap1.tmx");;
+        map = mapLoader.load("assets\\Map\\tilemap1.tmx");;
 
         // Initialize the renderer
         renderer = new OrthogonalTiledMapRenderer(map);
