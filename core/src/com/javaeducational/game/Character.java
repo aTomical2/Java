@@ -9,51 +9,74 @@ public class Character {
     // Texture representing the character
     private Texture texture;
 
-    // Position of the character
+    // Position and dimensions of the character
     private float x;
     private float y;
+    private float width;
+    private float height;
 
     // Speed of the character
     private float speed;
 
     // Constructor
-    public Character(String imagePath, float x, float y, float speed) {
+    public Character(String imagePath, int x, int y, int width, int height, int speed) {
         // Load the character texture using the provided imagePath
         texture = new Texture(imagePath);
-
-        // Set initial position and speed
+    
+        // Set initial position, dimensions, and speed
         this.x = x;
         this.y = y;
+        this.width = width;
+        this.height = height;
         this.speed = speed;
     }
 
     // Method to render the character
     public void render(SpriteBatch batch) {
-        batch.draw(texture, x, y);
+        batch.draw(texture, x, y, width, height);
     }
 
     // Method to handle user input for character movement
+    // Method to handle user input for character movement
     public void handleInput() {
-        // Get the time passed since the last frame
-        float delta = Gdx.graphics.getDeltaTime();
+    // Get the time passed since the last frame
+    float delta = Gdx.graphics.getDeltaTime();
 
-        // Move the character based on user input
-        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            y += speed * delta;
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-            y -= speed * delta;
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            x -= speed * delta;
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            x += speed * delta;
-        }
+    // Move the character based on user input
+    if (Gdx.input.isKeyPressed(Input.Keys.W)) {
+        y += speed * delta;
     }
+    if (Gdx.input.isKeyPressed(Input.Keys.S)) {
+        y -= speed * delta;
+    }
+    if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+        x -= speed * delta;
+    }
+    if (Gdx.input.isKeyPressed(Input.Keys.D)) {
+        x += speed * delta;
+    }
+}
+
 
     // Method to dispose of resources when they are no longer needed
     public void dispose() {
         texture.dispose();
+    }
+
+    // Getter methods for position and dimensions
+    public float getX() {
+        return x;
+    }
+
+    public float getY() {
+        return y;
+    }
+
+    public float getWidth() {
+        return width;
+    }
+
+    public float getHeight() {
+        return height;
     }
 }

@@ -42,7 +42,10 @@ public class EducationGame extends ApplicationAdapter {
         renderer = new OrthogonalTiledMapRenderer(map);
 
         // Initialize character
-		character = new Character("assets\\Character\\game.png", Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2, 200);
+        character = new Character("assets\\Character\\testcharacter.png", 
+                                  Gdx.graphics.getWidth() / 2, 
+                                  Gdx.graphics.getHeight() / 2, 
+                                  100, 100, 200); // Adjusted width and height
     }
 
     // Render the game
@@ -50,19 +53,22 @@ public class EducationGame extends ApplicationAdapter {
     public void render() {
         // Handle user input for camera movement and character control
         handleInput();
-
+    
         // Clear screen
         ScreenUtils.clear(0, 0, 0, 1);
-
+    
         // Update camera
         camera.update();
         batch.setProjectionMatrix(camera.combined);
-
+    
         // Render the map
         renderer.setView(camera);
         renderer.render();
-
-        // Render the character
+    
+        // Move the character based on user input
+        character.handleInput();
+    
+        // Render the character without scaling
         batch.begin();
         character.render(batch);
         batch.end();
@@ -72,7 +78,7 @@ public class EducationGame extends ApplicationAdapter {
     private void handleInput() {
         // Adjust camera speed based on your needs
         float cameraSpeed = 200 * Gdx.graphics.getDeltaTime();
-
+    
         // Move camera left
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             camera.translate(-cameraSpeed, 0);
@@ -89,9 +95,10 @@ public class EducationGame extends ApplicationAdapter {
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
             camera.translate(0, -cameraSpeed);
         }
-
-        // Move character
-        character.handleInput();
+    
+        // Ensure camera follows the character
+        camera.position.set(character.getX() + character.getWidth() / 2, character.getY() + character.getHeight() / 2, 0);
+        camera.update();
     }
 
     // Dispose of resources
