@@ -1,6 +1,8 @@
 package com.javaeducational.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -19,6 +21,9 @@ public class EducationGame extends ApplicationAdapter {
     private TiledMap map;
     private OrthogonalTiledMapRenderer renderer;
 
+    // Character instance
+    private Character character;
+
     // Initialize resources
     @Override
     public void create() {
@@ -31,15 +36,21 @@ public class EducationGame extends ApplicationAdapter {
 
         // Load the map
         TmxMapLoader mapLoader = new TmxMapLoader();
-        map = mapLoader.load("assets\\Map\\tilemap1.tmx");;
+        map = mapLoader.load("assets\\Map\\tilemap1.tmx");
 
         // Initialize the renderer
         renderer = new OrthogonalTiledMapRenderer(map);
+
+        // Initialize character
+		character = new Character("assets\\Character\\game.png", Gdx.graphics.getWidth() / 2, Gdx.graphics.getHeight() / 2, 200);
     }
 
     // Render the game
     @Override
     public void render() {
+        // Handle user input for camera movement and character control
+        handleInput();
+
         // Clear screen
         ScreenUtils.clear(0, 0, 0, 1);
 
@@ -50,6 +61,37 @@ public class EducationGame extends ApplicationAdapter {
         // Render the map
         renderer.setView(camera);
         renderer.render();
+
+        // Render the character
+        batch.begin();
+        character.render(batch);
+        batch.end();
+    }
+
+    // Handle user input for camera movement and character control
+    private void handleInput() {
+        // Adjust camera speed based on your needs
+        float cameraSpeed = 200 * Gdx.graphics.getDeltaTime();
+
+        // Move camera left
+        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+            camera.translate(-cameraSpeed, 0);
+        }
+        // Move camera right
+        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+            camera.translate(cameraSpeed, 0);
+        }
+        // Move camera up
+        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+            camera.translate(0, cameraSpeed);
+        }
+        // Move camera down
+        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+            camera.translate(0, -cameraSpeed);
+        }
+
+        // Move character
+        character.handleInput();
     }
 
     // Dispose of resources
@@ -58,5 +100,6 @@ public class EducationGame extends ApplicationAdapter {
         batch.dispose();
         map.dispose();
         renderer.dispose();
+        character.dispose();
     }
 }
