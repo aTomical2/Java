@@ -1,6 +1,7 @@
 package com.javaeducational.game;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -18,10 +19,15 @@ public class Character {
     // Speed of the character
     private float speed;
 
+    private String name;
+    private BitmapFont font;
+
     // Constructor
-    public Character(String imagePath, int x, int y, int width, int height, int speed) {
-        // Load the character texture using the provided imagePath
-        texture = new Texture(imagePath);
+    public Character(String texturePath, int x, int y, int width, int height, int speed, String name) {
+        // Load the character texture using the provided texturePath
+        texture = new Texture(texturePath);
+        this.name = name;
+        font = new BitmapFont();
     
         // Set initial position, dimensions, and speed
         this.x = x;
@@ -34,9 +40,11 @@ public class Character {
     // Method to render the character
     public void render(SpriteBatch batch) {
         batch.draw(texture, x, y, width, height);
+
+        // Render the name above the character
+        font.draw(batch, name, x, y + height + 20); // Adjust 20 according to your preference        
     }
 
-    // Method to handle user input for character movement
     // Method to handle user input for character movement
     public void handleInput() {
     // Get the time passed since the last frame

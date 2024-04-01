@@ -24,6 +24,13 @@ public class EducationGame extends ApplicationAdapter {
     // Character instance
     private Character character;
 
+    // Define and initialize variables for character creation
+    private int initialX = 100; // Example initial X position
+    private int initialY = 100; // Example initial Y position
+    private int characterWidth = 32; // Example character width
+    private int characterHeight = 32; // Example character height
+    private int characterSpeed = 200; // Example character speed    
+
     // Initialize resources
     @Override
     public void create() {
@@ -43,10 +50,13 @@ public class EducationGame extends ApplicationAdapter {
         renderer = new OrthogonalTiledMapRenderer(map);
     
         // Initialize character
-        character = new Character("assets\\Character\\testcharacter.png", 
-                                  Gdx.graphics.getWidth() / 2, 
-                                  Gdx.graphics.getHeight() / 2, 
-                                  100, 100, 200); // Adjusted width and height
+        character = new Character("assets/Character/testcharacter.png", 
+                                  initialX, 
+                                  initialY, 
+                                  characterWidth, 
+                                  characterHeight, 
+                                  characterSpeed, 
+                                  "Tiggy");
     }
 
     // Render the game
