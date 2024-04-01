@@ -29,18 +29,19 @@ public class EducationGame extends ApplicationAdapter {
     public void create() {
         // Create sprite batch
         batch = new SpriteBatch();
-
+    
         // Create camera
         camera = new OrthographicCamera();
-        camera.setToOrtho(false);
-
+        // Adjust viewport width and height to zoom out
+        camera.setToOrtho(false, Gdx.graphics.getWidth() * 1.5f, Gdx.graphics.getHeight() * 1.5f);
+    
         // Load the map
         TmxMapLoader mapLoader = new TmxMapLoader();
         map = mapLoader.load("assets\\Map\\tilemap1.tmx");
-
+    
         // Initialize the renderer
         renderer = new OrthogonalTiledMapRenderer(map);
-
+    
         // Initialize character
         character = new Character("assets\\Character\\testcharacter.png", 
                                   Gdx.graphics.getWidth() / 2, 

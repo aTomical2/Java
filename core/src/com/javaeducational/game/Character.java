@@ -26,8 +26,8 @@ public class Character {
         // Set initial position, dimensions, and speed
         this.x = x;
         this.y = y;
-        this.width = width;
-        this.height = height;
+        this.width = width / 2;
+        this.height = height / 2;
         this.speed = speed;
     }
 
