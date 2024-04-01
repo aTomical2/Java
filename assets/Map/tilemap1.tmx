@@ -108,7 +108,7 @@
  <objectgroup id="8" name="Character">
   <object id="7" name="Name" x="432" y="1970.5">
    <properties>
-    <property name="sprite" type="file" value="../../core/character/game.png"/>
+    <property name="imagePath" value="&quot;C:\\Users\\35385\\Desktop\\CS_Spring2024\\Java\\JavaGH\\assets\\Character\\game.png&quot;"/>
    </properties>
   </object>
  </objectgroup>

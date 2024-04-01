@@ -18,8 +18,8 @@ public class Character {
 
     // Constructor
     public Character(String imagePath, float x, float y, float speed) {
-        // Load the character texture
-        texture = new Texture("assets/Character/game.png");
+        // Load the character texture using the provided imagePath
+        texture = new Texture(imagePath);
 
         // Set initial position and speed
         this.x = x;
