@@ -3,6 +3,9 @@ package com.javaeducational.game;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
+import java.util.HashMap;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 
@@ -21,6 +24,9 @@ public class Character {
 
     private String name;
     private BitmapFont font;
+    private int gemCount; // Total number of gems collected
+    private float carbonFootprint; // Total carbon footprint
+    private HashMap<String, Float> transportCarbonValues; // Carbon values for different transports
 
     // Constructor
     public Character(String texturePath, int x, int y, int width, int height, int speed, String name) {
@@ -35,6 +41,9 @@ public class Character {
         this.width = width / 2;
         this.height = height / 2;
         this.speed = speed;
+        gemCount = 0;
+        carbonFootprint = 0.0f;
+        
     }
 
     // Method to render the character
@@ -87,4 +96,32 @@ public class Character {
     public float getHeight() {
         return height;
     }
+    
+    
+        // Method to be called when a gem is collected
+        public void collectGem(Gem gem) {
+            gemCount++;
+            // Optionally, perform any other action required when a gem is collected
+        }
+    
+        // Method to update carbon footprint based on transport mode
+        public void updateCarbonFootprint(String transportMode) {
+            carbonFootprint += transportCarbonValues.getOrDefault(transportMode, 0.0f);
+        }
+    
+        // Method to calculate the score
+        public int calculateScore() {
+            return gemCount * 100 - (int)carbonFootprint + (int)speed * 10;
+        }
+    
+        // Existing methods...
+    
+        // Getters for gem count and carbon footprint
+        public int getGemCount() {
+            return gemCount;
+        }
+    
+        public float getCarbonFootprint() {
+            return carbonFootprint;
+        }
 }

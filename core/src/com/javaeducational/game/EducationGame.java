@@ -1,5 +1,7 @@
 package com.javaeducational.game;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -8,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 public class EducationGame extends ApplicationAdapter {
@@ -29,7 +32,13 @@ public class EducationGame extends ApplicationAdapter {
     private int initialY = 100; // Example initial Y position
     private int characterWidth = 32; // Example character width
     private int characterHeight = 32; // Example character height
-    private int characterSpeed = 200; // Example character speed    
+    private int characterSpeed = 200; // Example character speed
+    private ArrayList<Gem> gems;
+    private final int GEM_COUNT = 5; // Adjust as needed
+    private final int MAP_WIDTH = 1000; // Adjust based on your map
+    private final int MAP_HEIGHT = 1000;
+    private final int GEM_WIDTH = 32;
+    private final int GEM_HEIGHT = 32; 
 
     // Initialize resources
     @Override
@@ -48,6 +57,8 @@ public class EducationGame extends ApplicationAdapter {
     
         // Initialize the renderer
         renderer = new OrthogonalTiledMapRenderer(map);
+
+        initializeGems();
     
         // Initialize character
         character = new Character("assets/Character/testcharacter.png", 
@@ -57,7 +68,21 @@ public class EducationGame extends ApplicationAdapter {
                                   characterHeight, 
                                   characterSpeed, 
                                   "Tiggy");
+    
     }
+
+    // Method to initialize gems
+    private void initializeGems() {
+        gems = new ArrayList<>();
+    
+        for (int i = 0; i < GEM_COUNT; i++) {
+            float gemX = MathUtils.random(0, MAP_WIDTH - GEM_WIDTH); // Corrected
+            float gemY = MathUtils.random(0, MAP_HEIGHT - GEM_HEIGHT); // Corrected
+    
+            gems.add(new Gem("assets/Gems/gemtexture.png", gemX, gemY, GEM_WIDTH, GEM_HEIGHT, 10)); // Corrected
+        }
+    }
+    
 
     // Render the game
     @Override
@@ -83,7 +108,24 @@ public class EducationGame extends ApplicationAdapter {
         batch.begin();
         character.render(batch);
         batch.end();
+
+        batch.begin();
+        for (Gem gem : gems) {
+            gem.render(batch);
+        }
+        batch.end();
     }
+
+    @Override
+public void dispose() {
+    batch.dispose();
+    map.dispose();
+    renderer.dispose();
+    character.dispose();
+    for (Gem gem : gems) {
+        gem.dispose();
+    }
+}
 
     // Handle user input for camera movement and character control
     private void handleInput() {
@@ -110,14 +152,4 @@ public class EducationGame extends ApplicationAdapter {
         // Ensure camera follows the character
         camera.position.set(character.getX() + character.getWidth() / 2, character.getY() + character.getHeight() / 2, 0);
         camera.update();
-    }
-
-    // Dispose of resources
-    @Override
-    public void dispose() {
-        batch.dispose();
-        map.dispose();
-        renderer.dispose();
-        character.dispose();
-    }
-}
+}}
