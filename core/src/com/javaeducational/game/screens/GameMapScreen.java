@@ -1,18 +1,19 @@
-package com.javaeducational.game;
+package com.javaeducational.game.screens;
 
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.javaeducational.game.entities.Character;
+import com.javaeducational.game.tools.EducationGame;
 
-public class EducationGame extends ApplicationAdapter {
+public class GameMapScreen implements Screen {
     // Sprite batch for rendering
-    private SpriteBatch batch;
+    private EducationGame game;
 
     // Orthographic camera for viewing the world
     private OrthographicCamera camera;
@@ -25,71 +26,69 @@ public class EducationGame extends ApplicationAdapter {
     private Character character;
 
     // Define and initialize variables for character creation
-    private int initialX = 100; // Example initial X position
-    private int initialY = 100; // Example initial Y position
+    private int initialX = 1800 / 2; // Example initial X position
+    private int initialY = 900 /2 ; // Example initial Y position
     private int characterWidth = 32; // Example character width
     private int characterHeight = 32; // Example character height
-    private int characterSpeed = 200; // Example character speed    
+    private int characterSpeed = 200; // Example character speed
 
-    // Initialize resources
+    public GameMapScreen(EducationGame game) {
+        this.game = game;
+    }
     @Override
-    public void create() {
-        // Create sprite batch
-        batch = new SpriteBatch();
-    
+    public void show() {
         // Create camera
         camera = new OrthographicCamera();
         // Adjust viewport width and height to zoom out
         camera.setToOrtho(false, Gdx.graphics.getWidth() * 1.5f, Gdx.graphics.getHeight() * 1.5f);
-    
+
         // Load the map
         TmxMapLoader mapLoader = new TmxMapLoader();
-        map = mapLoader.load("assets\\Map\\tilemap1.tmx");
-    
+        map = mapLoader.load("Map/tilemap1.tmx");
+
         // Initialize the renderer
         renderer = new OrthogonalTiledMapRenderer(map);
-    
+
         // Initialize character
-        character = new Character("assets/Character/testcharacter.png", 
-                                  initialX, 
-                                  initialY, 
-                                  characterWidth, 
-                                  characterHeight, 
-                                  characterSpeed, 
-                                  "Tiggy");
+        character = new Character("Character/testcharacter.png",
+                initialX,
+                initialY,
+                characterWidth,
+                characterHeight,
+                characterSpeed,
+                "Tiggy");
     }
 
-    // Render the game
     @Override
-    public void render() {
+    public void render(float delta) {
         // Handle user input for camera movement and character control
         handleInput();
-    
+
         // Clear screen
         ScreenUtils.clear(0, 0, 0, 1);
-    
+
         // Update camera
         camera.update();
-        batch.setProjectionMatrix(camera.combined);
-    
+        game.batch.setProjectionMatrix(camera.combined);
+
         // Render the map
         renderer.setView(camera);
         renderer.render();
-    
+
         // Move the character based on user input
         character.handleInput();
-    
+
         // Render the character without scaling
-        batch.begin();
-        character.render(batch);
-        batch.end();
+        game.batch.begin();
+        character.render(game.batch);
+        game.batch.end();
     }
 
     // Handle user input for camera movement and character control
     private void handleInput() {
         // Adjust camera speed based on your needs
         float cameraSpeed = 200 * Gdx.graphics.getDeltaTime();
-    
+
         // Move camera left
         if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
             camera.translate(-cameraSpeed, 0);
@@ -106,16 +105,35 @@ public class EducationGame extends ApplicationAdapter {
         if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
             camera.translate(0, -cameraSpeed);
         }
-    
+
         // Ensure camera follows the character
         camera.position.set(character.getX() + character.getWidth() / 2, character.getY() + character.getHeight() / 2, 0);
         camera.update();
     }
 
-    // Dispose of resources
+    @Override
+    public void resize(int width, int height) {
+
+    }
+
+    @Override
+    public void pause() {
+
+    }
+
+    @Override
+    public void resume() {
+
+    }
+
+    @Override
+    public void hide() {
+
+    }
+
     @Override
     public void dispose() {
-        batch.dispose();
+        game.batch.dispose();
         map.dispose();
         renderer.dispose();
         character.dispose();
