@@ -10,6 +10,7 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.javaeducational.game.entities.Character;
 import com.javaeducational.game.EducationGame;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 
 public class GameMapScreen implements Screen {
     // Sprite batch for rendering
@@ -32,32 +33,55 @@ public class GameMapScreen implements Screen {
     private int characterHeight = 32; // Example character height
     private int characterSpeed = 200; // Example character speed
 
+    // Variables related to map and collision
+    private TiledMapTileLayer solidLayer; // Assuming solid layer is available
+    private int tileWidth; // Assuming tile width in pixels
+    private int tileHeight; // Assuming tile height in pixels
+    private int mapWidthInTiles; // Assuming map width in tiles
+    private int mapHeightInTiles; // Assuming map height in tiles
+
     public GameMapScreen(EducationGame game) {
         this.game = game;
     }
+
     @Override
-    public void show() {
-        // Create camera
-        camera = new OrthographicCamera();
-        // Adjust viewport width and height to zoom out
-        camera.setToOrtho(false, Gdx.graphics.getWidth() * 1.5f, Gdx.graphics.getHeight() * 1.5f);
+public void show() {
+    // Create camera
+    camera = new OrthographicCamera();
+    // Adjust viewport width and height to zoom out
+    camera.setToOrtho(false, Gdx.graphics.getWidth() * 1.5f, Gdx.graphics.getHeight() * 1.5f);
 
-        // Load the map
-        TmxMapLoader mapLoader = new TmxMapLoader();
-        map = mapLoader.load("Map/tilemap1.tmx");
+    // Load the map
+    TmxMapLoader mapLoader = new TmxMapLoader();
+    map = mapLoader.load("Map/tilemap1.tmx");
 
-        // Initialize the renderer
-        renderer = new OrthogonalTiledMapRenderer(map);
-
-        // Initialize character
-        character = new Character("Character/testcharacter.png",
-                initialX,
-                initialY,
-                characterWidth,
-                characterHeight,
-                characterSpeed,
-                "Tiggy");
-    }
+    // Initialize the renderer
+    renderer = new OrthogonalTiledMapRenderer(map);
+    
+    // Initialize solidLayer - Assuming you have a reference to the solid layer
+    solidLayer = (TiledMapTileLayer) map.getLayers().get("solid");
+    
+    // Initialize other map-related variables
+    tileWidth = (int) solidLayer.getTileWidth();
+    tileHeight = (int) solidLayer.getTileHeight();
+    mapWidthInTiles = solidLayer.getWidth();
+    mapHeightInTiles = solidLayer.getHeight();
+    
+    // Initialize character
+    character = new Character("Character/testcharacter.png",
+            initialX,
+            initialY,
+            characterWidth,
+            characterHeight,
+            characterSpeed,
+            "Tiggy",
+            solidLayer,
+            tileWidth, 
+            tileHeight,
+            mapWidthInTiles,
+            mapHeightInTiles);
+}
+    
 
     @Override
     public void render(float delta) {
