@@ -15,6 +15,8 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.javaeducational.game.entities.Character;
 import com.javaeducational.game.EducationGame;
+import com.javaeducational.game.tools.Hud;
+
 
 public class GameMapScreen implements Screen {
     // Sprite batch for rendering
@@ -38,10 +40,11 @@ public class GameMapScreen implements Screen {
     private int characterSpeed = 200; // Example character speed
     private MapLayer objectLayer;
     private MapObjects objects;
-    private CollisionRect rect;
+    private Hud hud;
 
     public GameMapScreen(EducationGame game) {
         this.game = game;
+        hud = new Hud (game.batch);
     }
     @Override
     public void show() {
@@ -80,6 +83,11 @@ public class GameMapScreen implements Screen {
         // Update camera
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
+
+        // render score hud
+        game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
+        hud.stage.draw();
+
 
         // Render the map
         renderer.setView(camera);
