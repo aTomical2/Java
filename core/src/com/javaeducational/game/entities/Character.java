@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.math.Rectangle;
 
 public class Character {
     // Texture representing the character
@@ -22,6 +23,8 @@ public class Character {
     private String name;
     private BitmapFont font;
 
+    private Rectangle bounds;
+
     // Constructor
     public Character(String texturePath, int x, int y, int width, int height, int speed, String name) {
         // Load the character texture using the provided texturePath
@@ -35,6 +38,7 @@ public class Character {
         this.width = width / 2;
         this.height = height / 2;
         this.speed = speed;
+        bounds = new Rectangle(x, y, width, height);
     }
 
     // Method to render the character
@@ -63,9 +67,11 @@ public class Character {
     if (Gdx.input.isKeyPressed(Input.Keys.D)) {
         x += speed * delta;
     }
-}
-
-
+    bounds.setPosition(x, y);
+    }
+    public Rectangle getBounds() {
+        return bounds;
+    }
     // Method to dispose of resources when they are no longer needed
     public void dispose() {
         texture.dispose();
