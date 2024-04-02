@@ -11,7 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.javaeducational.game.tools.EducationGame;
+import com.javaeducational.game.EducationGame;
 
 public class MainMenuScreen implements Screen {
     private final EducationGame game;
@@ -61,7 +61,7 @@ public class MainMenuScreen implements Screen {
     @Override
     public void render(float delta) {
         ScreenUtils.clear(0.424f, 0.792f, 0.627f,1f);
-        gameTitleGlyph.setText(gameFont, "Java Educational Game");
+        gameTitleGlyph.setText(gameFont, "Carbon Cruncher: Tiggy's Adventures");
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         game.batch.begin();
         gameFont.draw(game.batch, gameTitleGlyph, (Gdx.graphics.getWidth() - gameTitleGlyph.width) / 2, (Gdx.graphics.getHeight() + gameTitleGlyph.height) / 1.25f);

@@ -9,7 +9,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.javaeducational.game.entities.Character;
-import com.javaeducational.game.tools.EducationGame;
+import com.javaeducational.game.EducationGame;
 
 public class GameMapScreen implements Screen {
     // Sprite batch for rendering

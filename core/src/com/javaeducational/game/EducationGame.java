@@ -1,4 +1,4 @@
-package com.javaeducational.game.tools;
+package com.javaeducational.game;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
