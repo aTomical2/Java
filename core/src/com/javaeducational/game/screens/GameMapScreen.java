@@ -38,8 +38,6 @@ public class GameMapScreen implements Screen {
     private int characterSpeed = 200; // Example character speed
     private MapLayer objectLayer;
     private MapObjects objects;
-    private CollisionRect rect;
-
     public GameMapScreen(EducationGame game) {
         this.game = game;
     }
