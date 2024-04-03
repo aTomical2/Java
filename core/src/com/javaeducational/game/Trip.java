@@ -3,9 +3,6 @@ package com.javaeducational.game;
 import com.javaeducational.game.tools.Route;
 
 public class Trip {
-    public void travel() {
-        System.out.println("Player is now traveling... ");
-    }
     public Trip() {
 
     }
@@ -14,6 +11,9 @@ public class Trip {
     }
     public startTrip(){
 
+    }
+    public void travel() {
+        System.out.println("Player is now traveling... ");
     }
     public endTrip(){
 
