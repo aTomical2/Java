@@ -41,11 +41,10 @@ public class Trip {
     }
 
     public void endTrip() {
-    tripStarted = false;
-    System.out.println("Current trip has ended!");
+        tripStarted = false;
+        System.out.println("Current trip has ended!");
     }
 
 }
-
 
 
