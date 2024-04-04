@@ -12,6 +12,8 @@ import com.javaeducational.game.entities.Character;
 import com.javaeducational.game.EducationGame;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.javaeducational.game.entities.Gem;
+import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.MapObjects;
 
 public class GameMapScreen implements Screen {
     // Sprite batch for rendering
@@ -27,12 +29,12 @@ public class GameMapScreen implements Screen {
     // Character instance
     private Character character;
 
-    //Gem instance
+    // Gem instance
     private Gem gem;
 
     // Define and initialize variables for character creation
     private int initialX = 1800 / 2; // Example initial X position
-    private int initialY = 900 /2 ; // Example initial Y position
+    private int initialY = 900 / 2; // Example initial Y position
     private int characterWidth = 32; // Example character width
     private int characterHeight = 32; // Example character height
     private int characterSpeed = 200; // Example character speed
@@ -44,61 +46,59 @@ public class GameMapScreen implements Screen {
     private int mapWidthInTiles; // Assuming map width in tiles
     private int mapHeightInTiles; // Assuming map height is in tiles
 
-    private int GemX = 900 / 2;
+    // Gem position and dimensions
+    private int gemX = 900 / 2;
+    private int gemY = 100 / 2;
+    private int gemWidth = 32;
+    private int gemHeight = 32;
 
-    private int GemY = 100/2;
-
-    private int Gem_Width = 32;
-    private int Gem_Height = 32;
-    private MapLayer objectLayer;
-    private MapObjects objects;
     public GameMapScreen(EducationGame game) {
         this.game = game;
     }
 
     @Override
-public void show() {
-    // Create camera
-    camera = new OrthographicCamera();
-    // Adjust viewport width and height to zoom out
-    camera.setToOrtho(false, Gdx.graphics.getWidth() * 1.5f, Gdx.graphics.getHeight() * 1.5f);
+    public void show() {
+        // Create camera
+        camera = new OrthographicCamera();
+        // Adjust viewport width and height to zoom out
+        camera.setToOrtho(false, Gdx.graphics.getWidth() * 1.5f, Gdx.graphics.getHeight() * 1.5f);
 
-    // Load the map
-    TmxMapLoader mapLoader = new TmxMapLoader();
-    map = mapLoader.load("Map/tilemap1.tmx");
+        // Load the map
+        TmxMapLoader mapLoader = new TmxMapLoader();
+        map = mapLoader.load("Map/tilemap1.tmx");
 
-    // Initialize the renderer
-    renderer = new OrthogonalTiledMapRenderer(map);
-    
-    // Initialize solidLayer - Assuming you have a reference to the solid layer
-    solidLayer = (TiledMapTileLayer) map.getLayers().get("solid");
-    
-    // Initialize other map-related variables
-    tileWidth = (int) solidLayer.getTileWidth();
-    tileHeight = (int) solidLayer.getTileHeight();
-    mapWidthInTiles = solidLayer.getWidth();
-    mapHeightInTiles = solidLayer.getHeight();
-    
-    // Initialize character
-    character = new Character("Character/testcharacter.png",
-            initialX,
-            initialY,
-            characterWidth,
-            characterHeight,
-            characterSpeed,
-            "Tiggy",
-            solidLayer,
-            tileWidth, 
-            tileHeight,
-            mapWidthInTiles,
-            mapHeightInTiles);
-}
-    
-    gem = new Gem("Map/blueheart.png",
-                 GemX,
-                 GemY,
-                 Gem_Width,
-                 Gem_Height);
+        // Initialize the renderer
+        renderer = new OrthogonalTiledMapRenderer(map);
+
+        // Initialize solidLayer - Assuming you have a reference to the solid layer
+        solidLayer = (TiledMapTileLayer) map.getLayers().get("solid");
+
+        // Initialize other map-related variables
+        tileWidth = (int) solidLayer.getTileWidth();
+        tileHeight = (int) solidLayer.getTileHeight();
+        mapWidthInTiles = solidLayer.getWidth();
+        mapHeightInTiles = solidLayer.getHeight();
+
+        // Initialize character
+        character = new Character("Character/testcharacter.png",
+                initialX,
+                initialY,
+                characterWidth,
+                characterHeight,
+                characterSpeed,
+                "Tiggy",
+                solidLayer,
+                tileWidth,
+                tileHeight,
+                mapWidthInTiles,
+                mapHeightInTiles);
+
+        // Initialize gem
+        gem = new Gem("Map/blueheart.png",
+                gemX,
+                gemY,
+                gemWidth,
+                gemHeight);
     }
 
     @Override
@@ -120,7 +120,7 @@ public void show() {
         // Move the character based on user input
         character.handleInput();
 
-        // Render the character without scaling
+        // Render the character and gem without scaling
         game.batch.begin();
         character.render(game.batch);
         gem.render(game.batch);
