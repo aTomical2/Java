@@ -38,7 +38,7 @@ public class GameMapScreen implements Screen {
     private int tileWidth; // Assuming tile width in pixels
     private int tileHeight; // Assuming tile height in pixels
     private int mapWidthInTiles; // Assuming map width in tiles
-    private int mapHeightInTiles; // Assuming map height in tiles
+    private int mapHeightInTiles; // Assuming map height is in tiles
 
     public GameMapScreen(EducationGame game) {
         this.game = game;
