@@ -11,6 +11,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.javaeducational.game.entities.Character;
 import com.javaeducational.game.EducationGame;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.javaeducational.game.entities.Gem;
 
 public class GameMapScreen implements Screen {
     // Sprite batch for rendering
@@ -26,6 +27,9 @@ public class GameMapScreen implements Screen {
     // Character instance
     private Character character;
 
+    //Gem instance
+    private Gem gem;
+
     // Define and initialize variables for character creation
     private int initialX = 1800 / 2; // Example initial X position
     private int initialY = 900 /2 ; // Example initial Y position
@@ -40,6 +44,14 @@ public class GameMapScreen implements Screen {
     private int mapWidthInTiles; // Assuming map width in tiles
     private int mapHeightInTiles; // Assuming map height is in tiles
 
+    private int GemX = 900 / 2;
+
+    private int GemY = 100/2;
+
+    private int Gem_Width = 32;
+    private int Gem_Height = 32;
+    private MapLayer objectLayer;
+    private MapObjects objects;
     public GameMapScreen(EducationGame game) {
         this.game = game;
     }
@@ -82,6 +94,12 @@ public void show() {
             mapHeightInTiles);
 }
     
+    gem = new Gem("Map/blueheart.png",
+                 GemX,
+                 GemY,
+                 Gem_Width,
+                 Gem_Height);
+    }
 
     @Override
     public void render(float delta) {
@@ -105,6 +123,7 @@ public void show() {
         // Render the character without scaling
         game.batch.begin();
         character.render(game.batch);
+        gem.render(game.batch);
         game.batch.end();
     }
 
@@ -161,5 +180,6 @@ public void show() {
         map.dispose();
         renderer.dispose();
         character.dispose();
+        gem.dispose();
     }
 }
