@@ -15,6 +15,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.javaeducational.game.entities.Character;
 import com.javaeducational.game.EducationGame;
+import com.javaeducational.game.entities.Gem;
 
 public class GameMapScreen implements Screen {
     // Sprite batch for rendering
@@ -30,12 +31,21 @@ public class GameMapScreen implements Screen {
     // Character instance
     private Character character;
 
+    //Gem instance
+    private Gem gem;
+
     // Define and initialize variables for character creation
     private int initialX = 1800 / 2; // Example initial X position
     private int initialY = 900 /2 ; // Example initial Y position
     private int characterWidth = 32; // Example character width
     private int characterHeight = 32; // Example character height
     private int characterSpeed = 200; // Example character speed
+    private int GemX = 900 / 2;
+
+    private int GemY = 100/2;
+
+    private int Gem_Width = 32;
+    private int Gem_Height = 32;
     private MapLayer objectLayer;
     private MapObjects objects;
     public GameMapScreen(EducationGame game) {
@@ -65,6 +75,12 @@ public class GameMapScreen implements Screen {
                 "Tiggy");
           objectLayer = map.getLayers().get("trial-transport");
           objects = objectLayer.getObjects();
+
+         gem = new Gem("Map/blueheart.png",
+                 GemX,
+                 GemY,
+                 Gem_Width,
+                 Gem_Height);
     }
 
     @Override
@@ -89,6 +105,7 @@ public class GameMapScreen implements Screen {
         // Render the character without scaling
         game.batch.begin();
         character.render(game.batch);
+        gem.render(game.batch);
         game.batch.end();
         for (MapObject object : objects) {
             if (object instanceof RectangleMapObject) {
@@ -154,5 +171,6 @@ public class GameMapScreen implements Screen {
         map.dispose();
         renderer.dispose();
         character.dispose();
+        gem.dispose();
     }
 }
