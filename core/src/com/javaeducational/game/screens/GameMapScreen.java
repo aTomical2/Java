@@ -168,8 +168,8 @@ public class GameMapScreen implements Screen {
         // Render the character and gem without scaling
         game.batch.begin();
         character.render(game.batch);
-        bus.render(game.batch);
-        bus.update(delta);
+        bus.update(delta); // update position
+        bus.render(game.batch); // then render
         gem.render(game.batch);
         game.batch.end();
         for (MapObject object : objects) {
