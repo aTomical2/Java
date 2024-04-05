@@ -41,7 +41,7 @@ public class Bus {
                      TiledMapTileLayer solidLayer, float tileWidth, float tileHeight,
                      float mapWidthInTiles, float mapHeightInTiles, Vector2 startPoint, Vector2 endPoint) {
         // Load the character texture using the provided texturePath
-        texture = new Texture("Bus/SEPARATED/BUS_CLEAN_ALLD0001.png");
+        texture = new Texture("assets/Bus/SEPARATED/BUS_CLEAN_ALLD0001.png");
 
         // Set initial position, dimensions, and speed
         this.x = x;
