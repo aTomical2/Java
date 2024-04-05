@@ -4,9 +4,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.MapObjects;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.javaeducational.game.entities.Character;
 import com.javaeducational.game.EducationGame;
@@ -45,6 +50,8 @@ public class GameMapScreen implements Screen {
     private int tileHeight; // Assuming tile height in pixels
     private int mapWidthInTiles; // Assuming map width in tiles
     private int mapHeightInTiles; // Assuming map height is in tiles
+    private MapLayer objectLayer;
+    private MapObjects objects;
 
     // Gem position and dimensions
     private int gemX = 900 / 2;
@@ -92,6 +99,8 @@ public class GameMapScreen implements Screen {
                 tileHeight,
                 mapWidthInTiles,
                 mapHeightInTiles);
+        objectLayer = map.getLayers().get("trial-transport");
+        objects = objectLayer.getObjects();
 
         // Initialize gem
         gem = new Gem("Map/blueheart.png",
@@ -125,6 +134,15 @@ public class GameMapScreen implements Screen {
         character.render(game.batch);
         gem.render(game.batch);
         game.batch.end();
+        for (MapObject object : objects) {
+            if (object instanceof RectangleMapObject) {
+                RectangleMapObject rectObject = (RectangleMapObject) object;
+                Rectangle rect = rectObject.getRectangle();
+                if (rect.overlaps(character.getBounds())) {
+                    System.out.println("OMG YES BOY");
+                }
+            }
+        }
     }
 
     // Handle user input for camera movement and character control

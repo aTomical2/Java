@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.math.Rectangle;
 
 public class Character {
     // Texture representing the character
@@ -28,6 +29,7 @@ public class Character {
     private int tileHeight; // Assuming tile height in pixels
     private int mapWidthInTiles; // Assuming map width in tiles
     private int mapHeightInTiles; // Assuming map height in tiles
+    private Rectangle bounds; // Get bounds for collisions
 
     // Constructor
     public Character(String texturePath, int x, int y, int width, int height, int speed, String name,
@@ -51,6 +53,7 @@ public class Character {
         this.tileHeight = tileHeight;
         this.mapWidthInTiles = mapWidthInTiles;
         this.mapHeightInTiles = mapHeightInTiles;
+        this.bounds = new Rectangle(x, y, width, height);
     }
 
     // Method to render the character
@@ -91,6 +94,13 @@ public class Character {
             x = newX;
             y = newY;
         }
+        // updates bounds for player
+        this.bounds.setPosition(x, y);
+    }
+
+    // checks collisions
+    public Rectangle getBounds() {
+        return bounds;
     }
 
     // Method to check collision with solid tiles
