@@ -17,8 +17,8 @@ import com.javaeducational.game.entities.Character;
 import com.javaeducational.game.EducationGame;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.javaeducational.game.entities.Gem;
-import com.badlogic.gdx.maps.MapLayer;
-import com.badlogic.gdx.maps.MapObjects;
+// import com.badlogic.gdx.maps.MapLayer;
+// import com.badlogic.gdx.maps.MapObjects;
 
 public class GameMapScreen implements Screen {
     // Sprite batch for rendering
