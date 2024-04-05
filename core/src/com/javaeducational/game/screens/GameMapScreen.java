@@ -12,13 +12,13 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.javaeducational.game.entities.Character;
 import com.javaeducational.game.EducationGame;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.javaeducational.game.entities.Gem;
-import com.badlogic.gdx.maps.MapLayer;
-import com.badlogic.gdx.maps.MapObjects;
+import com.javaeducational.game.entities.Bus;
 
 public class GameMapScreen implements Screen {
     // Sprite batch for rendering
@@ -53,14 +53,23 @@ public class GameMapScreen implements Screen {
     private MapLayer objectLayer;
     private MapObjects objects;
 
+    private MapLayer busRoute;
+    private MapObjects busObjects;
+
     // Gem position and dimensions
     private int gemX = 900 / 2;
     private int gemY = 100 / 2;
     private int gemWidth = 32;
     private int gemHeight = 32;
 
+    // Import bus class
+    Bus bus;
+    Vector2 startPoint;
+    Vector2 endPoint;
+
     public GameMapScreen(EducationGame game) {
         this.game = game;
+
     }
 
     @Override
@@ -99,8 +108,35 @@ public class GameMapScreen implements Screen {
                 tileHeight,
                 mapWidthInTiles,
                 mapHeightInTiles);
+
+//        bus = new Bus();
         objectLayer = map.getLayers().get("trial-transport");
         objects = objectLayer.getObjects();
+
+        busRoute = map.getLayers().get("Bus Layer");
+        busObjects = busRoute.getObjects();
+        System.out.println(busObjects);
+
+        for (RectangleMapObject rectangleBusObject : busObjects.getByType(RectangleMapObject.class)) {
+            Rectangle busRect = rectangleBusObject.getRectangle();
+
+            startPoint = new Vector2(busRect.x, busRect.y); // Bus Starting point
+            endPoint = new Vector2(busRect.x + busRect.width, busRect.y); // Bus End point
+
+            bus = new Bus(busRect.x,
+                    busRect.y,
+                    characterWidth,
+                    characterHeight,
+                    characterSpeed,
+                    solidLayer,
+                    tileWidth,
+                    tileHeight,
+                    mapWidthInTiles,
+                    mapHeightInTiles,
+                    startPoint,
+                    endPoint);
+
+        }
 
         // Initialize gem
         gem = new Gem("Map/blueheart.png",
@@ -132,6 +168,8 @@ public class GameMapScreen implements Screen {
         // Render the character and gem without scaling
         game.batch.begin();
         character.render(game.batch);
+        bus.render(game.batch);
+        bus.update(delta);
         gem.render(game.batch);
         game.batch.end();
         for (MapObject object : objects) {
@@ -143,6 +181,10 @@ public class GameMapScreen implements Screen {
                 }
             }
         }
+    }
+
+    public TiledMap getMap() {
+        return map;
     }
 
     // Handle user input for camera movement and character control

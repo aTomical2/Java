@@ -6,6 +6,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 
 public class Character {
     // Texture representing the character
@@ -30,6 +31,7 @@ public class Character {
     private int mapWidthInTiles; // Assuming map width in tiles
     private int mapHeightInTiles; // Assuming map height in tiles
     private Rectangle bounds; // Get bounds for collisions
+
 
     // Constructor
     public Character(String texturePath, int x, int y, int width, int height, int speed, String name,
