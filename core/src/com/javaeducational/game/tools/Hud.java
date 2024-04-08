@@ -22,19 +22,29 @@ public class Hud {
 
     private int score;
 
+    private float timeCount;
+
+    private int worldTimer;
+
+
+
     Label scoreLabel;
     Label CarbonCrunchersLabel;
+    Label timeLabel;
+    Label countdownLabel;
+    Label WorldLabel;
+
+    Label levelLabel;
 
     public Hud (SpriteBatch sb) {
         score =0;
+        timeCount =0;
+        worldTimer =100;
 
         viewport = new FitViewport(EducationGame.WIDTH, EducationGame.HEIGHT, new OrthographicCamera());
         stage = new Stage(viewport , sb);
 
 
-        Table table = new Table();
-        table.top();
-        table.setFillParent(true);
 
         BitmapFont font = new BitmapFont(); // Default font
         font.getData().setScale(2); // Scale the font size by a factor of 2
@@ -56,19 +66,31 @@ public class Hud {
         float screenX = worldCoordinates.x;
         float screenY = worldCoordinates.y;
 
-        // Now, you can position your label or widget using screenX and screenY
-        //label.setPosition(screenX, screenY);
+        Table table = new Table();
+        table.top();
+        table.setFillParent(true);
 
-
+        // initialising the widgets as int or str
         Label.LabelStyle labelStyle = new Label.LabelStyle(font, Color.WHITE);
+        countdownLabel = new Label(String.format("%06d", worldTimer), labelStyle);
         scoreLabel = new Label(String.format("%06d", score), labelStyle);
         CarbonCrunchersLabel = new Label("Carbon Crunchers", labelStyle);
+        timeLabel= new Label("Time", new Label.LabelStyle(font, Color.WHITE));
+        levelLabel = new Label("1-1", new Label.LabelStyle (font, Color.WHITE));
+        WorldLabel = new Label("Level", new Label.LabelStyle (font, Color.WHITE));
 
 
-        table.add(scoreLabel).expandX().padTop(10);
-        table.add( CarbonCrunchersLabel).expandX().padTop(10);
 
 
+        // using tables structures the hud on the screen
+        // the tables will expand to fit the whole screen and the padding will be equal
+        table.add(CarbonCrunchersLabel).expandX().padTop(10);
+        table.add(WorldLabel).expandX().padTop(10);
+        table.add(timeLabel).expandX().padTop(10);
+        table.row();
+        table.add(scoreLabel).expandX();
+        table.add(levelLabel).expandX();
+        table.add(countdownLabel).expandX();
 
 
         stage.addActor(table);
