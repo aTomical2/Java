@@ -15,6 +15,8 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.javaeducational.game.entities.Character;
 import com.javaeducational.game.EducationGame;
+import com.javaeducational.game.tools.Hud;
+
 
 public class GameMapScreen implements Screen {
     // Sprite batch for rendering
@@ -30,6 +32,11 @@ public class GameMapScreen implements Screen {
     // Character instance
     private Character character;
 
+    private Hud hud;
+
+
+
+
     // Define and initialize variables for character creation
     private int initialX = 1800 / 2; // Example initial X position
     private int initialY = 900 /2 ; // Example initial Y position
@@ -37,9 +44,12 @@ public class GameMapScreen implements Screen {
     private int characterHeight = 32; // Example character height
     private int characterSpeed = 200; // Example character speed
     private MapLayer objectLayer;
+
     private MapObjects objects;
     public GameMapScreen(EducationGame game) {
         this.game = game;
+        hud = new Hud (game.batch);
+
     }
     @Override
     public void show() {
@@ -79,12 +89,18 @@ public class GameMapScreen implements Screen {
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
 
+        // render score hud
+        game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
+        hud.stage.draw();
+
         // Render the map
         renderer.setView(camera);
         renderer.render();
 
         // Move the character based on user input
         character.handleInput();
+
+
 
         // Render the character without scaling
         game.batch.begin();
