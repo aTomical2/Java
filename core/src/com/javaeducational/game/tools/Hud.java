@@ -92,11 +92,20 @@ public class Hud {
         table.add(levelLabel).expandX();
         table.add(countdownLabel).expandX();
 
-
         stage.addActor(table);
 
     }
 
+
+    public void update(float dt) {
+        timeCount +=dt;
+        if (timeCount >=1){
+            worldTimer --;
+            countdownLabel.setText(String.format("%06d", worldTimer));
+            timeCount = 0;
+
+        }
+    }
 
 
 }

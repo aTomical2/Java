@@ -18,6 +18,8 @@ import com.javaeducational.game.EducationGame;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.javaeducational.game.entities.Gem;
 import com.javaeducational.game.tools.Hud;
+
+import static jdk.jfr.internal.consumer.EventLog.update;
 // import com.badlogic.gdx.maps.MapLayer;
 // import com.badlogic.gdx.maps.MapObjects;
 
@@ -137,9 +139,15 @@ public class GameMapScreen implements Screen {
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
         hud.stage.draw();
 
+
+
+
+
+
         // Render the character and gem without scaling
         game.batch.begin();
         character.render(game.batch);
+        hud.update(delta);
         gem.render(game.batch);
         game.batch.end();
         for (MapObject object : objects) {
@@ -199,6 +207,8 @@ public class GameMapScreen implements Screen {
     public void hide() {
 
     }
+
+
 
     @Override
     public void dispose() {
