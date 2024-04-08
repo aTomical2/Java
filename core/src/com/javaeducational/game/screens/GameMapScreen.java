@@ -17,8 +17,6 @@ import com.javaeducational.game.entities.Character;
 import com.javaeducational.game.EducationGame;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.javaeducational.game.entities.Gem;
-// import com.badlogic.gdx.maps.MapLayer;
-// import com.badlogic.gdx.maps.MapObjects;
 
 public class GameMapScreen implements Screen {
     // Sprite batch for rendering
@@ -68,17 +66,17 @@ public class GameMapScreen implements Screen {
         // Create camera
         camera = new OrthographicCamera();
         // Adjust viewport width and height to zoom out
-        camera.setToOrtho(false, Gdx.graphics.getWidth() * 1.5f, Gdx.graphics.getHeight() * 1.5f);
+        camera.setToOrtho(false, Gdx.graphics.getWidth() * 0.5f, Gdx.graphics.getHeight() * 0.5f);
 
         // Load the map
         TmxMapLoader mapLoader = new TmxMapLoader();
-        map = mapLoader.load("Map/tilemap1.tmx");
+        map = mapLoader.load("assets/Map/MapActual.tmx");
 
         // Initialize the renderer
         renderer = new OrthogonalTiledMapRenderer(map);
 
         // Initialize solidLayer - Assuming you have a reference to the solid layer
-        solidLayer = (TiledMapTileLayer) map.getLayers().get("solid");
+        solidLayer = (TiledMapTileLayer) map.getLayers().get("solid2");
 
         // Initialize other map-related variables
         tileWidth = (int) solidLayer.getTileWidth();
@@ -99,8 +97,10 @@ public class GameMapScreen implements Screen {
                 tileHeight,
                 mapWidthInTiles,
                 mapHeightInTiles);
-        objectLayer = map.getLayers().get("trial-transport");
-        objects = objectLayer.getObjects();
+        objectLayer = map.getLayers().get("solid2");
+        // Check if the objectLayer is not null before accessing its objects
+        if (objectLayer != null) {
+            objects = objectLayer.getObjects();
 
         // Initialize gem
         gem = new Gem("Map/blueheart.png",
@@ -109,6 +109,7 @@ public class GameMapScreen implements Screen {
                 gemWidth,
                 gemHeight);
     }
+}
 
     @Override
     public void render(float delta) {
