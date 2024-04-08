@@ -15,8 +15,10 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.javaeducational.game.entities.Character;
 import com.javaeducational.game.EducationGame;
-import com.javaeducational.game.tools.Hud;
-
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.javaeducational.game.entities.Gem;
+// import com.badlogic.gdx.maps.MapLayer;
+// import com.badlogic.gdx.maps.MapObjects;
 
 public class GameMapScreen implements Screen {
     // Sprite batch for rendering
@@ -32,20 +34,35 @@ public class GameMapScreen implements Screen {
     // Character instance
     private Character character;
 
+    // Gem instance
+    private Gem gem;
+
     // Define and initialize variables for character creation
     private int initialX = 1800 / 2; // Example initial X position
-    private int initialY = 900 /2 ; // Example initial Y position
+    private int initialY = 900 / 2; // Example initial Y position
     private int characterWidth = 32; // Example character width
     private int characterHeight = 32; // Example character height
     private int characterSpeed = 200; // Example character speed
+
+    // Variables related to map and collision
+    private TiledMapTileLayer solidLayer; // Assuming solid layer is available
+    private int tileWidth; // Assuming tile width in pixels
+    private int tileHeight; // Assuming tile height in pixels
+    private int mapWidthInTiles; // Assuming map width in tiles
+    private int mapHeightInTiles; // Assuming map height is in tiles
     private MapLayer objectLayer;
     private MapObjects objects;
-    private Hud hud;
+
+    // Gem position and dimensions
+    private int gemX = 900 / 2;
+    private int gemY = 100 / 2;
+    private int gemWidth = 32;
+    private int gemHeight = 32;
 
     public GameMapScreen(EducationGame game) {
         this.game = game;
-        hud = new Hud (game.batch);
     }
+
     @Override
     public void show() {
         // Create camera
@@ -60,6 +77,15 @@ public class GameMapScreen implements Screen {
         // Initialize the renderer
         renderer = new OrthogonalTiledMapRenderer(map);
 
+        // Initialize solidLayer - Assuming you have a reference to the solid layer
+        solidLayer = (TiledMapTileLayer) map.getLayers().get("solid");
+
+        // Initialize other map-related variables
+        tileWidth = (int) solidLayer.getTileWidth();
+        tileHeight = (int) solidLayer.getTileHeight();
+        mapWidthInTiles = solidLayer.getWidth();
+        mapHeightInTiles = solidLayer.getHeight();
+
         // Initialize character
         character = new Character("Character/testcharacter.png",
                 initialX,
@@ -67,9 +93,21 @@ public class GameMapScreen implements Screen {
                 characterWidth,
                 characterHeight,
                 characterSpeed,
-                "Tiggy");
-          objectLayer = map.getLayers().get("trial-transport");
-          objects = objectLayer.getObjects();
+                "Tiggy",
+                solidLayer,
+                tileWidth,
+                tileHeight,
+                mapWidthInTiles,
+                mapHeightInTiles);
+        objectLayer = map.getLayers().get("trial-transport");
+        objects = objectLayer.getObjects();
+
+        // Initialize gem
+        gem = new Gem("Map/blueheart.png",
+                gemX,
+                gemY,
+                gemWidth,
+                gemHeight);
     }
 
     @Override
@@ -84,11 +122,6 @@ public class GameMapScreen implements Screen {
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
 
-        // render score hud
-        game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
-        hud.stage.draw();
-
-
         // Render the map
         renderer.setView(camera);
         renderer.render();
@@ -96,9 +129,10 @@ public class GameMapScreen implements Screen {
         // Move the character based on user input
         character.handleInput();
 
-        // Render the character without scaling
+        // Render the character and gem without scaling
         game.batch.begin();
         character.render(game.batch);
+        gem.render(game.batch);
         game.batch.end();
         for (MapObject object : objects) {
             if (object instanceof RectangleMapObject) {
@@ -164,5 +198,6 @@ public class GameMapScreen implements Screen {
         map.dispose();
         renderer.dispose();
         character.dispose();
+        gem.dispose();
     }
 }
