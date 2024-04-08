@@ -2,6 +2,7 @@ package com.javaeducational.game.entities;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
 
 public class Gem {
     private Texture texture; // Texture for the gem
@@ -46,4 +47,18 @@ public class Gem {
     public int getValue() {
         return value;
     }
+
+    public void setX(float x) {
+        this.x = x;
+    }
+
+    public void setY(float y) {
+        this.y = y;
+    }
+
+    public Rectangle getBounds() {
+        return new Rectangle(x, y, width, height);
+    }
+
 }
+
