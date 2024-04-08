@@ -172,6 +172,10 @@ public class GameMapScreen implements Screen {
         bus.render(game.batch); // then render
         gem.render(game.batch);
         game.batch.end();
+        // Collision between bus and character
+        if (bus.getBounds().overlaps(character.getBounds())) {
+            System.out.println("Bus/Character collision test");
+        }
         for (MapObject object : objects) {
             if (object instanceof RectangleMapObject) {
                 RectangleMapObject rectObject = (RectangleMapObject) object;

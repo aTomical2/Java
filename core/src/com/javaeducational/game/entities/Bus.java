@@ -79,18 +79,17 @@ public class Bus {
         y = position.y;
 
         float distance = position.dst(target);
-
         if (distance < speed * dt) {
             movingTowardsEnd = !movingTowardsEnd;
             position.set(target);
         }
+        bounds.setPosition(x, y);
     }
-
-
 
     // checks collisions
     public Rectangle getBounds() {
         return bounds;
+
     }
 
     // Method to dispose of resources when they are no longer needed
