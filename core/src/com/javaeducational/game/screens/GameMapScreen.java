@@ -125,9 +125,6 @@ public class GameMapScreen implements Screen {
 
             bus = new Bus(busRect.x,
                     busRect.y,
-                    characterWidth,
-                    characterHeight,
-                    characterSpeed,
                     solidLayer,
                     tileWidth,
                     tileHeight,
@@ -135,7 +132,6 @@ public class GameMapScreen implements Screen {
                     mapHeightInTiles,
                     startPoint,
                     endPoint);
-
         }
 
         // Initialize gem
