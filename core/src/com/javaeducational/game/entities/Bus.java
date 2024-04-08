@@ -58,7 +58,6 @@ public class Bus {
         this.mapHeightInTiles = mapHeightInTiles;
         this.bounds = new Rectangle(x, y, width, height);
         this.movingTowardsEnd = true;
-        this.velocity = new Vector2(1 ,1);
         this.startPoint = startPoint;
         this.endPoint = endPoint;
         this.position = startPoint.cpy(); //use cpy to avoid reference issues
@@ -67,23 +66,24 @@ public class Bus {
     // Method to render the character
     public void render(SpriteBatch batch) {
         batch.draw(texture, x, y, width, height);
-
     }
 
     public void update(float dt) {
-        if (movingTowardsEnd) {
-            position.lerp(endPoint, 0.01f * speed * dt);
-            if (position.epsilonEquals(endPoint, 0.1f)) {
-                movingTowardsEnd = false;
-            }
-        } else {
-            position.lerp(startPoint, 0.01f  * speed * dt);
-            if (position.epsilonEquals(startPoint, 0.1f)) {
-                movingTowardsEnd = true;
-            }
-        }
+        Vector2 target = movingTowardsEnd ? endPoint : startPoint;
+        Vector2 direction = new Vector2(target.x - position.x, target.y - position.y).nor();
+        velocity = new Vector2(direction.x * speed, direction.y * speed);
+
+        position.add(velocity.scl(dt));
+
         x = position.x;
         y = position.y;
+
+        float distance = position.dst(target);
+
+        if (distance < speed * dt) {
+            movingTowardsEnd = !movingTowardsEnd;
+            position.set(target);
+        }
     }
 
 
