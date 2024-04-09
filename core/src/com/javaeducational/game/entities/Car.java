@@ -43,9 +43,15 @@ public class Car {
     public Car(float x, float y, float width, float height, float speed,
                TiledMapTileLayer solidLayer, float tileWidth, float tileHeight,
                float mapWidthInTiles, float mapHeightInTiles, Vector2 startPoint, Vector2 endPoint) {
-        // Load the car texture using the provided texturePath
-        carTexture = new Texture("Car/UniqueCarTexture.png"); // Load a different texture for the car
-
+        try {
+            // Load the car texture using the provided texturePath
+            carTexture = new Texture("Car/UniqueCarTexture.png"); // Load a different texture for the car
+        } catch (Exception e) {
+            // If an exception occurs (e.g., file not found), handle it gracefully
+            System.err.println("Failed to load car texture: " + e.getMessage());
+            // Load a default texture or simply log the error and continue
+            carTexture = null; // Assigning null texture to indicate failure
+        }
 
         // Set initial position, dimensions, and speed
         this.x = x;
