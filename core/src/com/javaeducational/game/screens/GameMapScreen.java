@@ -38,6 +38,9 @@ public class GameMapScreen implements Screen {
     // Gem instance
     private Gem gem;
 
+    //Gem counter
+    private int gemsCollected = 0;
+
     // Define and initialize variables for character creation
     private int initialX = 1800 / 2; // Example initial X position
     private int initialY = 900 / 2; // Example initial Y position
@@ -127,11 +130,16 @@ public class GameMapScreen implements Screen {
                 gemY,
                 gemWidth,
                 gemHeight);
+
     }
         busLayer = map.getLayers().get("bus_stops");
         busStations = busLayer.getObjects();
 }
-
+    private void relocateGem() {
+        // Example random positions, adjust as needed
+        gem.setX((float) Math.random() * (1600 - gem.getWidth())); // mapWidth needs to be defined
+        gem.setY((float) Math.random() * (1600 - gem.getHeight())); // mapHeight needs to be defined
+    }
     @Override
     public void render(float delta) {
         // Handle user input for camera movement and character control
@@ -159,6 +167,13 @@ public class GameMapScreen implements Screen {
 //        bus.render(game.batch); // then render
 
         gem.render(game.batch);
+
+        // Check collision with gem
+        if (character.getBounds().overlaps(gem.getBounds())) {
+            gemsCollected++;
+            relocateGem();
+            System.out.println("Gems Collected: " + gemsCollected);
+        }
         game.batch.end();
 
         // Collision bus station
