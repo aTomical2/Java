@@ -17,6 +17,8 @@ import com.javaeducational.game.entities.Character;
 import com.javaeducational.game.EducationGame;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.javaeducational.game.entities.Gem;
+import com.javaeducational.game.tools.Hud;
+// import com.javaeducational.game.tools.CollisionRect;
 
 public class GameMapScreen implements Screen {
     // Sprite batch for rendering
@@ -40,7 +42,7 @@ public class GameMapScreen implements Screen {
     private int initialY = 900 / 2; // Example initial Y position
     private int characterWidth = 32; // Example character width
     private int characterHeight = 32; // Example character height
-    private int characterSpeed = 200; // Example character speed
+    private int characterSpeed = 100; // Example character speed
 
     // Variables related to map and collision
     private TiledMapTileLayer solidLayer; // Assuming solid layer is available
@@ -50,6 +52,8 @@ public class GameMapScreen implements Screen {
     private int mapHeightInTiles; // Assuming map height is in tiles
     private MapLayer objectLayer;
     private MapObjects objects;
+    // private CollisionRect rect;
+    private Hud hud;
 
     // Gem position and dimensions
     private int gemX = 900 / 2;
@@ -59,6 +63,7 @@ public class GameMapScreen implements Screen {
 
     public GameMapScreen(EducationGame game) {
         this.game = game;
+        hud = new Hud (game.batch);
     }
 
     @Override
@@ -66,7 +71,7 @@ public class GameMapScreen implements Screen {
         // Create camera
         camera = new OrthographicCamera();
         // Adjust viewport width and height to zoom out
-        camera.setToOrtho(false, Gdx.graphics.getWidth() * 0.5f, Gdx.graphics.getHeight() * 0.5f);
+        camera.setToOrtho(false, Gdx.graphics.getWidth() * 1.5f, Gdx.graphics.getHeight() * 1.5f);
 
         // Load the map
         TmxMapLoader mapLoader = new TmxMapLoader();
@@ -85,7 +90,7 @@ public class GameMapScreen implements Screen {
         mapHeightInTiles = solidLayer.getHeight();
 
         // Initialize character
-        character = new Character("Character/testcharacter.png",
+        character = new Character("assets/Character/testcharacter.png",
                 initialX,
                 initialY,
                 characterWidth,
@@ -103,7 +108,7 @@ public class GameMapScreen implements Screen {
             objects = objectLayer.getObjects();
 
         // Initialize gem
-        gem = new Gem("Map/blueheart.png",
+        gem = new Gem("assets/Map/blueheart.png",
                 gemX,
                 gemY,
                 gemWidth,
@@ -129,6 +134,10 @@ public class GameMapScreen implements Screen {
 
         // Move the character based on user input
         character.handleInput();
+
+        // render score hud
+        game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
+        hud.stage.draw();
 
         // Render the character and gem without scaling
         game.batch.begin();

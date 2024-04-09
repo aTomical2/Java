@@ -25,9 +25,9 @@ public class MainMenuScreen implements Screen {
 
     public MainMenuScreen(EducationGame game) {
         this.game = game;
-        this.gameFont = new BitmapFont(Gdx.files.internal("fonts/Press_Start_2p.fnt"));
+        this.gameFont = new BitmapFont(Gdx.files.internal("assets/fonts/Press_Start_2p.fnt"));
         this.gameTitleGlyph = new GlyphLayout();
-        this.buttonSkin = new Skin(Gdx.files.internal("button.json"), new TextureAtlas(Gdx.files.internal("button.atlas")));
+        this.buttonSkin = new Skin(Gdx.files.internal("assets/button.json"), new TextureAtlas(Gdx.files.internal("assets/button.atlas")));
         this.buttonPlay = new TextButton("Play", buttonSkin, "default");
         this.buttonExit = new TextButton("Exit", buttonSkin, "default");
     }
