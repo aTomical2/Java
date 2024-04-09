@@ -12,16 +12,14 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.javaeducational.game.entities.Bus;
 import com.javaeducational.game.entities.Character;
 import com.javaeducational.game.EducationGame;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.javaeducational.game.entities.Gem;
 import com.javaeducational.game.tools.Hud;
-
-import static jdk.jfr.internal.consumer.EventLog.update;
-// import com.badlogic.gdx.maps.MapLayer;
-// import com.badlogic.gdx.maps.MapObjects;
 
 public class GameMapScreen implements Screen {
     // Sprite batch for rendering
@@ -40,14 +38,12 @@ public class GameMapScreen implements Screen {
     // Gem instance
     private Gem gem;
 
-    private Hud hud;
-
     // Define and initialize variables for character creation
     private int initialX = 1800 / 2; // Example initial X position
     private int initialY = 900 / 2; // Example initial Y position
     private int characterWidth = 32; // Example character width
     private int characterHeight = 32; // Example character height
-    private int characterSpeed = 200; // Example character speed
+    private int characterSpeed = 250; // Example character speed
 
     // Variables related to map and collision
     private TiledMapTileLayer solidLayer; // Assuming solid layer is available
@@ -57,6 +53,17 @@ public class GameMapScreen implements Screen {
     private int mapHeightInTiles; // Assuming map height is in tiles
     private MapLayer objectLayer;
     private MapObjects objects;
+
+    // Bus Section
+    private MapLayer busLayer;
+    private MapObjects busStations;
+    // Import bus class
+    Bus bus;
+    Vector2 startPoint;
+    Vector2 endPoint;
+
+    // private CollisionRect rect;
+    private Hud hud;
 
     // Gem position and dimensions
     private int gemX = 900 / 2;
@@ -78,13 +85,16 @@ public class GameMapScreen implements Screen {
 
         // Load the map
         TmxMapLoader mapLoader = new TmxMapLoader();
-        map = mapLoader.load("Map/tilemap1.tmx");
+        map = mapLoader.load("Map/MapActual.tmx");
+        for (MapLayer maplayer : map.getLayers()) {
+            System.out.println(maplayer.getName() + "test");
+        }
 
         // Initialize the renderer
         renderer = new OrthogonalTiledMapRenderer(map);
 
         // Initialize solidLayer - Assuming you have a reference to the solid layer
-        solidLayer = (TiledMapTileLayer) map.getLayers().get("solid");
+        solidLayer = (TiledMapTileLayer) map.getLayers().get("solid2");
 
         // Initialize other map-related variables
         tileWidth = (int) solidLayer.getTileWidth();
@@ -105,8 +115,11 @@ public class GameMapScreen implements Screen {
                 tileHeight,
                 mapWidthInTiles,
                 mapHeightInTiles);
-        objectLayer = map.getLayers().get("trial-transport");
-        objects = objectLayer.getObjects();
+
+        objectLayer = map.getLayers().get("solid2");
+        // Check if the objectLayer is not null before accessing its objects
+        if (objectLayer != null) {
+            objects = objectLayer.getObjects();
 
         // Initialize gem
         gem = new Gem("Map/blueheart.png",
@@ -115,6 +128,9 @@ public class GameMapScreen implements Screen {
                 gemWidth,
                 gemHeight);
     }
+        busLayer = map.getLayers().get("bus_stops");
+        busStations = busLayer.getObjects();
+}
 
     @Override
     public void render(float delta) {
@@ -135,21 +151,23 @@ public class GameMapScreen implements Screen {
         // Move the character based on user input
         character.handleInput();
 
-        // render score hud
-        game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
-        hud.stage.draw();
-
-
-
-
-
 
         // Render the character and gem without scaling
         game.batch.begin();
         character.render(game.batch);
-        hud.update(delta);
+//        bus.update(delta); // update position
+//        bus.render(game.batch); // then render
+
         gem.render(game.batch);
         game.batch.end();
+
+        // Collision bus station
+        for (RectangleMapObject rectangleBusObject : busStations.getByType(RectangleMapObject.class)) {
+            Rectangle busStationRect = rectangleBusObject.getRectangle();
+            if (character.getBounds().overlaps(busStationRect)) {
+                System.out.println("Character/Bus Station Collision");
+            }
+        }
         for (MapObject object : objects) {
             if (object instanceof RectangleMapObject) {
                 RectangleMapObject rectObject = (RectangleMapObject) object;
@@ -159,6 +177,9 @@ public class GameMapScreen implements Screen {
                 }
             }
         }
+        // render score hud
+        game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
+        hud.stage.draw();
     }
 
     // Handle user input for camera movement and character control
@@ -208,8 +229,6 @@ public class GameMapScreen implements Screen {
 
     }
 
-
-
     @Override
     public void dispose() {
         game.batch.dispose();
@@ -219,4 +238,3 @@ public class GameMapScreen implements Screen {
         gem.dispose();
     }
 }
-
