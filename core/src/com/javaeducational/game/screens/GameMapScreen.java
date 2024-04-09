@@ -21,6 +21,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.javaeducational.game.entities.Gem;
 import com.javaeducational.game.tools.Hud;
 
+
 public class GameMapScreen implements Screen {
     // Sprite batch for rendering
     private EducationGame game;
@@ -94,7 +95,7 @@ public class GameMapScreen implements Screen {
         renderer = new OrthogonalTiledMapRenderer(map);
 
         // Initialize solidLayer - Assuming you have a reference to the solid layer
-        solidLayer = (TiledMapTileLayer) map.getLayers().get("solid");
+        solidLayer = (TiledMapTileLayer) map.getLayers().get("solid2");
 
         // Initialize other map-related variables
         tileWidth = (int) solidLayer.getTileWidth();
