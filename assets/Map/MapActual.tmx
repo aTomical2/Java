@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="200" height="200" tilewidth="8" tileheight="8" infinite="0" nextlayerid="13" nextobjectid="1">
+<map version="1.8" tiledversion="1.8.0" orientation="orthogonal" renderorder="right-down" width="200" height="200" tilewidth="8" tileheight="8" infinite="0" nextlayerid="14" nextobjectid="13">
  <tileset firstgid="1" source="citytileset1.tsx"/>
  <tileset firstgid="1313" source="Tileset1Actual.tsx"/>
  <tileset firstgid="2313" source="citytileset2.tsx"/>
@@ -1435,6 +1435,18 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
+ <objectgroup id="13" name="bus_stops">
+  <object id="1" x="1369" y="441" width="17" height="32"/>
+  <object id="3" x="585" y="591" width="17" height="32"/>
+  <object id="4" x="585" y="591" width="17" height="32"/>
+  <object id="5" x="584" y="361" width="17" height="32"/>
+  <object id="6" x="118" y="654" width="17" height="32"/>
+  <object id="9" x="1136" y="1161" width="17" height="32"/>
+  <object id="8" x="255.532" y="215.561" width="17" height="32" rotation="269.783"/>
+  <object id="10" x="401.532" y="1048.56" width="17" height="32" rotation="269.783"/>
+  <object id="11" x="425.532" y="1402.56" width="17" height="32" rotation="269.783"/>
+  <object id="12" x="685.532" y="1400.56" width="17" height="32" rotation="269.783"/>
+ </objectgroup>
  <layer id="10" name="trainstops10" width="200" height="200">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,

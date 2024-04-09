@@ -10,7 +10,7 @@ public class Gem {
     private int value; // The value of the gem
 
     public Gem(String texturePath, float x, float y, float width, float height) {
-        this.texture = new Texture("assets/Map/blueheart.png");
+        this.texture = new Texture("Map/blueheart.png");
         this.x = x;
         this.y = y;
         this.width = width;
