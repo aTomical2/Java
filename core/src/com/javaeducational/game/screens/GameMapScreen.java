@@ -17,6 +17,7 @@ import com.javaeducational.game.entities.Character;
 import com.javaeducational.game.EducationGame;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.javaeducational.game.entities.Gem;
+import com.javaeducational.game.tools.Hud;
 
 public class GameMapScreen implements Screen {
     // Sprite batch for rendering
@@ -34,6 +35,8 @@ public class GameMapScreen implements Screen {
 
     // Gem instance
     private Gem gem;
+
+    private Hud hud;
 
     // Define and initialize variables for character creation
     private int initialX = 1800 / 2; // Example initial X position
@@ -59,6 +62,7 @@ public class GameMapScreen implements Screen {
 
     public GameMapScreen(EducationGame game) {
         this.game = game;
+        hud = new Hud (game.batch);
     }
 
     @Override
@@ -129,6 +133,10 @@ public class GameMapScreen implements Screen {
 
         // Move the character based on user input
         character.handleInput();
+
+        // render score hud
+        game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
+        hud.stage.draw();
 
         // Render the character and gem without scaling
         game.batch.begin();
@@ -202,3 +210,4 @@ public class GameMapScreen implements Screen {
         gem.dispose();
     }
 }
+
