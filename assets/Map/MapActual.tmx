@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="200" height="200" tilewidth="8" tileheight="8" infinite="0" nextlayerid="13" nextobjectid="1">
+<map version="1.8" tiledversion="1.8.0" orientation="orthogonal" renderorder="right-down" width="200" height="200" tilewidth="8" tileheight="8" infinite="0" nextlayerid="15" nextobjectid="15">
  <tileset firstgid="1" source="citytileset1.tsx"/>
  <tileset firstgid="1313" source="Tileset1Actual.tsx"/>
  <tileset firstgid="2313" source="citytileset2.tsx"/>
@@ -1435,6 +1435,25 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
+ <objectgroup id="13" name="bus_stops">
+  <object id="1" name="Wood's Woods" x="1369" y="441" width="17" height="32"/>
+  <object id="4" name="Train Station 3" x="585" y="591" width="17" height="32"/>
+  <object id="5" name="End of The Lane" x="584" y="361" width="17" height="32"/>
+  <object id="6" name="Tom's Train Station" x="119.5" y="655" width="17" height="32"/>
+  <object id="9" name="Ruth's Residential Area" x="1136" y="1161" width="17" height="32"/>
+  <object id="8" name="Industrial Area" x="255.532" y="215.561" width="17" height="32" rotation="269.783"/>
+  <object id="10" name="Estadio O'Dowd" x="401.532" y="1048.56" width="17" height="32" rotation="269.783"/>
+  <object id="11" name="T Junction" x="424.032" y="1401.56" width="17" height="32" rotation="269.783"/>
+  <object id="12" name="Wood's Station" x="687.032" y="1401.06" width="17" height="32" rotation="269.783"/>
+ </objectgroup>
+ <objectgroup id="14" name="bus_route">
+  <object id="13" x="140" y="1376">
+   <polygon points="0,0 2,-1158 438,-1152 438,-744 964,-742 966,-830 1198,-834 1198,-942 1224,-942 1224,-806 996,-800 990,8"/>
+  </object>
+  <object id="14" x="170" y="1356">
+   <polygon points="0,0 -6,-1110 88,-1106 86,-918 116,-916 118,-1106 384,-1106 382,-698 936,-694 934,-4 282,-4 284,-302 220,-308 222,-356 138,-350 136,-262 260,-276 256,-6"/>
+  </object>
+ </objectgroup>
  <layer id="10" name="trainstops10" width="200" height="200">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,

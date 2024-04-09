@@ -136,4 +136,10 @@ public class Character {
     public float getHeight() {
         return height;
     }
+
+    public void takeBus(float x, float y) {
+        this.x = x;
+        this.y = y;
+        bounds.setPosition(x, y);
+    }
 }

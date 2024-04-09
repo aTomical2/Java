@@ -12,13 +12,15 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.javaeducational.game.entities.Bus;
 import com.javaeducational.game.entities.Character;
 import com.javaeducational.game.EducationGame;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.javaeducational.game.entities.Gem;
 import com.javaeducational.game.tools.Hud;
-// import com.javaeducational.game.tools.CollisionRect;
+import org.w3c.dom.css.Rect;
 
 public class GameMapScreen implements Screen {
     // Sprite batch for rendering
@@ -42,7 +44,7 @@ public class GameMapScreen implements Screen {
     private int initialY = 900 / 2; // Example initial Y position
     private int characterWidth = 32; // Example character width
     private int characterHeight = 32; // Example character height
-    private int characterSpeed = 100; // Example character speed
+    private int characterSpeed = 250; // Example character speed
 
     // Variables related to map and collision
     private TiledMapTileLayer solidLayer; // Assuming solid layer is available
@@ -52,6 +54,15 @@ public class GameMapScreen implements Screen {
     private int mapHeightInTiles; // Assuming map height is in tiles
     private MapLayer objectLayer;
     private MapObjects objects;
+
+    // Bus Section
+    private MapLayer busLayer;
+    private MapObjects busStations;
+    // Import bus class
+    Bus bus;
+    Vector2 startPoint;
+    Vector2 endPoint;
+
     // private CollisionRect rect;
     private Hud hud;
 
@@ -75,7 +86,7 @@ public class GameMapScreen implements Screen {
 
         // Load the map
         TmxMapLoader mapLoader = new TmxMapLoader();
-        map = mapLoader.load("assets/Map/MapActual.tmx");
+        map = mapLoader.load("Map/MapActual.tmx");
 
         // Initialize the renderer
         renderer = new OrthogonalTiledMapRenderer(map);
@@ -90,7 +101,7 @@ public class GameMapScreen implements Screen {
         mapHeightInTiles = solidLayer.getHeight();
 
         // Initialize character
-        character = new Character("assets/Character/testcharacter.png",
+        character = new Character("Character/testcharacter.png",
                 initialX,
                 initialY,
                 characterWidth,
@@ -102,20 +113,22 @@ public class GameMapScreen implements Screen {
                 tileHeight,
                 mapWidthInTiles,
                 mapHeightInTiles);
+
         objectLayer = map.getLayers().get("solid2");
         // Check if the objectLayer is not null before accessing its objects
         if (objectLayer != null) {
             objects = objectLayer.getObjects();
 
         // Initialize gem
-        gem = new Gem("assets/Map/blueheart.png",
+        gem = new Gem("Map/blueheart.png",
                 gemX,
                 gemY,
                 gemWidth,
                 gemHeight);
     }
+        busLayer = map.getLayers().get("bus_stops");
+        busStations = busLayer.getObjects();
 }
-
     @Override
     public void render(float delta) {
         // Handle user input for camera movement and character control
@@ -135,24 +148,45 @@ public class GameMapScreen implements Screen {
         // Move the character based on user input
         character.handleInput();
 
-        // render score hud
-        game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
-        hud.stage.draw();
 
         // Render the character and gem without scaling
         game.batch.begin();
         character.render(game.batch);
+//        bus.update(delta); // update position
+//        bus.render(game.batch); // then render
+
         gem.render(game.batch);
-        game.batch.end();
-        for (MapObject object : objects) {
-            if (object instanceof RectangleMapObject) {
-                RectangleMapObject rectObject = (RectangleMapObject) object;
-                Rectangle rect = rectObject.getRectangle();
-                if (rect.overlaps(character.getBounds())) {
-                    System.out.println("OMG YES BOY");
+
+
+        // Collision bus station
+        for (RectangleMapObject rectangleBusObject : busStations.getByType(RectangleMapObject.class)) {
+            Rectangle busStationRect = rectangleBusObject.getRectangle();
+            if (character.getBounds().overlaps(busStationRect)) {
+                if (Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+                    System.out.println(rectangleBusObject.getName());
+                    character.takeBus(500,500);
+
+                    startPoint = new Vector2(busStationRect.x, busStationRect.y); // Bus Starting point
+                    endPoint = new Vector2(busStationRect.x + busStationRect.width, busStationRect.y); // Bus End point
+                    bus = new Bus(busStationRect.x,
+                            busStationRect.y,
+                            solidLayer,
+                            tileWidth,
+                            tileHeight,
+                            mapWidthInTiles,
+                            mapHeightInTiles,
+                            startPoint);
                 }
             }
         }
+
+        if (bus != null) {
+            bus.render(game.batch);
+        }
+        game.batch.end();
+        // render score hud
+        game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
+        hud.stage.draw();
     }
 
     // Handle user input for camera movement and character control
