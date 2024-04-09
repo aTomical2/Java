@@ -16,11 +16,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 
 
+
 public class Hud {
     public Stage stage;
     private Viewport viewport;
 
-    private int score;
+    private static int score;
 
     private float timeCount;
 
@@ -28,13 +29,13 @@ public class Hud {
 
 
 
-    Label scoreLabel;
-    Label CarbonCrunchersLabel;
-    Label timeLabel;
-    Label countdownLabel;
-    Label WorldLabel;
+    private static Label scoreLabel;
+    private Label CarbonCrunchersLabel;
+    private Label timeLabel;
+    private Label countdownLabel;
+    private Label WorldLabel;
 
-    Label levelLabel;
+    private Label levelLabel;
 
     public Hud (SpriteBatch sb) {
         score =0;
@@ -106,6 +107,11 @@ public class Hud {
 
         }
     }
+    public static void addScore(int  value) {
+        score+=value;
+        scoreLabel.setText((String.format("%06d", score)));
 
 
+    }
+    
 }

@@ -172,6 +172,7 @@ public class GameMapScreen implements Screen {
         if (character.getBounds().overlaps(gem.getBounds())) {
             gemsCollected++;
             relocateGem();
+            Hud.addScore(200);
             System.out.println("Gems Collected: " + gemsCollected);
         }
         game.batch.end();
@@ -193,6 +194,9 @@ public class GameMapScreen implements Screen {
             }
         }
         // render score hud
+       // hud.update(dt);
+        float deltaTime = Gdx.graphics.getDeltaTime(); // Assuming you're using libGDX
+        hud.update(deltaTime);
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
         hud.stage.draw();
     }
