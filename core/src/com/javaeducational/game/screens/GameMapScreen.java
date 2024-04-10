@@ -21,6 +21,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.javaeducational.game.entities.Gem;
 import com.javaeducational.game.tools.Hud;
 
+
 public class GameMapScreen implements Screen {
     // Sprite batch for rendering
     private EducationGame game;
@@ -88,7 +89,7 @@ public class GameMapScreen implements Screen {
 
         // Load the map
         TmxMapLoader mapLoader = new TmxMapLoader();
-        map = mapLoader.load("Map/MapActual.tmx");
+        map = mapLoader.load("assets/Map/MapActual.tmx");
         for (MapLayer maplayer : map.getLayers()) {
             System.out.println(maplayer.getName() + "test");
         }
@@ -257,3 +258,4 @@ public class GameMapScreen implements Screen {
         gem.dispose();
     }
 }
+
