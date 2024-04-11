@@ -1,8 +1,16 @@
+plugins {
+    id 'java-library'
+}
+
 sourceCompatibility = 1.8
-[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
 
 sourceSets.main.java.srcDirs = [ "src/" ]
 
 eclipse.project.name = appName + "-core"
 
-api "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+dependencies {
+    api "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
+}
