@@ -89,7 +89,7 @@ public class GameMapScreen implements Screen {
 
         // Load the map
         TmxMapLoader mapLoader = new TmxMapLoader();
-        map = mapLoader.load("assets/Map/MapActual.tmx");
+        map = mapLoader.load("Map/MapActual.tmx");
         for (MapLayer maplayer : map.getLayers()) {
             System.out.println(maplayer.getName() + "test");
         }
