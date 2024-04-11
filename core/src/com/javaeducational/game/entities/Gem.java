@@ -47,7 +47,6 @@ public class Gem {
     public int getValue() {
         return value;
     }
-
     public void setX(float x) {
         this.x = x;
     }
@@ -59,6 +58,4 @@ public class Gem {
     public Rectangle getBounds() {
         return new Rectangle(x, y, width, height);
     }
-
 }
-
