@@ -126,7 +126,7 @@ public class GameMapScreen implements Screen {
             objects = objectLayer.getObjects();
 
         // Initialize gem
-        gem = new Gem("Map/blueheart.png",
+        gem = new Gem("assets/Map/blueheart.png",
                 gemX,
                 gemY,
                 gemWidth,
