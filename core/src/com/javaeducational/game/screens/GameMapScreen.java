@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
@@ -19,6 +20,7 @@ import com.javaeducational.game.entities.Character;
 import com.javaeducational.game.EducationGame;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.javaeducational.game.entities.Gem;
+import com.javaeducational.game.entities.Bike;
 import com.javaeducational.game.tools.Hud;
 
 
@@ -51,10 +53,16 @@ public class GameMapScreen implements Screen {
 
     // Variables related to map and collision
     private TiledMapTileLayer solidLayer; // Assuming solid layer is available
+
     private int tileWidth; // Assuming tile width in pixels
     private int tileHeight; // Assuming tile height in pixels
     private int mapWidthInTiles; // Assuming map width in tiles
     private int mapHeightInTiles; // Assuming map height is in tiles
+
+    private int tileWidthb; // Assuming tile width in pixels
+    private int tileHeightb; // Assuming tile height in pixels
+    private int mapWidthInTilesb; // Assuming map width in tiles
+    private int mapHeightInTilesb; // Assuming map height is in tiles
     private MapLayer objectLayer;
     private MapObjects objects;
 
@@ -66,6 +74,9 @@ public class GameMapScreen implements Screen {
     Vector2 startPoint;
     Vector2 endPoint;
 
+    private MapObjects bikeStands;
+    private MapLayer bikeStandsLayer;
+
     // private CollisionRect rect;
     private Hud hud;
 
@@ -74,6 +85,8 @@ public class GameMapScreen implements Screen {
     private int gemY = 100 / 2;
     private int gemWidth = 32;
     private int gemHeight = 32;
+
+
 
     public GameMapScreen(EducationGame game) {
         this.game = game;
@@ -92,6 +105,7 @@ public class GameMapScreen implements Screen {
         map = mapLoader.load("Map/MapActual.tmx");
         for (MapLayer maplayer : map.getLayers()) {
             System.out.println(maplayer.getName() + "test");
+
         }
 
         // Initialize the renderer
@@ -100,11 +114,15 @@ public class GameMapScreen implements Screen {
         // Initialize solidLayer - Assuming you have a reference to the solid layer
         solidLayer = (TiledMapTileLayer) map.getLayers().get("solid2");
 
+
+
         // Initialize other map-related variables
         tileWidth = (int) solidLayer.getTileWidth();
         tileHeight = (int) solidLayer.getTileHeight();
         mapWidthInTiles = solidLayer.getWidth();
         mapHeightInTiles = solidLayer.getHeight();
+
+
 
         // Initialize character
         character = new Character("Character/testcharacter.png",
@@ -135,6 +153,8 @@ public class GameMapScreen implements Screen {
     }
         busLayer = map.getLayers().get("bus_stops");
         busStations = busLayer.getObjects();
+        bikeStandsLayer = map.getLayers().get("bike_stops");
+        bikeStands = bikeStandsLayer.getObjects();
 }
     private void relocateGem() {
         // Example random positions, adjust as needed
@@ -175,9 +195,10 @@ public class GameMapScreen implements Screen {
             relocateGem();
             Hud.addScore(200);
             System.out.println("Gems Collected: " + gemsCollected);
+
         }
         game.batch.end();
-
+        checkCollisionWithBikeStand();
         // Collision bus station
         for (RectangleMapObject rectangleBusObject : busStations.getByType(RectangleMapObject.class)) {
             Rectangle busStationRect = rectangleBusObject.getRectangle();
@@ -194,12 +215,32 @@ public class GameMapScreen implements Screen {
                 }
             }
         }
+
+
         // render score hud
        // hud.update(dt);
         float deltaTime = Gdx.graphics.getDeltaTime(); // Assuming you're using libGDX
         hud.update(deltaTime);
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
         hud.stage.draw();
+    }
+    private void checkCollisionWithBikeStand() {
+        // Get the character's bounds for collision detection
+        Rectangle characterBounds = character.getBounds();
+
+        // Iterate over the objects in the bike stands layer
+        for (RectangleMapObject rectangleBikeStandObject : bikeStands.getByType(RectangleMapObject.class)) {
+            Rectangle bikeStandRect = rectangleBikeStandObject.getRectangle();
+
+            // Check for intersection with the character's bounds
+            if (characterBounds.overlaps(bikeStandRect)) {
+                // Collision detected, toggle the bike state or log a message
+                //System.out.println("Character/Bike Stand Collision");
+                // Optionally, toggle the bike state if needed
+                character.toggleBikeState();
+                return; // Exit the loop to prevent multiple collisions in one frame
+            }
+        }
     }
 
     // Handle user input for camera movement and character control

@@ -24,6 +24,9 @@ public class Character {
     private String name;
     private BitmapFont font;
 
+    private boolean onBike;
+    private Bike bike;
+
     // Variables related to map and collision
     private TiledMapTileLayer solidLayer; // Assuming solid layer is available
     private int tileWidth; // Assuming tile width in pixels
@@ -56,6 +59,7 @@ public class Character {
         this.mapWidthInTiles = mapWidthInTiles;
         this.mapHeightInTiles = mapHeightInTiles;
         this.bounds = new Rectangle(x, y, width, height);
+        this.onBike = false;
     }
 
     // Method to render the character
@@ -113,6 +117,14 @@ public class Character {
 
         // Check if the tile is solid
         return solidLayer.getCell(tileX, tileY) != null;
+    }
+
+    public void toggleBikeState() {
+        this.onBike = !this.onBike;
+        // Initialize the bike when the state is toggled
+        if (onBike && bike == null) {
+            bike = new Bike("Bike/bike.png", getX(), getY(), 32,32);
+        }
     }
 
     // Method to dispose of resources when they are no longer needed
