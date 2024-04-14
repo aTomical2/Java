@@ -81,11 +81,17 @@ public class Character {
 
     // Method to render the character
     public void render(SpriteBatch batch) {
-        batch.draw(texture, x, y, width, height);
-
-        // Render the name above the character
-        font.draw(batch, name, x, y + height + 20); // Adjust 20 according to your preference
+        if (onBike && bike != null) {
+            Texture bikeTexture = bike.getTexture();
+            if (bikeTexture != null) {
+                batch.draw(bikeTexture, x, y, width, height);
+            }
+        } else {
+            batch.draw(texture, x, y, width, height);
+        }
+        font.draw(batch, name, x, y + height + 20);
     }
+
 
     // Method to handle user input for character movement
     public void handleInput() {

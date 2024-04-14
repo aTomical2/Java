@@ -166,6 +166,7 @@ public class GameMapScreen implements Screen {
     public void render(float delta) {
         // Handle user input for camera movement and character control
         handleInput();
+        checkCollisionWithBikeStand();
 
         // Clear screen
         ScreenUtils.clear(0, 0, 0, 1);
