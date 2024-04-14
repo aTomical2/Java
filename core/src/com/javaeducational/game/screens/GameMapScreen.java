@@ -161,6 +161,7 @@ public class GameMapScreen implements Screen {
         gem.setX((float) Math.random() * (1600 - gem.getWidth())); // mapWidth needs to be defined
         gem.setY((float) Math.random() * (1600 - gem.getHeight())); // mapHeight needs to be defined
     }
+
     @Override
     public void render(float delta) {
         // Handle user input for camera movement and character control
@@ -176,18 +177,25 @@ public class GameMapScreen implements Screen {
         // Render the map
         renderer.setView(camera);
         renderer.render();
+        game.batch.begin();
 
-        // Move the character based on user input
-        character.handleInput();
+        if (character.getBike() != null && character.getBike().isOnBike()) {
+            character.getBike().render(game.batch);
+        } else {
+            character.handleInput();
+            character.render(game.batch);
+        }
+
 
 
         // Render the character and gem without scaling
-        game.batch.begin();
-        character.render(game.batch);
+
+
 //        bus.update(delta); // update position
 //        bus.render(game.batch); // then render
 
         gem.render(game.batch);
+
 
         // Check collision with gem
         if (character.getBounds().overlaps(gem.getBounds())) {
@@ -225,22 +233,26 @@ public class GameMapScreen implements Screen {
         hud.stage.draw();
     }
     private void checkCollisionWithBikeStand() {
-        // Get the character's bounds for collision detection
         Rectangle characterBounds = character.getBounds();
+        boolean collisionDetected = false;
 
-        // Iterate over the objects in the bike stands layer
         for (RectangleMapObject rectangleBikeStandObject : bikeStands.getByType(RectangleMapObject.class)) {
             Rectangle bikeStandRect = rectangleBikeStandObject.getRectangle();
-
-            // Check for intersection with the character's bounds
             if (characterBounds.overlaps(bikeStandRect)) {
-                // Collision detected, toggle the bike state or log a message
-                //System.out.println("Character/Bike Stand Collision");
-                // Optionally, toggle the bike state if needed
-                character.toggleBikeState();
-                return; // Exit the loop to prevent multiple collisions in one frame
+                collisionDetected = true;
+                if (!character.inBikeStandCollision) {
+                    character.toggleBikeState();
+                    character.inBikeStandCollision = true;
+                    System.out.println("Collision with Bike Stand Detected. Bike state toggled to: " + character.isOnBike());
+                }
+                break;
             }
         }
+
+        if (!collisionDetected && character.inBikeStandCollision) {
+            character.inBikeStandCollision = false;  // Reset the collision flag when no longer colliding
+        }
+
     }
 
     // Handle user input for camera movement and character control

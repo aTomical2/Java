@@ -32,27 +32,34 @@ public class Bike {
         this.y = y;
         this.width = width;
         this.height = height;
+        this.onBike = false;
+    }
+    public Texture getTexture() {
+        return texture;
+    }
+
+
+    public boolean isOnBike() {
+        return this.onBike;  // Just return the state, no arguments needed
     }
 
     public void handleInput() {
         float delta = Gdx.graphics.getDeltaTime();
 
-        // Store the character's potential new position
-        float newX = x;
-        float newY = y;
-
-        // Move the character based on user input
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
-            newY += speed * delta;
+            y += speed * delta;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.S)) {
-            newY -= speed * delta;
+            y -= speed * delta;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.A)) {
-            newX -= speed * delta;
+            x -= speed * delta;
         }
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
-            newX += speed * delta;
+            x += speed * delta;
         }
+    }
+    public void render(SpriteBatch spriteBatch) {
+        spriteBatch.draw(texture, x, y, width, height);
     }
 }

@@ -35,6 +35,8 @@ public class Character {
     private int mapHeightInTiles; // Assuming map height in tiles
     private Rectangle bounds; // Get bounds for collisions
 
+    public boolean inBikeStandCollision = false;
+
 
     // Constructor
     public Character(String texturePath, int x, int y, int width, int height, int speed, String name,
@@ -60,6 +62,21 @@ public class Character {
         this.mapHeightInTiles = mapHeightInTiles;
         this.bounds = new Rectangle(x, y, width, height);
         this.onBike = false;
+    }
+    public void setBike(Bike bike) {
+        this.bike = bike;
+    }
+
+    // Method to get the character's bike
+    public Bike getBike() {
+        return this.bike;
+    }
+    public boolean isOnBike() {
+        return onBike;
+    }
+
+    public void setOnBike(boolean onBike) {
+        this.onBike = onBike;
     }
 
     // Method to render the character
@@ -122,8 +139,15 @@ public class Character {
     public void toggleBikeState() {
         this.onBike = !this.onBike;
         // Initialize the bike when the state is toggled
-        if (onBike && bike == null) {
-            bike = new Bike("Bike/bike.png", getX(), getY(), 32,32);
+        Texture bikeTexture;
+        if (onBike) {
+            if (bike == null) {
+                bike = new Bike("Bike/bike.png", x, y, width, height);
+            }
+            bikeTexture = bike.getTexture();
+        } else {
+            bike = null;
+            bikeTexture = null;
         }
     }
 
