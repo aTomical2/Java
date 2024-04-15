@@ -75,10 +75,10 @@ public class Character {
         this.bounds = new Rectangle(x, y, width, height);
 
         // Load textures
-         leftTexture = new Texture(Gdx.files.internal("Character/leftC.png"));
-         rightTexture = new Texture(Gdx.files.internal("Character/rightC.png"));
-         frontTexture = new Texture(Gdx.files.internal("Character/frontC.png"));
-         backTexture = new Texture(Gdx.files.internal("Character/backC.png"));
+         leftTexture = new Texture(Gdx.files.internal("assets/Character/leftC.png"));
+         rightTexture = new Texture(Gdx.files.internal("assets/Character/rightC.png"));
+         frontTexture = new Texture(Gdx.files.internal("assets/Character/frontC.png"));
+         backTexture = new Texture(Gdx.files.internal("assets/Character/backC.png"));
 
 
         // Create animations

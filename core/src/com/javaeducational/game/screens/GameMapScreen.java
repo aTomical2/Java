@@ -93,7 +93,7 @@ public class GameMapScreen implements Screen {
 
         // Load the map
         TmxMapLoader mapLoader = new TmxMapLoader();
-        map = mapLoader.load("Map/MapActual.tmx");
+        map = mapLoader.load("assets/Map/MapActual.tmx");
         for (MapLayer maplayer : map.getLayers()) {
             System.out.println(maplayer.getName() + "test");
         }
@@ -123,7 +123,7 @@ public class GameMapScreen implements Screen {
             objects = objectLayer.getObjects();
 
         // Initialize gem
-        gem = new Gem("Map/blueheart.png",
+        gem = new Gem("assets/Map/blueheart.png",
                 gemX,
                 gemY,
                 gemWidth,
@@ -143,31 +143,34 @@ public class GameMapScreen implements Screen {
     public void render(float delta) {
         // Handle user input for camera movement and character control
         handleInput();
-
+    
         // Clear screen
         ScreenUtils.clear(0, 0, 0, 1);
-
+    
         // Update camera
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
-
+    
         // Move the character based on user input
         character.handleInput();
+    
         // Render the map
         renderer.setView(camera);
         renderer.render();
-
-
-
-        // Render the character and gem without scaling
+    
+        // **Start of drawing with SpriteBatch:**
         game.batch.begin();
+    
+        // Render the character and gem
         character.render(game.batch);
-//        bus.update(delta); // update position
-//        bus.render(game.batch); // then render
-
+    
         gem.render(game.batch);
-        //game.batch.end();
-
+    
+        // ... other rendering calls using game.batch (if any)
+    
+        // **End of drawing with SpriteBatch:**
+        game.batch.end();
+    
         // Collision bus station
         for (RectangleMapObject rectangleBusObject : busStations.getByType(RectangleMapObject.class)) {
             Rectangle busStationRect = rectangleBusObject.getRectangle();
@@ -184,8 +187,8 @@ public class GameMapScreen implements Screen {
                 }
             }
         }
-        // render score hud
-        // hud.update(dt);
+    
+        // Render score hud
         float deltaTime = Gdx.graphics.getDeltaTime(); // Assuming you're using libGDX
         hud.update(deltaTime);
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
