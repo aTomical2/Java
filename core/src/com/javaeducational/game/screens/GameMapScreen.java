@@ -22,9 +22,8 @@ import com.javaeducational.game.entities.Gem;
 import com.javaeducational.game.tools.Hud;
 import com.badlogic.gdx.graphics.Texture;
 
-
-
 public class GameMapScreen implements Screen {
+
     // Sprite batch for rendering
     private EducationGame game;
 
@@ -41,9 +40,8 @@ public class GameMapScreen implements Screen {
     // Gem instance
     private Gem gem;
 
-    //Gem counter
+    // Gem counter
     private int gemsCollected = 0;
-
 
     // Define and initialize variables for character creation
     private int initialX = 1800 / 2; // Example initial X position
@@ -69,7 +67,6 @@ public class GameMapScreen implements Screen {
     Vector2 startPoint;
     Vector2 endPoint;
 
-    // private CollisionRect rect;
     private Hud hud;
 
     // Gem position and dimensions
@@ -80,8 +77,7 @@ public class GameMapScreen implements Screen {
 
     public GameMapScreen(EducationGame game) {
         this.game = game;
-        hud = new Hud (game.batch);
-
+        hud = new Hud(game.batch);
     }
 
     @Override
@@ -143,46 +139,42 @@ public class GameMapScreen implements Screen {
     public void render(float delta) {
         // Handle user input for camera movement and character control
         handleInput();
-
-    
+        
         // Clear screen
         ScreenUtils.clear(0, 0, 0, 1);
-
-    
+        
         // Update camera
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
-
-    
+        
         // Move the character based on user input
         character.handleInput();
-    
+        
         // Render the map
         renderer.setView(camera);
         renderer.render();
-
-
-
+        
         // Render the character and gem without scaling
-    
-        // **Start of drawing with SpriteBatch:**
         game.batch.begin();
-    
-        // Render the character and gem
+        
+        // Render the character
         character.render(game.batch);
-//        bus.update(delta); // update position
-//        bus.render(game.batch); // then render
-
-    
+        
+        // Render the gem
         gem.render(game.batch);
-        //game.batch.end();
-
-    
-        // ... other rendering calls using game.batch (if any)
-    
-        // **End of drawing with SpriteBatch:**
+        
         game.batch.end();
-    
+        
+        // Check for collision between character and gem
+        if (character.getBounds().overlaps(gem.getBounds())) {
+            // Increment gems collected
+            gemsCollected++;
+            System.out.println("Gem collected! Total gems: " + gemsCollected);
+        
+            // Relocate gem to a new position
+            relocateGem();
+        }
+        
         // Collision bus station
         for (RectangleMapObject rectangleBusObject : busStations.getByType(RectangleMapObject.class)) {
             Rectangle busStationRect = rectangleBusObject.getRectangle();
@@ -199,16 +191,14 @@ public class GameMapScreen implements Screen {
                 }
             }
         }
-        // render score hud
-        // hud.update(dt);
-    
-        // Render score hud
-        float deltaTime = Gdx.graphics.getDeltaTime(); // Assuming you're using libGDX
-        hud.update(deltaTime);
+        
+        // Update and render HUD
+        float deltaTime = Gdx.graphics.getDeltaTime();
+        hud.update(deltaTime, gemsCollected);
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
         hud.stage.draw();
     }
-
+    
 
     // Handle user input for camera movement and character control
     private void handleInput() {

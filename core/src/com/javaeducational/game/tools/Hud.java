@@ -86,14 +86,14 @@ public class Hud {
 
     }
 
-    public void update(float dt) {
-        timeCount +=dt;
-        if (timeCount >=1){
-            worldTimer --;
+    public void update(float dt, int gemsCollected) {
+        timeCount += dt;
+        if (timeCount >= 1) {
+            worldTimer--;
             countdownLabel.setText(String.format("%06d", worldTimer));
             timeCount = 0;
-
         }
+    
     }
     public static void addScore(int  value) {
         score+=value;
