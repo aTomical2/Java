@@ -143,13 +143,16 @@ public class GameMapScreen implements Screen {
     public void render(float delta) {
         // Handle user input for camera movement and character control
         handleInput();
+
     
         // Clear screen
         ScreenUtils.clear(0, 0, 0, 1);
+
     
         // Update camera
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
+
     
         // Move the character based on user input
         character.handleInput();
@@ -157,14 +160,23 @@ public class GameMapScreen implements Screen {
         // Render the map
         renderer.setView(camera);
         renderer.render();
+
+
+
+        // Render the character and gem without scaling
     
         // **Start of drawing with SpriteBatch:**
         game.batch.begin();
     
         // Render the character and gem
         character.render(game.batch);
+//        bus.update(delta); // update position
+//        bus.render(game.batch); // then render
+
     
         gem.render(game.batch);
+        //game.batch.end();
+
     
         // ... other rendering calls using game.batch (if any)
     
@@ -187,6 +199,8 @@ public class GameMapScreen implements Screen {
                 }
             }
         }
+        // render score hud
+        // hud.update(dt);
     
         // Render score hud
         float deltaTime = Gdx.graphics.getDeltaTime(); // Assuming you're using libGDX
