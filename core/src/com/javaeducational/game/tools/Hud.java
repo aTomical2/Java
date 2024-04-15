@@ -13,10 +13,6 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-
-
-
-
 public class Hud {
     public Stage stage;
     private Viewport viewport;
@@ -26,8 +22,6 @@ public class Hud {
     private float timeCount;
 
     private int worldTimer;
-
-
 
     private static Label scoreLabel;
     private Label CarbonCrunchersLabel;
@@ -45,13 +39,10 @@ public class Hud {
         viewport = new FitViewport(EducationGame.WIDTH, EducationGame.HEIGHT, new OrthographicCamera());
         stage = new Stage(viewport , sb);
 
-
-
         BitmapFont font = new BitmapFont(); // Default font
         font.getData().setScale(2); // Scale the font size by a factor of 2
         //scoreLabel = new Label (String.format("%06d", score),new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         //CarbonCrunchersLabel= new Label ("Carbon Crunchers",new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-
 
         // Declare and initialize world coordinates
         float worldX = 100; // Example value
@@ -81,8 +72,6 @@ public class Hud {
         WorldLabel = new Label("Level", new Label.LabelStyle (font, Color.WHITE));
 
 
-
-
         // using tables structures the hud on the screen
         // the tables will expand to fit the whole screen and the padding will be equal
         table.add(CarbonCrunchersLabel).expandX().padTop(10);
@@ -97,21 +86,19 @@ public class Hud {
 
     }
 
-
-    public void update(float dt) {
-        timeCount +=dt;
-        if (timeCount >=1){
-            worldTimer --;
+    public void update(float dt, int gemsCollected) {
+        timeCount += dt;
+        if (timeCount >= 1) {
+            worldTimer--;
             countdownLabel.setText(String.format("%06d", worldTimer));
             timeCount = 0;
-
         }
+    
     }
     public static void addScore(int  value) {
         score+=value;
         scoreLabel.setText((String.format("%06d", score)));
 
-
     }
-    
+
 }

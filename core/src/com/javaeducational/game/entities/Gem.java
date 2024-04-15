@@ -59,3 +59,4 @@ public class Gem {
         return new Rectangle(x, y, width, height);
     }
 }
+
