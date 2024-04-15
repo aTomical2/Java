@@ -20,7 +20,7 @@ public class EducationGame extends Game {
 		super.render();
 
 	}
-	
+
 	@Override
 	public void dispose () {
 		batch.dispose();

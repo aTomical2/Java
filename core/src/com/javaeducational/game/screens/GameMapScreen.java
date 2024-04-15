@@ -20,6 +20,9 @@ import com.javaeducational.game.EducationGame;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.javaeducational.game.entities.Gem;
 import com.javaeducational.game.tools.Hud;
+import com.badlogic.gdx.graphics.Texture;
+
+
 
 public class GameMapScreen implements Screen {
     // Sprite batch for rendering
@@ -37,6 +40,10 @@ public class GameMapScreen implements Screen {
 
     // Gem instance
     private Gem gem;
+
+    //Gem counter
+    private int gemsCollected = 0;
+
 
     // Define and initialize variables for character creation
     private int initialX = 1800 / 2; // Example initial X position
@@ -74,6 +81,7 @@ public class GameMapScreen implements Screen {
     public GameMapScreen(EducationGame game) {
         this.game = game;
         hud = new Hud (game.batch);
+
     }
 
     @Override
@@ -103,14 +111,7 @@ public class GameMapScreen implements Screen {
         mapHeightInTiles = solidLayer.getHeight();
 
         // Initialize character
-        character = new Character("Character/testcharacter.png",
-                initialX,
-                initialY,
-                characterWidth,
-                characterHeight,
-                characterSpeed,
-                "Tiggy",
-                solidLayer,
+        character = new Character(solidLayer,
                 tileWidth,
                 tileHeight,
                 mapWidthInTiles,
@@ -132,6 +133,12 @@ public class GameMapScreen implements Screen {
         busStations = busLayer.getObjects();
 }
 
+    private void relocateGem() {
+        // Example random positions, adjust as needed
+        gem.setX((float) Math.random() * (1600 - gem.getWidth())); // mapWidth needs to be defined
+        gem.setY((float) Math.random() * (1600 - gem.getHeight())); // mapHeight needs to be defined
+    }
+
     @Override
     public void render(float delta) {
         // Handle user input for camera movement and character control
@@ -144,12 +151,12 @@ public class GameMapScreen implements Screen {
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
 
+        // Move the character based on user input
+        character.handleInput();
         // Render the map
         renderer.setView(camera);
         renderer.render();
 
-        // Move the character based on user input
-        character.handleInput();
 
 
         // Render the character and gem without scaling
@@ -159,7 +166,7 @@ public class GameMapScreen implements Screen {
 //        bus.render(game.batch); // then render
 
         gem.render(game.batch);
-        game.batch.end();
+        //game.batch.end();
 
         // Collision bus station
         for (RectangleMapObject rectangleBusObject : busStations.getByType(RectangleMapObject.class)) {
@@ -178,9 +185,13 @@ public class GameMapScreen implements Screen {
             }
         }
         // render score hud
+        // hud.update(dt);
+        float deltaTime = Gdx.graphics.getDeltaTime(); // Assuming you're using libGDX
+        hud.update(deltaTime);
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
         hud.stage.draw();
     }
+
 
     // Handle user input for camera movement and character control
     private void handleInput() {
