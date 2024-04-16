@@ -3,11 +3,8 @@ package com.javaeducational.game.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.MapLayer;
-import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -22,7 +19,6 @@ import com.javaeducational.game.EducationGame;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.javaeducational.game.entities.Gem;
 import com.javaeducational.game.tools.Hud;
-import com.badlogic.gdx.graphics.Texture;
 
 public class GameMapScreen implements Screen {
 
@@ -105,7 +101,7 @@ public class GameMapScreen implements Screen {
                 mapWidthInTiles,
                 mapHeightInTiles);
 
-        hud = new Hud(game.batch, character);
+        hud = new Hud(game.batch, map, character);
 //        Gdx.input.setInputProcessor(hud.stage);
 
 
@@ -124,7 +120,6 @@ public class GameMapScreen implements Screen {
 
         busLayer = map.getLayers().get("bus_stops");
         busStations = busLayer.getObjects();
-        System.out.println(busStations.getCount());
 }
 
     private void relocateGem() {
@@ -133,18 +128,95 @@ public class GameMapScreen implements Screen {
         gem.setY((float) Math.random() * (1600 - gem.getHeight())); // mapHeight needs to be defined
     }
 
-    @Override
+//    @Override
+//    public void render(float delta) {
+//        // Handle user input for camera movement and character control
+//        handleInput();
+//
+//        // Clear screen
+//        ScreenUtils.clear(0, 0, 0, 1);
+//
+//        // Update camera
+//        camera.update();
+//        game.batch.setProjectionMatrix(camera.combined);
+//
+//
+//        // Render the map
+//        renderer.setView(camera);
+//        renderer.render();
+//
+//        // Move the character based on user input
+//        character.handleInput();
+//
+//        // Render the character and gem without scaling
+//        game.batch.begin();
+//
+//        // Render the character
+//        character.render(game.batch);
+//
+//        // Render the gem
+//        gem.render(game.batch);
+//
+//        // Check for collision between character and gem
+//        if (character.getBounds().overlaps(gem.getBounds())) {
+//            // Increment gems collected
+//            gemsCollected++;
+//            System.out.println("Gem collected! Total gems: " + gemsCollected);
+//            // Relocate gem to a new position
+//            relocateGem();
+//        }
+//
+//
+//        // Update the HUD
+//        float deltaTime = Gdx.graphics.getDeltaTime();
+//        hud.stage.act();
+//        hud.update(deltaTime, gemsCollected);
+//
+//        game.batch.end();
+//        // Render the HUD stage
+//        game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
+//        hud.stage.draw();
+//
+//        // Collision bus station
+//        for (RectangleMapObject rectangleBusObject : busStations.getByType(RectangleMapObject.class)) {
+//            Rectangle busStationRect = rectangleBusObject.getRectangle();
+//            if (character.getBounds().overlaps(busStationRect)) {
+//                if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+//                    if (!hud.active) {
+//                        character.setCanMove(false);
+//                        hud.takeBus(rectangleBusObject.getName(), busStations);
+//                    }
+//                }
+//            }
+//        }
+//
+//        // Check the condition to trigger the popup box
+//        if (hud.isTimerExpired()) {
+//            // Load the texture atlas file and add its regions to the skin
+//            FileHandle fileHandle = Gdx.files.internal("popup/uiskin.json");
+//            FileHandle atlasFile = fileHandle.sibling("uiskin.atlas");
+//
+//            if (atlasFile.exists()) {
+//                hud.getSkin().addRegions(new TextureAtlas(atlasFile)); // Use getSkin() method to access the skin
+//            }
+//            // Show the levelend popup box
+////            hud.levelEnd();
+//        } else {
+//            // Handle the case where the timer has not expired
+//            // You can add any other actions or logic here
+//        }
+//    }
+
     public void render(float delta) {
         // Handle user input for camera movement and character control
         handleInput();
-        
+
         // Clear screen
         ScreenUtils.clear(0, 0, 0, 1);
-        
+
         // Update camera
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
-
 
         // Render the map
         renderer.setView(camera);
@@ -153,15 +225,14 @@ public class GameMapScreen implements Screen {
         // Move the character based on user input
         character.handleInput();
 
-        // Render the character and gem without scaling
+        // Start batch for rendering sprites
         game.batch.begin();
-        
+
         // Render the character
         character.render(game.batch);
-        
+
         // Render the gem
         gem.render(game.batch);
-
 
         // Check for collision between character and gem
         if (character.getBounds().overlaps(gem.getBounds())) {
@@ -172,7 +243,20 @@ public class GameMapScreen implements Screen {
             relocateGem();
         }
 
-        game.batch.end();
+        game.batch.end();  // Ensure all sprites are rendered before ending the batch
+
+        // Handle bus station collision and interaction logic
+        for (RectangleMapObject rectangleBusObject : busStations.getByType(RectangleMapObject.class)) {
+            Rectangle busStationRect = rectangleBusObject.getRectangle();
+            if (character.getBounds().overlaps(busStationRect)) {
+                if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+                    if (!hud.active) {
+                        character.setCanMove(false);
+                        hud.takeBus(rectangleBusObject.getName(), busStations);
+                    }
+                }
+            }
+        }
 
         // Update the HUD
         float deltaTime = Gdx.graphics.getDeltaTime();
@@ -182,38 +266,9 @@ public class GameMapScreen implements Screen {
         // Render the HUD stage
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
         hud.stage.draw();
-
-        // Collision bus station
-        for (RectangleMapObject rectangleBusObject : busStations.getByType(RectangleMapObject.class)) {
-            Rectangle busStationRect = rectangleBusObject.getRectangle();
-            if (character.getBounds().overlaps(busStationRect)) {
-                if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-                    if (!hud.active) {
-                        System.out.println("TEST" + rectangleBusObject.getName());
-                        hud.takeBus(rectangleBusObject.getName());
-                        character.setCanMove(false);
-                    }
-                }
-            }
-        }
-
-        // Check the condition to trigger the popup box
-        if (hud.isTimerExpired()) {
-            // Load the texture atlas file and add its regions to the skin
-            FileHandle fileHandle = Gdx.files.internal("popup/uiskin.json");
-            FileHandle atlasFile = fileHandle.sibling("uiskin.atlas");
-
-            if (atlasFile.exists()) {
-                hud.getSkin().addRegions(new TextureAtlas(atlasFile)); // Use getSkin() method to access the skin
-            }
-            // Show the levelend popup box
-//            hud.levelEnd();
-        } else {
-            // Handle the case where the timer has not expired
-            // You can add any other actions or logic here
-        }
     }
-    
+
+
 
     // Handle user input for camera movement and character control
     private void handleInput() {

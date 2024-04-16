@@ -4,6 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.MapObjects;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
+import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -22,6 +27,7 @@ import com.javaeducational.game.entities.Character;
 public class Hud {
     public Stage stage;
     private Viewport viewport;
+    private TiledMap map;
 
     private static int score;
     private float timeCount;
@@ -41,7 +47,7 @@ public class Hud {
     Character character;
     public boolean active;
 
-    public Hud (SpriteBatch sb, Character character) {
+    public Hud (SpriteBatch sb, TiledMap map, Character character) {
         score = 0;
         timeCount = 0;
         worldTimer = 100;
@@ -49,6 +55,7 @@ public class Hud {
 
         this.active = false;
         this.character = character;
+        this.map = map;
 
         viewport = new FitViewport(EducationGame.WIDTH, EducationGame.HEIGHT, new OrthographicCamera());
         stage = new Stage(viewport , sb);
@@ -151,7 +158,8 @@ public class Hud {
             }
         });
     }
-    public void takeBus(String stationName) {
+
+    public void takeBus(String stationName, MapObjects busStations) {
         active = true;
         Gdx.input.setInputProcessor(stage);
         popupBox = new PopupBox(stationName, skin, "Do you want to take a bus", stage);
@@ -161,12 +169,44 @@ public class Hud {
         TextButton yesButton = (TextButton) popupBox.getButtonTable().getCells().get(0).getActor();
         TextButton noButton = (TextButton) popupBox.getButtonTable().getCells().get(1).getActor();
 
-//        yesButton.addListener(new )
         // Add event listener to "Yes" button
         yesButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                System.out.println("Player selected Yes.");
+                popupBox.hide(); // Dispose the popup box;
+                popupBox.remove();
+
+                String[] busStationNames = new String[8];
+                int count = 0;
+                // Get Station Names and Coordinates
+                for (RectangleMapObject rectangleBusObject : busStations.getByType(RectangleMapObject.class)) {
+                    if (stationName == rectangleBusObject.getName()) {
+                        continue;
+                    }
+                    busStationNames[count] = rectangleBusObject.getName();
+                    count++;
+                }
+
+                StationSelectPopup stationPopup = new StationSelectPopup("Select Station", skin, busStationNames, stage);
+                stage.addActor(stationPopup);
+                stationPopup.show(stage);
+                stationPopup.addListener(new ChangeListener() {
+                    @Override
+                    public void changed(ChangeEvent event, Actor actor) {
+                        String selectedStation = stationPopup.getSelectedStation();
+                        // Get Station Names and Coordinates
+                        for (RectangleMapObject rectangleBusObject : busStations.getByType(RectangleMapObject.class)) {
+                            if (selectedStation.equals(rectangleBusObject.getName())) {
+                                stationPopup.hide();
+                                stationPopup.remove();
+                                character.takeBus(rectangleBusObject.getRectangle().getX(), rectangleBusObject.getRectangle().getY());
+                                character.setCanMove(true);
+                                active = false;
+                                return;
+                            }
+                        }
+                    }
+                });
             }
         });
 
@@ -174,11 +214,9 @@ public class Hud {
         noButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                System.out.println("player selected no.");
-                popupBox.hide(); // Dispose the popup box;
+                popupBox.hide();
                 popupBox.remove();
                 character.setCanMove(true);
-                System.out.println("" + character.getX() + " " + character.getY());
                 active = false;
             }
         });

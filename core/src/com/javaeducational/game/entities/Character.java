@@ -183,11 +183,12 @@ public class Character {
         }
 
         currentFrame = currentAnimation.getKeyFrame(stateTime, true);
+        System.out.println("" + x + y + " " + width + " " + height);
+        batch.setColor(1, 1,1,1);
         batch.draw(currentFrame, x, y, width, height);
 
         // Render the name above the character
         font.draw(batch, name, x, y + height + 20); // Adjust 20 according to your preference
-       // font.draw(batch, name, x, y + height + 20); // Adjust 20 according to your preference
     }
 
     // Method to check collision with solid tiles
@@ -231,9 +232,14 @@ public class Character {
     }
 
     public void takeBus(float x, float y) {
+        System.out.println("X: " + x + " Y: " + y);
         this.x = x;
         this.y = y;
         bounds.setPosition(x, y);
+        isFacingUp = false;
+        isFacingDown = true;
+        isFacingLeft = false;
+        isFacingRight = false;
     }
 
     public void setCanMove(boolean canMove) {
