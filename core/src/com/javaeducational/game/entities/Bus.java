@@ -47,7 +47,7 @@ public class Bus {
 
     // Constructor
     public Bus(float x, float y, TiledMapTileLayer solidLayer, float tileWidth, float tileHeight,
-                     float mapWidthInTiles, float mapHeightInTiles, Vector2 startPoint) {
+               float mapWidthInTiles, float mapHeightInTiles, Vector2 startPoint) {
         // Load the character texture using the provided texturePath
         // Set initial position, dimensions, and speed
         this.x = x;
@@ -76,7 +76,7 @@ public class Bus {
 
     // Method to render the character
     public void render(SpriteBatch batch) {
-    batch.draw(busRolls[24].getKeyFrame(1), x - (BUS_WIDTH / 2), y - (BUS_HEIGHT / 2), BUS_WIDTH, BUS_HEIGHT);
+        batch.draw(busRolls[24].getKeyFrame(1), x - (BUS_WIDTH / 2), y - (BUS_HEIGHT / 2), BUS_WIDTH, BUS_HEIGHT);
     }
 
 //    public void update(float deltaTime) {

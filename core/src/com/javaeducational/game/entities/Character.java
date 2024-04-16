@@ -33,6 +33,7 @@ public class Character {
     private int mapWidthInTiles; // Assuming map width in tiles
     private int mapHeightInTiles; // Assuming map height in tiles
     private Rectangle bounds; // Get bounds for collisions
+    private boolean canMove;
 
     // Textures for each direction
     private Texture frontTexture;
@@ -73,16 +74,17 @@ public class Character {
         this.mapWidthInTiles = mapWidthInTiles;
         this.mapHeightInTiles = mapHeightInTiles;
         this.bounds = new Rectangle(x, y, width, height);
+        this.canMove = true;
 
         // Load textures
          leftTexture = new Texture(Gdx.files.internal("Character/leftC.png"));
          rightTexture = new Texture(Gdx.files.internal("Character/rightC.png"));
          frontTexture = new Texture(Gdx.files.internal("Character/frontC.png"));
          backTexture = new Texture(Gdx.files.internal("Character/backC.png"));
-         leftTexture = new Texture(Gdx.files.internal("assets/Character/leftC.png"));
-         rightTexture = new Texture(Gdx.files.internal("assets/Character/rightC.png"));
-         frontTexture = new Texture(Gdx.files.internal("assets/Character/frontC.png"));
-         backTexture = new Texture(Gdx.files.internal("assets/Character/backC.png"));
+         leftTexture = new Texture(Gdx.files.internal("Character/leftC.png"));
+         rightTexture = new Texture(Gdx.files.internal("Character/rightC.png"));
+         frontTexture = new Texture(Gdx.files.internal("Character/frontC.png"));
+         backTexture = new Texture(Gdx.files.internal("Character/backC.png"));
 
 
         // Create animations
@@ -107,6 +109,11 @@ public class Character {
     }
 
     public void handleInput() {
+
+        if (!canMove) {
+            return;
+        }
+
         float delta = Gdx.graphics.getDeltaTime();
         stateTime += delta;
 
@@ -221,6 +228,16 @@ public class Character {
 
     public Rectangle getBounds() {
         return bounds;
+    }
+
+    public void takeBus(float x, float y) {
+        this.x = x;
+        this.y = y;
+        bounds.setPosition(x, y);
+    }
+
+    public void setCanMove(boolean canMove) {
+        this.canMove = canMove;
     }
 }
 

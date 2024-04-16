@@ -3,7 +3,9 @@ package com.javaeducational.game.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
@@ -43,13 +45,6 @@ public class GameMapScreen implements Screen {
     // Gem counter
     private int gemsCollected = 0;
 
-    // Define and initialize variables for character creation
-    private int initialX = 1800 / 2; // Example initial X position
-    private int initialY = 900 / 2; // Example initial Y position
-    private int characterWidth = 32; // Example character width
-    private int characterHeight = 32; // Example character height
-    private int characterSpeed = 250; // Example character speed
-
     // Variables related to map and collision
     private TiledMapTileLayer solidLayer; // Assuming solid layer is available
     private int tileWidth; // Assuming tile width in pixels
@@ -62,6 +57,7 @@ public class GameMapScreen implements Screen {
     // Bus Section
     private MapLayer busLayer;
     private MapObjects busStations;
+
     // Import bus class
     Bus bus;
     Vector2 startPoint;
@@ -77,7 +73,6 @@ public class GameMapScreen implements Screen {
 
     public GameMapScreen(EducationGame game) {
         this.game = game;
-        hud = new Hud(game.batch);
     }
 
     @Override
@@ -89,10 +84,7 @@ public class GameMapScreen implements Screen {
 
         // Load the map
         TmxMapLoader mapLoader = new TmxMapLoader();
-        map = mapLoader.load("assets/Map/MapActual.tmx");
-        for (MapLayer maplayer : map.getLayers()) {
-            System.out.println(maplayer.getName() + "test");
-        }
+        map = mapLoader.load("Map/MapActual.tmx");
 
         // Initialize the renderer
         renderer = new OrthogonalTiledMapRenderer(map);
@@ -113,20 +105,26 @@ public class GameMapScreen implements Screen {
                 mapWidthInTiles,
                 mapHeightInTiles);
 
+        hud = new Hud(game.batch, character);
+//        Gdx.input.setInputProcessor(hud.stage);
+
+
         objectLayer = map.getLayers().get("solid2");
         // Check if the objectLayer is not null before accessing its objects
         if (objectLayer != null) {
             objects = objectLayer.getObjects();
 
         // Initialize gem
-        gem = new Gem("assets/Map/blueheart.png",
+        gem = new Gem("Map/blueheart.png",
                 gemX,
                 gemY,
                 gemWidth,
                 gemHeight);
     }
+
         busLayer = map.getLayers().get("bus_stops");
         busStations = busLayer.getObjects();
+        System.out.println(busStations.getCount());
 }
 
     private void relocateGem() {
@@ -146,14 +144,15 @@ public class GameMapScreen implements Screen {
         // Update camera
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
-        
-        // Move the character based on user input
-        character.handleInput();
-        
+
+
         // Render the map
         renderer.setView(camera);
         renderer.render();
-        
+
+        // Move the character based on user input
+        character.handleInput();
+
         // Render the character and gem without scaling
         game.batch.begin();
         
@@ -162,41 +161,57 @@ public class GameMapScreen implements Screen {
         
         // Render the gem
         gem.render(game.batch);
-        
-        game.batch.end();
-        
+
+
         // Check for collision between character and gem
         if (character.getBounds().overlaps(gem.getBounds())) {
             // Increment gems collected
             gemsCollected++;
             System.out.println("Gem collected! Total gems: " + gemsCollected);
-        
             // Relocate gem to a new position
             relocateGem();
         }
-        
+
+        game.batch.end();
+
+        // Update the HUD
+        float deltaTime = Gdx.graphics.getDeltaTime();
+        hud.stage.act();
+        hud.update(deltaTime, gemsCollected);
+
+        // Render the HUD stage
+        game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
+        hud.stage.draw();
+
         // Collision bus station
         for (RectangleMapObject rectangleBusObject : busStations.getByType(RectangleMapObject.class)) {
             Rectangle busStationRect = rectangleBusObject.getRectangle();
             if (character.getBounds().overlaps(busStationRect)) {
-                System.out.println("Character/Bus Station Collision");
-            }
-        }
-        for (MapObject object : objects) {
-            if (object instanceof RectangleMapObject) {
-                RectangleMapObject rectObject = (RectangleMapObject) object;
-                Rectangle rect = rectObject.getRectangle();
-                if (rect.overlaps(character.getBounds())) {
-                    System.out.println("OMG YES BOY");
+                if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+                    if (!hud.active) {
+                        System.out.println("TEST" + rectangleBusObject.getName());
+                        hud.takeBus(rectangleBusObject.getName());
+                        character.setCanMove(false);
+                    }
                 }
             }
         }
-        
-        // Update and render HUD
-        float deltaTime = Gdx.graphics.getDeltaTime();
-        hud.update(deltaTime, gemsCollected);
-        game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
-        hud.stage.draw();
+
+        // Check the condition to trigger the popup box
+        if (hud.isTimerExpired()) {
+            // Load the texture atlas file and add its regions to the skin
+            FileHandle fileHandle = Gdx.files.internal("popup/uiskin.json");
+            FileHandle atlasFile = fileHandle.sibling("uiskin.atlas");
+
+            if (atlasFile.exists()) {
+                hud.getSkin().addRegions(new TextureAtlas(atlasFile)); // Use getSkin() method to access the skin
+            }
+            // Show the levelend popup box
+//            hud.levelEnd();
+        } else {
+            // Handle the case where the timer has not expired
+            // You can add any other actions or logic here
+        }
     }
     
 
