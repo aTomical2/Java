@@ -1,7 +1,6 @@
 package com.javaeducational.game.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -21,11 +20,10 @@ import com.javaeducational.game.EducationGame;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.javaeducational.game.entities.Gem;
 import com.javaeducational.game.tools.Hud;
-import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-
+import com.badlogic.gdx.graphics.Texture;
 
 public class GameMapScreen implements Screen {
+
     // Sprite batch for rendering
     private EducationGame game;
 
@@ -69,7 +67,6 @@ public class GameMapScreen implements Screen {
     Vector2 startPoint;
     Vector2 endPoint;
 
-    // private CollisionRect rect;
     private Hud hud;
 
     // Gem position and dimensions
@@ -77,7 +74,6 @@ public class GameMapScreen implements Screen {
     private int gemY = 100 / 2;
     private int gemWidth = 32;
     private int gemHeight = 32;
-
 
     public GameMapScreen(EducationGame game) {
         this.game = game;
@@ -111,14 +107,7 @@ public class GameMapScreen implements Screen {
         mapHeightInTiles = solidLayer.getHeight();
 
         // Initialize character
-        character = new Character("Character/testcharacter.png",
-                initialX,
-                initialY,
-                characterWidth,
-                characterHeight,
-                characterSpeed,
-                "Tiggy",
-                solidLayer,
+        character = new Character(solidLayer,
                 tileWidth,
                 tileHeight,
                 mapWidthInTiles,
@@ -129,17 +118,16 @@ public class GameMapScreen implements Screen {
         if (objectLayer != null) {
             objects = objectLayer.getObjects();
 
-            // Initialize gem
-            gem = new Gem("Map/blueheart.png",
-                    gemX,
-                    gemY,
-                    gemWidth,
-                    gemHeight);
-        }
-
+        // Initialize gem
+        gem = new Gem("assets/Map/blueheart.png",
+                gemX,
+                gemY,
+                gemWidth,
+                gemHeight);
+    }
         busLayer = map.getLayers().get("bus_stops");
         busStations = busLayer.getObjects();
-    }
+}
 
     private void relocateGem() {
         // Example random positions, adjust as needed
@@ -151,35 +139,42 @@ public class GameMapScreen implements Screen {
     public void render(float delta) {
         // Handle user input for camera movement and character control
         handleInput();
-
+        
         // Clear screen
         ScreenUtils.clear(0, 0, 0, 1);
-
+        
         // Update camera
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
-
+        
+        // Move the character based on user input
+        character.handleInput();
+        
         // Render the map
         renderer.setView(camera);
         renderer.render();
-
-        // Move the character based on user input
-        character.handleInput();
-
+        
         // Render the character and gem without scaling
         game.batch.begin();
+        
+        // Render the character
         character.render(game.batch);
+        
+        // Render the gem
         gem.render(game.batch);
-
-        // Check collision with gem
-        if (character.getBounds().overlaps(gem.getBounds())) {
-            gemsCollected++;
-            relocateGem();
-            Hud.addScore(200);
-            System.out.println("Gems Collected: " + gemsCollected);
-        }
+        
         game.batch.end();
-
+        
+        // Check for collision between character and gem
+        if (character.getBounds().overlaps(gem.getBounds())) {
+            // Increment gems collected
+            gemsCollected++;
+            System.out.println("Gem collected! Total gems: " + gemsCollected);
+        
+            // Relocate gem to a new position
+            relocateGem();
+        }
+        
         // Collision bus station
         for (RectangleMapObject rectangleBusObject : busStations.getByType(RectangleMapObject.class)) {
             Rectangle busStationRect = rectangleBusObject.getRectangle();
@@ -196,34 +191,14 @@ public class GameMapScreen implements Screen {
                 }
             }
         }
-
-        // Update the HUD
-        hud.update(delta);
-        // Render the HUD stage
+        
+        // Update and render HUD
+        float deltaTime = Gdx.graphics.getDeltaTime();
+        hud.update(deltaTime, gemsCollected);
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
         hud.stage.draw();
-
-        // Check the condition to trigger the popup box
-        if (hud.isTimerExpired()) {
-            // Load the texture atlas file and add its regions to the skin
-            FileHandle fileHandle = Gdx.files.internal("assets/popup/uiskin.json");
-            FileHandle atlasFile = fileHandle.sibling("uiskin.atlas");
-
-            if (atlasFile.exists()) {
-                Gdx.app.log("MyGame", "Atlas file is loaded");
-                hud.getSkin().addRegions(new TextureAtlas(atlasFile)); // Use getSkin() method to access the skin
-            } else {
-                Gdx.app.log("MyGame", "Atlas file is NOT loaded");
-            }
-
-            // Show the levelend popup box
-            hud.levelEnd();
-        } else {
-            // Handle the case where the timer has not expired
-            // You can add any other actions or logic here
-        }
     }
-
+    
 
     // Handle user input for camera movement and character control
     private void handleInput() {
@@ -254,18 +229,22 @@ public class GameMapScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
+
     }
 
     @Override
     public void pause() {
+
     }
 
     @Override
     public void resume() {
+
     }
 
     @Override
     public void hide() {
+
     }
 
     @Override
