@@ -161,10 +161,10 @@ public class Hud {
         });
     }
 
-    public void takeBus(String stationName, MapObjects busStations) {
+    public void takePublicTransport(String type, String stationName, MapObjects stations) {
         active = true;
         Gdx.input.setInputProcessor(stage);
-        popupBox = new PopupBox(stationName, skin, "Do you want to take a bus", stage);
+        popupBox = new PopupBox(stationName, skin, "Do you want to take a " + type + "?", stage);
         stage.addActor(popupBox);
         popupBox.show(stage);
 
@@ -178,18 +178,26 @@ public class Hud {
                 popupBox.hide(); // Dispose the popup box;
                 popupBox.remove();
 
-                String[] busStationNames = new String[8];
+                int numStations = 8;
+
+                if (type == "train") {
+                    numStations = 4;
+                }
+
+                String[] stationNames = new String[numStations];
+
                 int count = 0;
                 // Get Station Names and Coordinates
-                for (RectangleMapObject rectangleBusObject : busStations.getByType(RectangleMapObject.class)) {
-                    if (stationName == rectangleBusObject.getName()) {
+                for (RectangleMapObject rectangleObject : stations.getByType(RectangleMapObject.class)) {
+                    System.out.println(rectangleObject.getName());
+                    if (stationName == rectangleObject.getName()) {
                         continue;
                     }
-                    busStationNames[count] = rectangleBusObject.getName();
+                    stationNames[count] = rectangleObject.getName();
                     count++;
                 }
 
-                StationSelectPopup stationPopup = new StationSelectPopup("Select Station", skin, busStationNames, stage);
+                StationSelectPopup stationPopup = new StationSelectPopup("Select Station", skin, stationNames, stage);
                 stage.addActor(stationPopup);
                 stationPopup.show(stage);
                 stationPopup.addListener(new ChangeListener() {
@@ -197,13 +205,22 @@ public class Hud {
                     public void changed(ChangeEvent event, Actor actor) {
                         String selectedStation = stationPopup.getSelectedStation();
                         // Get Station Names and Coordinates
-                        for (RectangleMapObject rectangleBusObject : busStations.getByType(RectangleMapObject.class)) {
+                        for (RectangleMapObject rectangleBusObject : stations.getByType(RectangleMapObject.class)) {
                             if (selectedStation.equals(rectangleBusObject.getName())) {
-                                carbonFootprint += 50;
+                                if (type == "bus") {
+                                    carbonFootprint += 50;
+                                    worldTimer -= 10;
+
+                                }
+                                if (type == "train") {
+                                    carbonFootprint += 25;
+                                    worldTimer -= 5;
+                                }
+
                                 System.out.println("Your Carbon Footprint is now: " + carbonFootprint);
                                 stationPopup.hide();
                                 stationPopup.remove();
-                                character.takeBus(rectangleBusObject.getRectangle().getX(), rectangleBusObject.getRectangle().getY());
+                                character.takePublicTransport(rectangleBusObject.getRectangle().getX(), rectangleBusObject.getRectangle().getY());
                                 character.setCanMove(true);
                                 active = false;
                                 return;

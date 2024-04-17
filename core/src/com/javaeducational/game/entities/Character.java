@@ -230,7 +230,7 @@ public class Character {
         return bounds;
     }
 
-    public void takeBus(float x, float y) {
+    public void takePublicTransport(float x, float y) {
         this.x = x;
         this.y = y;
         bounds.setPosition(x, y);
