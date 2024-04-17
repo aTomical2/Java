@@ -25,4 +25,11 @@ public class EducationGame extends Game {
 	public void dispose () {
 		batch.dispose();
 	}
+
+	public int getWidth() {
+		return this.WIDTH;
+	}
+	public int getHeight() {
+		return this.HEIGHT;
+	}
 }
