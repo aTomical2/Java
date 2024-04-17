@@ -80,8 +80,12 @@ public class Character {
 
     }
 
-    public void setBike(Bike bike) {
-        this.bike = bike;
+    public void setOnBikepath(boolean onBike) {
+        this.onBike = onBike;
+        if (!onBike) {
+            // Handle additional logic for when the character dismounts the bike, if necessary
+            this.bike = null;  // Assuming you have a 'bike' object or similar
+        }
     }
 
     // Method to get the character's bike
@@ -143,7 +147,7 @@ public class Character {
             x = newX;
             y = newY;
         } else {
-            // Optional: add feedback to the player that movement is restricted
+
             System.out.println("Movement restricted: Off path");
         }
 

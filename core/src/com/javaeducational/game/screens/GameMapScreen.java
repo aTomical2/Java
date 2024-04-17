@@ -240,18 +240,23 @@ public class GameMapScreen implements Screen {
     }
     public boolean bikemovepath(float newX, float newY, float width, float height) {
         Rectangle newRect = new Rectangle(newX, newY, width, height);
+        boolean isOnPath = false;
         if (character.isOnBike()) {
             for (MapObject object : bikepaths) {
                 if (object instanceof RectangleMapObject) {
                     Rectangle rect = ((RectangleMapObject) object).getRectangle();
                     if (Intersector.overlaps(newRect, rect)) {
-                        return true; // Movement is valid, on bike path
+                        isOnPath = true; // At least part of the bike is on the path
+                        break;
                     }
                 }
             }
-            return false; // No valid path found, movement not allowed
+            if (!isOnPath) {
+                character.setOnBike(false);
+                System.out.println("You are off the path! Dismounting bike...");
+            }
         }
-        return true; // If not on bike, always allow movement (adjust logic if needed)
+        return isOnPath; // Return true only if the new position overlaps with a bike path
     }
     private void checkCollisionWithBikeStand() {
         Rectangle characterBounds = character.getBounds();
