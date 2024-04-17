@@ -5,7 +5,6 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.MapLayer;
-import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
@@ -21,7 +20,6 @@ import com.javaeducational.game.entities.Character;
 import com.javaeducational.game.EducationGame;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.javaeducational.game.entities.Gem;
-import com.javaeducational.game.entities.Bike;
 import com.javaeducational.game.tools.Hud;
 
 
@@ -33,7 +31,7 @@ public class GameMapScreen implements Screen {
     private OrthographicCamera camera;
 
     // Tiled map and renderer
-    private TiledMap map;
+    public static TiledMap map;
     private OrthogonalTiledMapRenderer renderer;
 
     // Character instance
@@ -126,7 +124,8 @@ public class GameMapScreen implements Screen {
 
 
         // Initialize character
-        character = new Character("Character/testcharacter.png",
+        character = new Character(this,"Character/testcharacter.png",
+
                 initialX,
                 initialY,
                 characterWidth,
@@ -138,6 +137,7 @@ public class GameMapScreen implements Screen {
                 tileHeight,
                 mapWidthInTiles,
                 mapHeightInTiles);
+
 
         objectLayer = map.getLayers().get("solid2");
         // Check if the objectLayer is not null before accessing its objects
@@ -170,7 +170,7 @@ public class GameMapScreen implements Screen {
         // Handle user input for camera movement and character control
         handleInput();
         checkCollisionWithBikeStand();
-        bikemovepath(character.getX(), character.getY());
+        bikemovepath(character.getX(), character.getY(), character.getWidth(), character.getHeight());
 
         // Clear screen
         ScreenUtils.clear(0, 0, 0, 1);
@@ -211,8 +211,8 @@ public class GameMapScreen implements Screen {
             System.out.println("Gems Collected: " + gemsCollected);
 
         }
+
         game.batch.end();
-        checkCollisionWithBikeStand();
         // Collision bus station
         for (RectangleMapObject rectangleBusObject : busStations.getByType(RectangleMapObject.class)) {
             Rectangle busStationRect = rectangleBusObject.getRectangle();
@@ -238,18 +238,20 @@ public class GameMapScreen implements Screen {
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
         hud.stage.draw();
     }
-    public boolean bikemovepath(float newX, float newY) {
-        Rectangle newRect = new Rectangle();
-        for (MapObject object : bikepaths) {
-            if (object instanceof RectangleMapObject) {
-                Rectangle rect = ((RectangleMapObject) object).getRectangle();
-                if (Intersector.overlaps(newRect, rect)) {
-                    return true; // Collision detected
+    public boolean bikemovepath(float newX, float newY, float width, float height) {
+        Rectangle newRect = new Rectangle(newX, newY, width, height);
+        if (character.isOnBike()) {
+            for (MapObject object : bikepaths) {
+                if (object instanceof RectangleMapObject) {
+                    Rectangle rect = ((RectangleMapObject) object).getRectangle();
+                    if (Intersector.overlaps(newRect, rect)) {
+                        return true; // Movement is valid, on bike path
+                    }
                 }
             }
-            // Add checks for other types of shapes if necessary
+            return false; // No valid path found, movement not allowed
         }
-        return false;  // No valid path found
+        return true; // If not on bike, always allow movement (adjust logic if needed)
     }
     private void checkCollisionWithBikeStand() {
         Rectangle characterBounds = character.getBounds();

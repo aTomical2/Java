@@ -2,11 +2,19 @@ package com.javaeducational.game.entities;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.MapObjects;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
+import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.javaeducational.game.screens.GameMapScreen;
 
 public class Character {
     // Texture representing the character
@@ -27,6 +35,7 @@ public class Character {
     private boolean onBike;
     private Bike bike;
 
+
     // Variables related to map and collision
     private TiledMapTileLayer solidLayer; // Assuming solid layer is available
     private int tileWidth; // Assuming tile width in pixels
@@ -34,18 +43,22 @@ public class Character {
     private int mapWidthInTiles; // Assuming map width in tiles
     private int mapHeightInTiles; // Assuming map height in tiles
     private Rectangle bounds; // Get bounds for collisions
+    private MapObjects bikepaths;
+    private MapLayer bikepathslayer;
+    private GameMapScreen gameMapScreen;
 
     public boolean inBikeStandCollision = false;
 
 
     // Constructor
-    public Character(String texturePath, int x, int y, int width, int height, int speed, String name,
+    public Character(GameMapScreen gameMapScreen, String texturePath, int x, int y, int width, int height, int speed, String name,
                      TiledMapTileLayer solidLayer, int tileWidth, int tileHeight,
                      int mapWidthInTiles, int mapHeightInTiles) {
         // Load the character texture using the provided texturePath
         texture = new Texture(texturePath);
         this.name = name;
         font = new BitmapFont();
+        this.gameMapScreen = gameMapScreen;
 
         // Set initial position, dimensions, and speed
         this.x = x;
@@ -62,7 +75,11 @@ public class Character {
         this.mapHeightInTiles = mapHeightInTiles;
         this.bounds = new Rectangle(x, y, width, height);
         this.onBike = false;
+        bikepathslayer = GameMapScreen.map.getLayers().get("bikepaths");
+        bikepaths = bikepathslayer.getObjects();
+
     }
+
     public void setBike(Bike bike) {
         this.bike = bike;
     }
@@ -107,6 +124,7 @@ public class Character {
         }
 
 
+
         // Move the character based on user input
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             newY += speed * delta;
@@ -119,6 +137,14 @@ public class Character {
         }
         if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             newX += speed * delta;
+        }
+        if (gameMapScreen.bikemovepath(newX, newY, width, height)) {
+            // Update position if the new position is on a valid path or if not restricted
+            x = newX;
+            y = newY;
+        } else {
+            // Optional: add feedback to the player that movement is restricted
+            System.out.println("Movement restricted: Off path");
         }
 
         // Check collision with map boundaries and solid tiles

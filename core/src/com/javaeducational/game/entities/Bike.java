@@ -3,7 +3,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -12,7 +11,8 @@ import com.badlogic.gdx.math.Rectangle;
 public class Bike {
     private Texture texture; // Texture for the bike
     private float x, y; // Position of the bike
-    private float width, height; // Dimensions of the bike
+    public float width;
+    public float height;// Dimensions of the bike
 
     private boolean onBike;
 
@@ -45,6 +45,12 @@ public class Bike {
 
     public boolean isOnBike() {
         return this.onBike;  }
+    public float getbikewidth() {
+        return width;
+    }
+    public float getbikeheight(){
+        return height;
+    }
 
 
     public void handleInput() {
