@@ -4,6 +4,8 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Rectangle;
 
@@ -24,6 +26,8 @@ public class Bike {
     private int mapWidthInTiles;      // Assuming map width in tiles
     private int mapHeightInTiles;     // Assuming map height in tiles
     private Rectangle bounds;         // Get bounds for collisions
+    private MapObjects bikepaths;
+    private MapLayer bikepathslayer;
 
 
     public Bike(String texturePath, float x, float y, float width, float height) {
@@ -32,16 +36,16 @@ public class Bike {
         this.y = y;
         this.width = width;
         this.height = height;
+        this.speed = 1000;
         this.onBike = false;
     }
     public Texture getTexture() {
         return texture;
     }
 
-
     public boolean isOnBike() {
-        return this.onBike;  // Just return the state, no arguments needed
-    }
+        return this.onBike;  }
+
 
     public void handleInput() {
         float delta = Gdx.graphics.getDeltaTime();

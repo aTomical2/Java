@@ -100,6 +100,12 @@ public class Character {
         // Store the character's potential new position
         float newX = x;
         float newY = y;
+        if (isOnBike()) {
+            speed = 500;  // Increased speed when on the bike
+        } else {
+            speed = 250;  // Normal walking speed when not on the bike
+        }
+
 
         // Move the character based on user input
         if (Gdx.input.isKeyPressed(Input.Keys.W)) {

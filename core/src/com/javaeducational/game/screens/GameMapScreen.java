@@ -12,6 +12,7 @@ import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -59,10 +60,6 @@ public class GameMapScreen implements Screen {
     private int mapWidthInTiles; // Assuming map width in tiles
     private int mapHeightInTiles; // Assuming map height is in tiles
 
-    private int tileWidthb; // Assuming tile width in pixels
-    private int tileHeightb; // Assuming tile height in pixels
-    private int mapWidthInTilesb; // Assuming map width in tiles
-    private int mapHeightInTilesb; // Assuming map height is in tiles
     private MapLayer objectLayer;
     private MapObjects objects;
 
@@ -76,6 +73,10 @@ public class GameMapScreen implements Screen {
 
     private MapObjects bikeStands;
     private MapLayer bikeStandsLayer;
+
+    private MapObjects bikepaths;
+    private MapLayer bikepathslayer;
+
 
     // private CollisionRect rect;
     private Hud hud;
@@ -155,6 +156,8 @@ public class GameMapScreen implements Screen {
         busStations = busLayer.getObjects();
         bikeStandsLayer = map.getLayers().get("bike_stops");
         bikeStands = bikeStandsLayer.getObjects();
+        bikepathslayer = map.getLayers().get("bikepaths");
+        bikepaths = bikepathslayer.getObjects();
 }
     private void relocateGem() {
         // Example random positions, adjust as needed
@@ -167,6 +170,7 @@ public class GameMapScreen implements Screen {
         // Handle user input for camera movement and character control
         handleInput();
         checkCollisionWithBikeStand();
+        bikemovepath(character.getX(), character.getY());
 
         // Clear screen
         ScreenUtils.clear(0, 0, 0, 1);
@@ -182,6 +186,7 @@ public class GameMapScreen implements Screen {
 
         if (character.getBike() != null && character.getBike().isOnBike()) {
             character.getBike().render(game.batch);
+
         } else {
             character.handleInput();
             character.render(game.batch);
@@ -233,6 +238,19 @@ public class GameMapScreen implements Screen {
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
         hud.stage.draw();
     }
+    public boolean bikemovepath(float newX, float newY) {
+        Rectangle newRect = new Rectangle();
+        for (MapObject object : bikepaths) {
+            if (object instanceof RectangleMapObject) {
+                Rectangle rect = ((RectangleMapObject) object).getRectangle();
+                if (Intersector.overlaps(newRect, rect)) {
+                    return true; // Collision detected
+                }
+            }
+            // Add checks for other types of shapes if necessary
+        }
+        return false;  // No valid path found
+    }
     private void checkCollisionWithBikeStand() {
         Rectangle characterBounds = character.getBounds();
         boolean collisionDetected = false;
@@ -249,6 +267,7 @@ public class GameMapScreen implements Screen {
                 break;
             }
         }
+
 
         if (!collisionDetected && character.inBikeStandCollision) {
             character.inBikeStandCollision = false;  // Reset the collision flag when no longer colliding
