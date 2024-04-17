@@ -18,7 +18,7 @@ public class MainMenuScreen implements Screen {
     private Stage stage;
     private BitmapFont gameFont;
     private GlyphLayout gameTitleGlyph;
-    private TextButton buttonPlay, buttonExit;
+    private TextButton buttonPlay, buttonExit, buttonInstructions;
     Skin buttonSkin;
     final MainMenuScreen mainMenuScreen = this;
 
@@ -30,14 +30,17 @@ public class MainMenuScreen implements Screen {
         this.buttonSkin = new Skin(Gdx.files.internal("button.json"), new TextureAtlas(Gdx.files.internal("button.atlas")));
         this.buttonPlay = new TextButton("Play", buttonSkin, "default");
         this.buttonExit = new TextButton("Exit", buttonSkin, "default");
+        this.buttonInstructions = new TextButton("Instructions", buttonSkin, "default");
     }
 
     @Override
     public void show() {
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
-        buttonPlay.setPosition((Gdx.graphics.getWidth() - buttonPlay.getWidth()) / 3f, (Gdx.graphics.getHeight() - buttonPlay.getHeight()) / 2);
-        buttonExit.setPosition((Gdx.graphics.getWidth()  - buttonExit.getWidth()) / 1.5f, (Gdx.graphics.getHeight() - buttonExit.getHeight()) / 2);
+        buttonPlay.setPosition((Gdx.graphics.getWidth() - buttonPlay.getWidth()) / 3f, (Gdx.graphics.getHeight() - buttonPlay.getHeight()) / 2.33f);
+        buttonExit.setPosition((Gdx.graphics.getWidth()  - buttonExit.getWidth()) / 1.5f, (Gdx.graphics.getHeight() - buttonExit.getHeight()) / 2.33f);
+        buttonInstructions.setPosition((Gdx.graphics.getWidth() - buttonInstructions.getWidth()) / 2f,
+                (Gdx.graphics.getHeight() - buttonInstructions.getHeight()) / 1.66f);
 
         buttonPlay.addListener(new ClickListener() {
             @Override
@@ -46,6 +49,16 @@ public class MainMenuScreen implements Screen {
                 game.setScreen(new GameMapScreen(game));
             }
         });
+
+        buttonInstructions.addListener(new ClickListener() {
+           @Override
+            public void clicked(InputEvent event, float x, float y) {
+               mainMenuScreen.dispose();
+               game.setScreen(new InstructionsScreen(game));
+           }
+
+        });
+
         buttonExit.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -55,6 +68,7 @@ public class MainMenuScreen implements Screen {
         });
 
         stage.addActor(buttonPlay);
+        stage.addActor(buttonInstructions);
         stage.addActor(buttonExit);
     }
 

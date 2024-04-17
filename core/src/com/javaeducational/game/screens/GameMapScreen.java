@@ -5,7 +5,6 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.MapLayer;
-import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -21,8 +20,8 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.javaeducational.game.entities.Gem;
 import com.javaeducational.game.tools.Hud;
 
-
 public class GameMapScreen implements Screen {
+
     // Sprite batch for rendering
     private EducationGame game;
 
@@ -39,15 +38,8 @@ public class GameMapScreen implements Screen {
     // Gem instance
     private Gem gem;
 
-    //Gem counter
+    // Gem counter
     private int gemsCollected = 0;
-
-    // Define and initialize variables for character creation
-    private int initialX = 1800 / 2; // Example initial X position
-    private int initialY = 900 / 2; // Example initial Y position
-    private int characterWidth = 32; // Example character width
-    private int characterHeight = 32; // Example character height
-    private int characterSpeed = 250; // Example character speed
 
     // Variables related to map and collision
     private TiledMapTileLayer solidLayer; // Assuming solid layer is available
@@ -61,12 +53,16 @@ public class GameMapScreen implements Screen {
     // Bus Section
     private MapLayer busLayer;
     private MapObjects busStations;
+
+    // Train Section
+    private MapLayer trainLayer;
+    private MapObjects trainStations;
+
     // Import bus class
     Bus bus;
     Vector2 startPoint;
     Vector2 endPoint;
 
-    // private CollisionRect rect;
     private Hud hud;
 
     // Gem position and dimensions
@@ -77,7 +73,6 @@ public class GameMapScreen implements Screen {
 
     public GameMapScreen(EducationGame game) {
         this.game = game;
-        hud = new Hud (game.batch);
     }
 
     @Override
@@ -90,9 +85,6 @@ public class GameMapScreen implements Screen {
         // Load the map
         TmxMapLoader mapLoader = new TmxMapLoader();
         map = mapLoader.load("assets/Map/MapActual.tmx");
-        for (MapLayer maplayer : map.getLayers()) {
-            System.out.println(maplayer.getName() + "test");
-        }
 
         // Initialize the renderer
         renderer = new OrthogonalTiledMapRenderer(map);
@@ -107,18 +99,15 @@ public class GameMapScreen implements Screen {
         mapHeightInTiles = solidLayer.getHeight();
 
         // Initialize character
-        character = new Character("Character/testcharacter.png",
-                initialX,
-                initialY,
-                characterWidth,
-                characterHeight,
-                characterSpeed,
-                "Tiggy",
-                solidLayer,
+        character = new Character(solidLayer,
                 tileWidth,
                 tileHeight,
                 mapWidthInTiles,
                 mapHeightInTiles);
+
+        hud = new Hud(game.batch, map, character);
+//        Gdx.input.setInputProcessor(hud.stage);
+
 
         objectLayer = map.getLayers().get("solid2");
         // Check if the objectLayer is not null before accessing its objects
@@ -126,22 +115,22 @@ public class GameMapScreen implements Screen {
             objects = objectLayer.getObjects();
 
         // Initialize gem
-        gem = new Gem("Map/blueheart.png",
-                gemX,
-                gemY,
-                gemWidth,
-                gemHeight);
+        gem = new Gem("assets/Map/blueheart.png", gemX, gemY, gemWidth, gemHeight);
+        }
 
-    }
         busLayer = map.getLayers().get("bus_stops");
         busStations = busLayer.getObjects();
+
+        trainLayer = map.getLayers().get("train_stations");
+        trainStations = trainLayer.getObjects();
 }
+
     private void relocateGem() {
         // Example random positions, adjust as needed
         gem.setX((float) Math.random() * (1600 - gem.getWidth())); // mapWidth needs to be defined
         gem.setY((float) Math.random() * (1600 - gem.getHeight())); // mapHeight needs to be defined
     }
-    @Override
+
     public void render(float delta) {
         // Handle user input for camera movement and character control
         handleInput();
@@ -160,47 +149,66 @@ public class GameMapScreen implements Screen {
         // Move the character based on user input
         character.handleInput();
 
-
-        // Render the character and gem without scaling
+        // Start batch for rendering sprites
         game.batch.begin();
-        character.render(game.batch);
-//        bus.update(delta); // update position
-//        bus.render(game.batch); // then render
 
+        // Render the character
+        character.render(game.batch);
+
+        // Render the gem
         gem.render(game.batch);
 
-        // Check collision with gem
-        if (character.getBounds().overlaps(gem.getBounds())) {
-            gemsCollected++;
-            relocateGem();
-            Hud.addScore(200);
-            System.out.println("Gems Collected: " + gemsCollected);
-        }
-        game.batch.end();
+    // Check for collision between character and gem
+    if (character.getBounds().overlaps(gem.getBounds())) {
+    // Increment gems collected
+    gemsCollected++;
+    System.out.println("Gem collected! Total gems: " + gemsCollected);
+    // Increment score by the gem's value
+    Hud.addScore(gem.getValue());
+    // Relocate gem to a new position
+    relocateGem();
+    }
 
-        // Collision bus station
+
+        game.batch.end();  // Ensure all sprites are rendered before ending the batch
+
+        // Handle bus station collision and interaction logic
         for (RectangleMapObject rectangleBusObject : busStations.getByType(RectangleMapObject.class)) {
             Rectangle busStationRect = rectangleBusObject.getRectangle();
             if (character.getBounds().overlaps(busStationRect)) {
-                System.out.println("Character/Bus Station Collision");
-            }
-        }
-        for (MapObject object : objects) {
-            if (object instanceof RectangleMapObject) {
-                RectangleMapObject rectObject = (RectangleMapObject) object;
-                Rectangle rect = rectObject.getRectangle();
-                if (rect.overlaps(character.getBounds())) {
-                    System.out.println("OMG YES BOY");
+                if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+                    if (!hud.active) {
+                        character.setCanMove(false);
+                        hud.takePublicTransport("bus", rectangleBusObject.getName(), busStations);
+                    }
                 }
             }
         }
-        // render score hud
-       // hud.update(dt);
-        float deltaTime = Gdx.graphics.getDeltaTime(); // Assuming you're using libGDX
-        hud.update(deltaTime);
+
+        // Handle train station collision and interaction logic
+        for (RectangleMapObject rectangleBusObject : trainStations.getByType(RectangleMapObject.class)) {
+            Rectangle trainStationRect = rectangleBusObject.getRectangle();
+            if (character.getBounds().overlaps(trainStationRect)) {
+                if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+                    if (!hud.active) {
+                        character.setCanMove(false);
+                        hud.takePublicTransport("train", rectangleBusObject.getName(), trainStations);
+                    }
+                }
+            }
+        }
+
+        // Update the HUD
+        float deltaTime = Gdx.graphics.getDeltaTime();
+        hud.stage.act();
+        hud.update(deltaTime, gemsCollected);
+
+        // Render the HUD stage
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
         hud.stage.draw();
     }
+
+
 
     // Handle user input for camera movement and character control
     private void handleInput() {
@@ -258,4 +266,3 @@ public class GameMapScreen implements Screen {
         gem.dispose();
     }
 }
-
