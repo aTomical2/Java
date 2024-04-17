@@ -23,6 +23,8 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.javaeducational.game.entities.Character;
+import com.javaeducational.game.tools.PopupBox;
+
 
 public class Hud {
     public Stage stage;
@@ -62,7 +64,7 @@ public class Hud {
         viewport = new FitViewport(EducationGame.WIDTH, EducationGame.HEIGHT, new OrthographicCamera());
         stage = new Stage(viewport , sb);
 
-        this.skin = new Skin(Gdx.files.internal("popup/uiskin.json"));
+        this.skin = new Skin(Gdx.files.internal("assets/popup/uiskin.json"));
 
         BitmapFont font = new BitmapFont(); // Default font
         font.getData().setScale(2); // Scale the font size by a factor of 2
@@ -118,8 +120,10 @@ public class Hud {
             countdownLabel.setText(String.format("%06d", worldTimer));
             timeCount = 0;
         }
-    
+        // Update the score label with the current gems collected
+        scoreLabel.setText(String.format("%06d", score));
     }
+
     public static void addScore(int  value) {
         score+=value;
         scoreLabel.setText((String.format("%06d", score)));

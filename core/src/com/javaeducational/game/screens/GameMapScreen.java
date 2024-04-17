@@ -80,7 +80,7 @@ public class GameMapScreen implements Screen {
 
         // Load the map
         TmxMapLoader mapLoader = new TmxMapLoader();
-        map = mapLoader.load("Map/MapActual.tmx");
+        map = mapLoader.load("assets/Map/MapActual.tmx");
 
         // Initialize the renderer
         renderer = new OrthogonalTiledMapRenderer(map);
@@ -111,12 +111,8 @@ public class GameMapScreen implements Screen {
             objects = objectLayer.getObjects();
 
         // Initialize gem
-        gem = new Gem("Map/blueheart.png",
-                gemX,
-                gemY,
-                gemWidth,
-                gemHeight);
-    }
+        gem = new Gem("assets/Map/blueheart.png", gemX, gemY, gemWidth, gemHeight);
+        }
 
         busLayer = map.getLayers().get("bus_stops");
         busStations = busLayer.getObjects();
@@ -234,14 +230,17 @@ public class GameMapScreen implements Screen {
         // Render the gem
         gem.render(game.batch);
 
-        // Check for collision between character and gem
-        if (character.getBounds().overlaps(gem.getBounds())) {
-            // Increment gems collected
-            gemsCollected++;
-            System.out.println("Gem collected! Total gems: " + gemsCollected);
-            // Relocate gem to a new position
-            relocateGem();
-        }
+    // Check for collision between character and gem
+    if (character.getBounds().overlaps(gem.getBounds())) {
+    // Increment gems collected
+    gemsCollected++;
+    System.out.println("Gem collected! Total gems: " + gemsCollected);
+    // Increment score by the gem's value
+    Hud.addScore(gem.getValue());
+    // Relocate gem to a new position
+    relocateGem();
+    }
+
 
         game.batch.end();  // Ensure all sprites are rendered before ending the batch
 
