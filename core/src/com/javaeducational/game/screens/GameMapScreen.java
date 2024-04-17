@@ -84,7 +84,7 @@ public class GameMapScreen implements Screen {
 
         // Load the map
         TmxMapLoader mapLoader = new TmxMapLoader();
-        map = mapLoader.load("assets/Map/MapActual.tmx");
+        map = mapLoader.load("Map/MapActual.tmx");
 
         // Initialize the renderer
         renderer = new OrthogonalTiledMapRenderer(map);
@@ -106,7 +106,6 @@ public class GameMapScreen implements Screen {
                 mapHeightInTiles);
 
         hud = new Hud(game.batch, map, character);
-//        Gdx.input.setInputProcessor(hud.stage);
 
 
         objectLayer = map.getLayers().get("solid2");
@@ -115,7 +114,7 @@ public class GameMapScreen implements Screen {
             objects = objectLayer.getObjects();
 
         // Initialize gem
-        gem = new Gem("assets/Map/blueheart.png", gemX, gemY, gemWidth, gemHeight);
+        gem = new Gem("Map/blueheart.png", gemX, gemY, gemWidth, gemHeight);
         }
 
         busLayer = map.getLayers().get("bus_stops");

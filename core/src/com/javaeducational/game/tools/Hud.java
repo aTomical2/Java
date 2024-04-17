@@ -64,7 +64,7 @@ public class Hud {
         viewport = new FitViewport(EducationGame.WIDTH, EducationGame.HEIGHT, new OrthographicCamera());
         stage = new Stage(viewport , sb);
 
-        this.skin = new Skin(Gdx.files.internal("assets/popup/uiskin.json"));
+        this.skin = new Skin(Gdx.files.internal("popup/uiskin.json"));
 
         BitmapFont font = new BitmapFont(); // Default font
         font.getData().setScale(2); // Scale the font size by a factor of 2
@@ -92,11 +92,11 @@ public class Hud {
 
         // initialising the widgets as int or str
         Label.LabelStyle labelStyle = new Label.LabelStyle(font, Color.WHITE);
-        countdownLabel = new Label(String.format("%06d", worldTimer), labelStyle);
-        scoreLabel = new Label(String.format("%06d", score), labelStyle);
+        countdownLabel = new Label(String.format("%01d", worldTimer), labelStyle);
+        scoreLabel = new Label(String.format("%02d", score), labelStyle);
         CarbonCrunchersLabel = new Label("Carbon Crunchers", labelStyle);
         timeLabel= new Label("Time", new Label.LabelStyle(font, Color.WHITE));
-        levelLabel = new Label("1-1", new Label.LabelStyle (font, Color.WHITE));
+        levelLabel = new Label("1", new Label.LabelStyle (font, Color.WHITE));
         WorldLabel = new Label("Level", new Label.LabelStyle (font, Color.WHITE));
 
 
@@ -120,6 +120,10 @@ public class Hud {
             countdownLabel.setText(String.format("%06d", worldTimer));
             timeCount = 0;
         }
+        if (worldTimer < 1){
+            character.setCanMove(false);
+            levelEnd();
+        }
         // Update the score label with the current gems collected
         scoreLabel.setText(String.format("%06d", score));
     }
@@ -134,7 +138,7 @@ public class Hud {
     }
 
     public void levelEnd() {
-        popupBox = new PopupBox("Time's up!", skin, "Level-1 Complete. Ready for Level-2?", stage);
+        popupBox = new PopupBox("Time's up!", skin, "Level 1 Complete. Ready for Level 2?", stage);
         popupBox.show(stage);
 
         // Add event listeners to the "Yes" and "No" buttons
