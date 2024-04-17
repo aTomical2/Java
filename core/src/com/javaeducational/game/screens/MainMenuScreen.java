@@ -49,12 +49,12 @@ public class MainMenuScreen implements Screen {
         buttonExit.setPosition((Gdx.graphics.getWidth() - buttonExit.getWidth()) / 1.5f + 100, (Gdx.graphics.getHeight() - buttonExit.getHeight()) / 2);
 
         buttonPlay.addListener(new ClickListener() {
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    dispose();
-                    game.setScreen(new GameMapScreen(game));
-                }
-            });
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                mainMenuScreen.dispose();
+                game.setScreen(new GameMapScreen(game));
+            }
+        });
 
         buttonInstructions.addListener(new ClickListener() {
                 @Override
@@ -64,12 +64,12 @@ public class MainMenuScreen implements Screen {
             });
 
         buttonExit.addListener(new ClickListener() {
-                @Override
-                public void clicked(InputEvent event, float x, float y) {
-                    dispose();
-                    Gdx.app.exit();
-                }
-            });
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                mainMenuScreen.dispose();
+                Gdx.app.exit();
+            }
+        });
 
         stage.addActor(buttonPlay);
         stage.addActor(buttonInstructions);
