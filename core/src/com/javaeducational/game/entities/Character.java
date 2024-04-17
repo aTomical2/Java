@@ -19,6 +19,8 @@ public class Character {
     private float y;
     private float width;
     private float height;
+    private final int WIDTH_PIXEL = 40;
+    private final int HEIGHT_PIXEL = 40;
 
     // Speed of the character
     private float speed;
@@ -35,24 +37,29 @@ public class Character {
     private Rectangle bounds; // Get bounds for collisions
     private boolean canMove;
 
-    // Textures for each direction
-    private Texture frontTexture;
-    private Texture backTexture;
-    private Texture leftTexture;
-    private Texture rightTexture;
+    //Textures for walking
+    private TextureRegion[] upFrames;
+    private TextureRegion[] downFrames;
+    private TextureRegion[] leftFrames;
+    private TextureRegion[] rightFrames;
 
-    // Animations for each direction
-    private Animation<TextureRegion> frontAnimation;
-    private Animation<TextureRegion> backAnimation;
-    private Animation<TextureRegion> leftAnimation;
-    private Animation<TextureRegion> rightAnimation;
+    // Animations for walking
+    private TextureRegion[][] characterSpriteSheet;
+    private Animation<TextureRegion> upWalkingAnimation;
+    private Animation<TextureRegion> downWalkingAnimation;
+    private Animation<TextureRegion> leftWalkingAnimation;
+    private Animation<TextureRegion> rightWalkingAnimation;
 
-    TextureRegion currentFrame;
+    // Animations for each direction when stopped
+    private TextureRegion upStoppedFrame;
+    private TextureRegion downStoppedFrame;
+    private TextureRegion leftStoppedFrame;
+    private TextureRegion rightStoppedFrame;
+
+    private Animation<TextureRegion> currentAnimation;
+    private TextureRegion currentFrame;
 
     private float stateTime;
-
-    // Current animation
-    private Animation<TextureRegion> currentAnimation;
 
     boolean isFacingUp = false;
     boolean isFacingDown = false;
@@ -76,31 +83,42 @@ public class Character {
         this.bounds = new Rectangle(x, y, width, height);
         this.canMove = true;
 
-        // Load textures
-         leftTexture = new Texture(Gdx.files.internal("Character/leftC.png"));
-         rightTexture = new Texture(Gdx.files.internal("Character/rightC.png"));
-         frontTexture = new Texture(Gdx.files.internal("Character/frontC.png"));
-         backTexture = new Texture(Gdx.files.internal("Character/backC.png"));
-         leftTexture = new Texture(Gdx.files.internal("Character/leftC.png"));
-         rightTexture = new Texture(Gdx.files.internal("Character/rightC.png"));
-         frontTexture = new Texture(Gdx.files.internal("Character/frontC.png"));
-         backTexture = new Texture(Gdx.files.internal("Character/backC.png"));
+        characterSpriteSheet = TextureRegion.split(new Texture("Character/character.png"), WIDTH_PIXEL, HEIGHT_PIXEL);
 
+        upFrames = new TextureRegion[2];
+        downFrames = new TextureRegion[2];
+        leftFrames = new TextureRegion[2];
+        rightFrames = new TextureRegion[2];
 
-        // Create animations
-        frontAnimation = new Animation<>(0.1f, new TextureRegion(frontTexture));
-        backAnimation = new Animation<>(0.1f, new TextureRegion(backTexture));
-        leftAnimation = new Animation<>(0.1f, new TextureRegion(leftTexture));
-        rightAnimation = new Animation<>(0.1f, new TextureRegion(rightTexture));
+        upFrames[0] = characterSpriteSheet[2][0];
+        upFrames[1] = characterSpriteSheet[2][2];
+
+        downFrames[0] = characterSpriteSheet[0][0];
+        downFrames[1] = characterSpriteSheet[0][2];
+
+        leftFrames[0] = characterSpriteSheet[3][0];
+        leftFrames[1] = characterSpriteSheet[3][2];
+
+        rightFrames[0] = characterSpriteSheet[1][0];
+        rightFrames[1] = characterSpriteSheet[1][2];
+
+        upStoppedFrame = characterSpriteSheet[2][1];
+        downStoppedFrame = characterSpriteSheet[0][1];
+        leftStoppedFrame = characterSpriteSheet[3][1];
+        rightStoppedFrame = characterSpriteSheet[1][1];
+
+        upWalkingAnimation = new Animation<TextureRegion>(0.1f, upFrames);
+        downWalkingAnimation = new Animation<TextureRegion>(0.1f, downFrames);
+        leftWalkingAnimation = new Animation<TextureRegion>(0.1f, leftFrames);
+        rightWalkingAnimation = new Animation<TextureRegion>(0.1f, rightFrames);
 
         // Set initial animation
-        //currentAnimation = frontAnimation;
         isFacingUp = false;
-        isFacingDown = false;
+        isFacingDown = true;
         isFacingLeft = false;
-        isFacingRight = true; // Start facing right by default
+        isFacingRight = false;
 
-        currentAnimation = frontAnimation;
+        currentAnimation = downWalkingAnimation;
 
         currentFrame = currentAnimation.getKeyFrame(stateTime, true);
 
@@ -164,25 +182,32 @@ public class Character {
 
     // Method to render the character
     public void render(SpriteBatch batch) {
-        // Render the appropriate animation based on the current animation state
-
-        //TextureRegion currentFrame = currentAnimation.getKeyFrame(stateTime, true);
-       // TextureRegion currentFrame = currentAnimation.getKeyFrame(0, true); // State time doesn't matter
-
-       // if (currentAnimation != null) {
-          //  TextureRegion currentFrame = currentAnimation.getKeyFrame(stateTime, true);
-
         if (isFacingUp) {
-            currentAnimation = backAnimation;
+            if (Gdx.input.isKeyPressed(Input.Keys.W) || Gdx.input.isKeyPressed(Input.Keys.UP)) {
+                currentFrame = upWalkingAnimation.getKeyFrame(stateTime, true);
+            } else {
+                currentFrame = upStoppedFrame;
+            }
         } else if (isFacingDown) {
-            currentAnimation = frontAnimation;
+            if (Gdx.input.isKeyPressed(Input.Keys.S) || Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+                currentFrame = downWalkingAnimation.getKeyFrame(stateTime, true);
+            } else {
+                currentFrame = downStoppedFrame;
+            }
         } else if (isFacingLeft) {
-            currentAnimation = leftAnimation;
+            if (Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+                currentFrame = leftWalkingAnimation.getKeyFrame(stateTime, true);
+            } else {
+                currentFrame = leftStoppedFrame;
+            }
         } else if (isFacingRight) {
-            currentAnimation = rightAnimation;
+            if (Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+                currentFrame = rightWalkingAnimation.getKeyFrame(stateTime, true);
+            } else {
+                currentFrame = rightStoppedFrame;
+            }
         }
 
-        currentFrame = currentAnimation.getKeyFrame(stateTime, true);
         batch.setColor(1, 1,1,1);
         batch.draw(currentFrame, x, y, width, height);
 
@@ -202,10 +227,6 @@ public class Character {
 
     // Method to dispose of resources when they are no longer needed
     public void dispose() {
-        frontTexture.dispose();
-        backTexture.dispose();
-        leftTexture.dispose();
-        rightTexture.dispose();
         font.dispose();
     }
 
