@@ -43,6 +43,7 @@ public class Hud {
     private Label countdownLabel;
     private Label WorldLabel;
     private Label levelLabel;
+    private int carbonFootprint;
 
     Character character;
     public boolean active;
@@ -52,6 +53,7 @@ public class Hud {
         timeCount = 0;
         worldTimer = 100;
         timerExpired = false;
+        this.carbonFootprint = 0;
 
         this.active = false;
         this.character = character;
@@ -197,6 +199,8 @@ public class Hud {
                         // Get Station Names and Coordinates
                         for (RectangleMapObject rectangleBusObject : busStations.getByType(RectangleMapObject.class)) {
                             if (selectedStation.equals(rectangleBusObject.getName())) {
+                                carbonFootprint += 50;
+                                System.out.println("Your Carbon Footprint is now: " + carbonFootprint);
                                 stationPopup.hide();
                                 stationPopup.remove();
                                 character.takeBus(rectangleBusObject.getRectangle().getX(), rectangleBusObject.getRectangle().getY());

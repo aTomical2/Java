@@ -183,7 +183,6 @@ public class Character {
         }
 
         currentFrame = currentAnimation.getKeyFrame(stateTime, true);
-        System.out.println("" + x + y + " " + width + " " + height);
         batch.setColor(1, 1,1,1);
         batch.draw(currentFrame, x, y, width, height);
 
@@ -232,7 +231,6 @@ public class Character {
     }
 
     public void takeBus(float x, float y) {
-        System.out.println("X: " + x + " Y: " + y);
         this.x = x;
         this.y = y;
         bounds.setPosition(x, y);
