@@ -33,10 +33,10 @@ public class MainMenuScreen implements Screen {
         this.buttonInstructions = new TextButton("Instructions", buttonSkin, "default");
         this.buttonExit = new TextButton("Exit", buttonSkin, "default");
 
-//        // Initialize the instructions dialog ('buttonSkin' causing error with loading the game window)
-//        instructionsDialog = new Dialog("Instructions", buttonSkin);
-//        instructionsDialog.text("In this game, your objective is to navigate a map and collect as many gems as possible within a set time limit. You'll use various modes of transport available on the map while aiming to keep your carbon footprint as low as possible. The goal is to maximize gem collection while minimizing environmental impact until the timer runs out.");
-//        instructionsDialog.button("Close", false); // Add a close button
+        // Initialize the instructions dialog
+        instructionsDialog = new Dialog("Instructions", buttonSkin);
+        instructionsDialog.text("In this game, your objective is to navigate a map and collect as many gems as possible within a set time limit. You'll use various modes of transport available on the map while aiming to keep your carbon footprint as low as possible. The goal is to maximize gem collection while minimizing environmental impact until the timer runs out.");
+        instructionsDialog.button("Close", false); // Add a close button
     }
 
     @Override
@@ -49,12 +49,12 @@ public class MainMenuScreen implements Screen {
         buttonExit.setPosition((Gdx.graphics.getWidth() - buttonExit.getWidth()) / 1.5f + 100, (Gdx.graphics.getHeight() - buttonExit.getHeight()) / 2);
 
         buttonPlay.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                mainMenuScreen.dispose();
-                game.setScreen(new GameMapScreen(game));
-            }
-        });
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    dispose();
+                    game.setScreen(new GameMapScreen(game));
+                }
+            });
 
         buttonInstructions.addListener(new ClickListener() {
                 @Override
@@ -64,12 +64,12 @@ public class MainMenuScreen implements Screen {
             });
 
         buttonExit.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                mainMenuScreen.dispose();
-                Gdx.app.exit();
-            }
-        });
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    dispose();
+                    Gdx.app.exit();
+                }
+            });
 
         stage.addActor(buttonPlay);
         stage.addActor(buttonInstructions);
