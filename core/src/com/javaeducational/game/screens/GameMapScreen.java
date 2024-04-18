@@ -80,11 +80,11 @@ public class GameMapScreen implements Screen {
         // Create camera
         camera = new OrthographicCamera();
         // Adjust viewport width and height to zoom out
-        camera.setToOrtho(false, Gdx.graphics.getWidth() * 1.5f, Gdx.graphics.getHeight() * 1.5f);
+        camera.setToOrtho(false, Gdx.graphics.getWidth() * .5f, Gdx.graphics.getHeight() * .5f);
 
         // Load the map
         TmxMapLoader mapLoader = new TmxMapLoader();
-        map = mapLoader.load("Map/MapActual.tmx");
+        map = mapLoader.load("assets/Map/MapActual.tmx");
 
         // Initialize the renderer
         renderer = new OrthogonalTiledMapRenderer(map);
@@ -114,7 +114,7 @@ public class GameMapScreen implements Screen {
             objects = objectLayer.getObjects();
 
         // Initialize gem
-        gem = new Gem("Map/blueheart.png", gemX, gemY, gemWidth, gemHeight);
+        gem = new Gem("assets/Map/blueheart.png", gemX, gemY, gemWidth, gemHeight);
         }
 
         busLayer = map.getLayers().get("bus_stops");

@@ -64,7 +64,7 @@ public class Hud {
         viewport = new FitViewport(EducationGame.WIDTH, EducationGame.HEIGHT, new OrthographicCamera());
         stage = new Stage(viewport , sb);
 
-        this.skin = new Skin(Gdx.files.internal("popup/uiskin.json"));
+        this.skin = new Skin(Gdx.files.internal("assets/popup/uiskin.json"));
 
         BitmapFont font = new BitmapFont(); // Default font
         font.getData().setScale(2); // Scale the font size by a factor of 2
