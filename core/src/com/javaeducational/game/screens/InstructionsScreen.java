@@ -25,7 +25,7 @@ public class InstructionsScreen implements Screen {
     private TextButton buttonExit;
     private GlyphLayout instructionsLayout;
     final InstructionsScreen instructionsScreen = this;
-    private final String instructions = "In this game your objective is to navigate the map and collect as many gems as possible within the time limit. You can use 4 modes of transport: Walking, Bike, Bus, & Train to reach the gems. The more Gems you collect the higher your score will be, but be careful! Using faster modes of transport will reduce your time left and increase your Carbon Footprint which is deducted from your final score. Your goal is to collect as many gems as possible until you run out of time while minimizing your environmental impact. Have fun!";
+    private final String instructions = "Welcome to Carbon Cruncher: Tiggy's Adventures.\n\nIn this game your objective is to navigate the map and collect as many gems as possible within the time limit, while minimizing your environmental impact. \n\n You can use 4 modes of transport: Walking, Bike, Bus, & Train to reach the gems. The more Gems you collect the higher your score will be. \n\nBut be careful! Using faster modes of transport will reduce your time left and increase your Carbon Footprint, reducing your final score :( \n\n Have fun!";
     float x, y;
 
     public InstructionsScreen(EducationGame game) {
