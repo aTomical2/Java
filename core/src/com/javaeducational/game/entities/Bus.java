@@ -47,7 +47,7 @@ public class Bus {
 
     // Constructor
     public Bus(float x, float y, TiledMapTileLayer solidLayer, float tileWidth, float tileHeight,
-                     float mapWidthInTiles, float mapHeightInTiles, Vector2 startPoint, Vector2 endPoint) {
+               float mapWidthInTiles, float mapHeightInTiles, Vector2 startPoint) {
         // Load the character texture using the provided texturePath
         // Set initial position, dimensions, and speed
         this.x = x;
@@ -62,7 +62,6 @@ public class Bus {
         this.bounds = new Rectangle(x, y, BUS_WIDTH, BUS_HEIGHT);
         this.movingTowardsEnd = true;
         this.startPoint = startPoint;
-        this.endPoint = endPoint;
         this.position = startPoint.cpy(); //use cpy to avoid reference issues
         stateTime = 0f;
         busRolls = new Animation[49];
@@ -77,32 +76,32 @@ public class Bus {
 
     // Method to render the character
     public void render(SpriteBatch batch) {
-    batch.draw(currentFrame, x - (BUS_WIDTH / 2), y - (BUS_HEIGHT / 2), BUS_WIDTH, BUS_HEIGHT);
+        batch.draw(busRolls[24].getKeyFrame(1), x - (BUS_WIDTH / 2), y - (BUS_HEIGHT / 2), BUS_WIDTH, BUS_HEIGHT);
     }
 
-    public void update(float deltaTime) {
-        Vector2 target = movingTowardsEnd ? endPoint : startPoint;
-        Vector2 direction = new Vector2(target.x - position.x, target.y - position.y).nor();
-        System.out.println(direction.x + " " + direction.y);
-        velocity = new Vector2(direction.x * BUS_SPEED, direction.y * BUS_SPEED);
-
-        position.add(velocity.scl(deltaTime));
-
-        x = position.x;
-        y = position.y;
-
-        float distance = position.dst(target);
-        if (distance < BUS_SPEED * deltaTime) {
-            movingTowardsEnd = !movingTowardsEnd;
-            position.set(target);
-        }
-
-        bounds.setPosition(x, y);
-
-        updateDirection(velocity);
-        currentFrame = currentAnimation.getKeyFrame(stateTime, true);
-        stateTime += deltaTime;
-    }
+//    public void update(float deltaTime) {
+//        Vector2 target = movingTowardsEnd ? endPoint : startPoint;
+//        Vector2 direction = new Vector2(target.x - position.x, target.y - position.y).nor();
+//        System.out.println(direction.x + " " + direction.y);
+//        velocity = new Vector2(direction.x * BUS_SPEED, direction.y * BUS_SPEED);
+//
+//        position.add(velocity.scl(deltaTime));
+//
+//        x = position.x;
+//        y = position.y;
+//
+//        float distance = position.dst(target);
+//        if (distance < BUS_SPEED * deltaTime) {
+//            movingTowardsEnd = !movingTowardsEnd;
+//            position.set(target);
+//        }
+//
+//        bounds.setPosition(x, y);
+//
+//        updateDirection(velocity);
+//        currentFrame = currentAnimation.getKeyFrame(stateTime, true);
+//        stateTime += deltaTime;
+//    }
 
     // checks collisions
     public Rectangle getBounds() {
