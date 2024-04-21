@@ -4,10 +4,16 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.MapObjects;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
+import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.javaeducational.game.screens.GameMapScreen;
 
 
 public class Character {
@@ -27,6 +33,13 @@ public class Character {
 
     private String name;
     private BitmapFont font;
+
+    private boolean onBike;
+    private Bike bike;
+    private MapObjects bikepaths;
+    private MapLayer bikepathslayer;
+    private GameMapScreen gameMapScreen;
+    public boolean inBikeStandCollision = false;
 
     // Variables related to map and collision
     private TiledMapTileLayer solidLayer; // Assuming solid layer is available
@@ -67,7 +80,7 @@ public class Character {
     boolean isFacingRight = true; // Start facing right by default
 
     // Constructor
-    public Character(TiledMapTileLayer solidLayer, int tileWidth, int tileHeight,
+    public Character(GameMapScreen gameMapScreen, TiledMapTileLayer solidLayer, int tileWidth, int tileHeight,
                      int mapWidthInTiles, int mapHeightInTiles) {
         this.x = 1800/2;
         this.y= 900 /2;
@@ -84,6 +97,11 @@ public class Character {
         this.canMove = true;
 
         characterSpriteSheet = TextureRegion.split(new Texture("Character/character.png"), WIDTH_PIXEL, HEIGHT_PIXEL);
+
+        this.gameMapScreen = gameMapScreen;
+        this.onBike = false;
+        bikepathslayer = GameMapScreen.map.getLayers().get("bikepaths");
+        bikepaths = bikepathslayer.getObjects();
 
         upFrames = new TextureRegion[2];
         downFrames = new TextureRegion[2];
@@ -125,6 +143,23 @@ public class Character {
         // Initialize font
         font = new BitmapFont();
     }
+    public void setOnBikepath(boolean onBike) {
+        this.onBike = onBike;
+        if (!onBike) {
+            // Handle additional logic for when the character dismounts the bike, if necessary
+            this.bike = null;  // Assuming you have a 'bike' object or similar
+        }
+    }
+    public Bike getBike() {
+        return this.bike;
+    }
+    public boolean isOnBike() {
+        return onBike;
+    }
+    public void setOnBike(boolean onBike) {
+        this.onBike = onBike;
+    }
+
 
     public void handleInput() {
 
@@ -168,6 +203,19 @@ public class Character {
             isFacingRight = true;
             newX += speed * delta;
         }
+        if (isOnBike()) {
+            speed = 500;  // Increased speed when on the bike
+        } else {
+            speed = 250;  // Normal walking speed when not on the bike
+        }
+        if (gameMapScreen.bikemovepath(newX, newY, width, height)) {
+            // Update position if the new position is on a valid path or if not restricted
+            x = newX;
+            y = newY;
+        } else {
+
+            System.out.println("Movement restricted: Off path");
+        }
 
         // Check collision with map boundaries and solid tiles
         if (newX >= 0 && newX + width <= mapWidthInTiles * tileWidth &&
@@ -207,12 +255,17 @@ public class Character {
                 currentFrame = rightStoppedFrame;
             }
         }
+        if (onBike && bike != null) {
+            Texture bikeTexture = bike.getTexture();
+            if (bikeTexture != null) {
+                batch.draw(bikeTexture, x, y, width, height);
+            }
+        } else {
+            batch.setColor(1, 1,1,1);
+            batch.draw(currentFrame, x, y, width, height);
+        }
+        font.draw(batch, name, x, y + height + 20);
 
-        batch.setColor(1, 1,1,1);
-        batch.draw(currentFrame, x, y, width, height);
-
-        // Render the name above the character
-        font.draw(batch, name, x, y + height + 20); // Adjust 20 according to your preference
     }
 
     // Method to check collision with solid tiles
@@ -223,6 +276,20 @@ public class Character {
 
         // Check if the tile is solid
         return solidLayer.getCell(tileX, tileY) != null;
+    }
+    public void toggleBikeState() {
+        this.onBike = !this.onBike;
+        // Initialize the bike when the state is toggled
+        Texture bikeTexture;
+        if (onBike) {
+            if (bike == null) {
+                bike = new Bike("Bike/bike.png", x, y, width, height);
+            }
+            bikeTexture = bike.getTexture();
+        } else {
+            bike = null;
+            bikeTexture = null;
+        }
     }
 
     // Method to dispose of resources when they are no longer needed

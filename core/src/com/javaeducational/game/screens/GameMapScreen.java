@@ -5,11 +5,13 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
@@ -29,7 +31,13 @@ public class GameMapScreen implements Screen {
     private OrthographicCamera camera;
 
     // Tiled map and renderer
-    private TiledMap map;
+    public static TiledMap map;
+    private MapObjects bikeStands;
+    private MapLayer bikeStandsLayer;
+
+    private MapObjects bikepaths;
+    private MapLayer bikepathslayer;
+
     private OrthogonalTiledMapRenderer renderer;
 
     // Character instance
@@ -84,7 +92,7 @@ public class GameMapScreen implements Screen {
 
         // Load the map
         TmxMapLoader mapLoader = new TmxMapLoader();
-        map = mapLoader.load("assets/Map/MapActual.tmx");
+        map = mapLoader.load("Map/MapActual.tmx");
 
         // Initialize the renderer
         renderer = new OrthogonalTiledMapRenderer(map);
@@ -99,7 +107,7 @@ public class GameMapScreen implements Screen {
         mapHeightInTiles = solidLayer.getHeight();
 
         // Initialize character
-        character = new Character(solidLayer,
+        character = new Character(this, solidLayer,
                 tileWidth,
                 tileHeight,
                 mapWidthInTiles,
@@ -114,7 +122,7 @@ public class GameMapScreen implements Screen {
             objects = objectLayer.getObjects();
 
         // Initialize gem
-        gem = new Gem("assets/Map/blueheart.png", gemX, gemY, gemWidth, gemHeight);
+        gem = new Gem("Map/blueheart.png", gemX, gemY, gemWidth, gemHeight);
         }
 
         busLayer = map.getLayers().get("bus_stops");
@@ -122,6 +130,12 @@ public class GameMapScreen implements Screen {
 
         trainLayer = map.getLayers().get("train_stations");
         trainStations = trainLayer.getObjects();
+        busLayer = map.getLayers().get("bus_stops");
+        busStations = busLayer.getObjects();
+        bikeStandsLayer = map.getLayers().get("bike_stops");
+        bikeStands = bikeStandsLayer.getObjects();
+        bikepathslayer = map.getLayers().get("bikepaths");
+        bikepaths = bikepathslayer.getObjects();
 }
 
     private void relocateGem() {
@@ -133,6 +147,9 @@ public class GameMapScreen implements Screen {
     public void render(float delta) {
         // Handle user input for camera movement and character control
         handleInput();
+        checkCollisionWithBikeStand();
+        bikemovepath(character.getX(), character.getY(), character.getWidth(), character.getHeight());
+
 
         // Clear screen
         ScreenUtils.clear(0, 0, 0, 1);
@@ -150,9 +167,13 @@ public class GameMapScreen implements Screen {
 
         // Start batch for rendering sprites
         game.batch.begin();
+        if (character.getBike() != null && character.getBike().isOnBike()) {
+            character.getBike().render(game.batch);
 
-        // Render the character
-        character.render(game.batch);
+        } else {
+            character.handleInput();
+            character.render(game.batch);
+        }
 
         // Render the gem
         gem.render(game.batch);
@@ -170,6 +191,8 @@ public class GameMapScreen implements Screen {
 
 
         game.batch.end();  // Ensure all sprites are rendered before ending the batch
+
+
 
         // Handle bus station collision and interaction logic
         for (RectangleMapObject rectangleBusObject : busStations.getByType(RectangleMapObject.class)) {
@@ -206,62 +229,104 @@ public class GameMapScreen implements Screen {
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
         hud.stage.draw();
     }
+    public boolean bikemovepath(float newX, float newY, float width, float height) {
+        Rectangle newRect = new Rectangle(newX, newY, width, height);
+        boolean isOnPath = false;
+        if (character.isOnBike()) {
+            for (MapObject object : bikepaths) {
+                if (object instanceof RectangleMapObject) {
+                    Rectangle rect = ((RectangleMapObject) object).getRectangle();
+                    if (Intersector.overlaps(newRect, rect)) {
+                        isOnPath = true; // At least part of the bike is on the path
+                        break;
+                    }
+                }
+            }
+            if (!isOnPath) {
+                character.setOnBike(false);
+                System.out.println("You are off the path! Dismounting bike...");
+            }
+        }
+        return isOnPath; // Return true only if the new position overlaps with a bike path
+    }
+    private void checkCollisionWithBikeStand() {
+        Rectangle characterBounds = character.getBounds();
+        boolean collisionDetected = false;
+
+        for (RectangleMapObject rectangleBikeStandObject : bikeStands.getByType(RectangleMapObject.class)) {
+            Rectangle bikeStandRect = rectangleBikeStandObject.getRectangle();
+            if (characterBounds.overlaps(bikeStandRect)) {
+                collisionDetected = true;
+                if (!character.inBikeStandCollision) {
+                    character.toggleBikeState();
+                    character.inBikeStandCollision = true;
+                    System.out.println("Collision with Bike Stand Detected. Bike state toggled to: " + character.isOnBike());
+                }
+                break;
+            }
+        }
+
+
+        if (!collisionDetected && character.inBikeStandCollision) {
+            character.inBikeStandCollision = false;  // Reset the collision flag when no longer colliding
+        }
+    }
 
 
 
     // Handle user input for camera movement and character control
-    private void handleInput() {
-        // Adjust camera speed based on your needs
-        float cameraSpeed = 200 * Gdx.graphics.getDeltaTime();
+        private void handleInput() {
+            // Adjust camera speed based on your needs
+            float cameraSpeed = 200 * Gdx.graphics.getDeltaTime();
 
-        // Move camera left
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            camera.translate(-cameraSpeed, 0);
+            // Move camera left
+            if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+                camera.translate(-cameraSpeed, 0);
+            }
+            // Move camera right
+            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+                camera.translate(cameraSpeed, 0);
+            }
+            // Move camera up
+            if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+                camera.translate(0, cameraSpeed);
+            }
+            // Move camera down
+            if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+                camera.translate(0, -cameraSpeed);
+            }
+
+            // Ensure camera follows the character
+            camera.position.set(character.getX() + character.getWidth() / 2, character.getY() + character.getHeight() / 2, 0);
+            camera.update();
         }
-        // Move camera right
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            camera.translate(cameraSpeed, 0);
-        }
-        // Move camera up
-        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-            camera.translate(0, cameraSpeed);
-        }
-        // Move camera down
-        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-            camera.translate(0, -cameraSpeed);
+
+        @Override
+        public void resize(int width, int height) {
+
         }
 
-        // Ensure camera follows the character
-        camera.position.set(character.getX() + character.getWidth() / 2, character.getY() + character.getHeight() / 2, 0);
-        camera.update();
+        @Override
+        public void pause() {
+
+        }
+
+        @Override
+        public void resume() {
+
+        }
+
+        @Override
+        public void hide() {
+
+        }
+
+        @Override
+        public void dispose() {
+            game.batch.dispose();
+            map.dispose();
+            renderer.dispose();
+            character.dispose();
+            gem.dispose();
+        }
     }
-
-    @Override
-    public void resize(int width, int height) {
-
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
-    @Override
-    public void dispose() {
-        game.batch.dispose();
-        map.dispose();
-        renderer.dispose();
-        character.dispose();
-        gem.dispose();
-    }
-}

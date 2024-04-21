@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.8" tiledversion="1.8.0" orientation="orthogonal" renderorder="right-down" width="200" height="200" tilewidth="8" tileheight="8" infinite="0" nextlayerid="32" nextobjectid="27">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="200" height="200" tilewidth="8" tileheight="8" infinite="0" nextlayerid="33" nextobjectid="49">
  <tileset firstgid="1" source="citytileset1.tsx"/>
  <tileset firstgid="1313" source="Tileset1Actual.tsx"/>
  <tileset firstgid="2313" source="citytileset2.tsx"/>
@@ -1454,6 +1454,19 @@
   <object id="10" name="Estadio O'Dowd" x="401.532" y="1048.56" width="17" height="32" rotation="269.783"/>
   <object id="11" name="T Junction" x="425.532" y="1402.56" width="17" height="32" rotation="269.783"/>
   <object id="12" name="Wood's Station" x="685.532" y="1400.56" width="17" height="32" rotation="269.783"/>
+ </objectgroup>
+ <objectgroup id="32" name="bikepaths">
+  <object id="28" x="192" y="658" width="2"/>
+  <object id="34" x="634" y="406" width="628" height="22"/>
+  <object id="36" x="1290" y="424"/>
+  <object id="39" x="686" y="716" width="26" height="596"/>
+  <object id="41" x="216" y="642" width="294" height="14"/>
+  <object id="42" x="176" y="636" width="34" height="46"/>
+  <object id="43" x="514" y="636" width="36" height="52"/>
+  <object id="44" x="682" y="1310" width="52" height="42"/>
+  <object id="45" x="680" y="658" width="58" height="58"/>
+  <object id="47" x="594" y="406" width="34" height="46"/>
+  <object id="48" x="1274" y="406" width="36" height="46"/>
  </objectgroup>
  <objectgroup id="31" name="train_stations">
   <object id="21" name="Central" x="710.5" y="735" width="73" height="57"/>
