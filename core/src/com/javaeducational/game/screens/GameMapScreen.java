@@ -23,31 +23,25 @@ import com.javaeducational.game.entities.Gem;
 import com.javaeducational.game.tools.Hud;
 
 public class GameMapScreen implements Screen {
-
     // Sprite batch for rendering
     private EducationGame game;
 
-    // Orthographic camera for viewing the world
-    private OrthographicCamera camera;
+    private OrthographicCamera camera;    // Orthographic camera for viewing the world
 
     // Tiled map and renderer
     public static TiledMap map;
     private MapObjects bikeStands;
     private MapLayer bikeStandsLayer;
-
     private MapObjects bikepaths;
     private MapLayer bikepathslayer;
 
     private OrthogonalTiledMapRenderer renderer;
 
-    // Character instance
-    private Character character;
+    private Character character; // Character instance
 
-    // Gem instance
-    private Gem gem;
+    private Gem gem; // Gem instance
 
-    // Gem counter
-    private int gemsCollected = 0;
+    private int gemsCollected = 0;    // Gem counter
 
     // Variables related to map and collision
     private TiledMapTileLayer solidLayer; // Assuming solid layer is available
@@ -57,22 +51,16 @@ public class GameMapScreen implements Screen {
     private int mapHeightInTiles; // Assuming map height is in tiles
     private MapLayer objectLayer;
     private MapObjects objects;
-
-    // Bus Section
-    private MapLayer busLayer;
+    private MapLayer busLayer; // Bus Section
     private MapObjects busStations;
-
-    // Train Section
-    private MapLayer trainLayer;
+    private MapLayer trainLayer;   // Train Section
     private MapObjects trainStations;
-
+    private MapLayer eduPopsLayer; // edupopups
+    private MapObjects eduPopsObjects;
     // Import bus class
     Bus bus;
     Vector2 startPoint;
     Vector2 endPoint;
-
-    private MapLayer eduPopsLayer;
-    private MapObjects eduPopObjects;
 
     private Hud hud;
 
@@ -118,7 +106,6 @@ public class GameMapScreen implements Screen {
 
         hud = new Hud(game.batch, map, character);
 
-
         objectLayer = map.getLayers().get("solid2");
         // Check if the objectLayer is not null before accessing its objects
         if (objectLayer != null) {
@@ -127,9 +114,6 @@ public class GameMapScreen implements Screen {
         // Initialize gem
         gem = new Gem("Map/blueheart.png", gemX, gemY, gemWidth, gemHeight);
         }
-
-        busLayer = map.getLayers().get("bus_stops");
-        busStations = busLayer.getObjects();
 
         trainLayer = map.getLayers().get("train_stations");
         trainStations = trainLayer.getObjects();
@@ -140,8 +124,8 @@ public class GameMapScreen implements Screen {
         bikepathslayer = map.getLayers().get("bikepaths");
         bikepaths = bikepathslayer.getObjects();
         eduPopsLayer = map.getLayers().get("edupops");
-        eduPopObjects = eduPopsLayer.getObjects();
-}
+        eduPopsObjects = eduPopsLayer.getObjects();
+    }
 
     private void relocateGem() {
         // Example random positions, adjust as needed
@@ -154,7 +138,7 @@ public class GameMapScreen implements Screen {
         handleInput();
         checkCollisionWithBikeStand();
         bikemovepath(character.getX(), character.getY(), character.getWidth(), character.getHeight());
-
+        checkCollisionWithEduPopsObjects();
 
         // Clear screen
         ScreenUtils.clear(0, 0, 0, 1);
@@ -194,10 +178,7 @@ public class GameMapScreen implements Screen {
     relocateGem();
     }
 
-
         game.batch.end();  // Ensure all sprites are rendered before ending the batch
-
-
 
         // Handle bus station collision and interaction logic
         for (RectangleMapObject rectangleBusObject : busStations.getByType(RectangleMapObject.class)) {
@@ -276,61 +257,60 @@ public class GameMapScreen implements Screen {
             }
         }
 
-
         if (!collisionDetected && character.inBikeStandCollision) {
             character.inBikeStandCollision = false;  // Reset the collision flag when no longer colliding
         }
     }
 
-
-
     // Handle user input for camera movement and character control
         private void handleInput() {
             // Adjust camera speed based on your needs
             float cameraSpeed = 200 * Gdx.graphics.getDeltaTime();
-
-            // Move camera left
-            if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+            if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) { // Move camera left
                 camera.translate(-cameraSpeed, 0);
             }
-            // Move camera right
-            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) { // Move camera right
                 camera.translate(cameraSpeed, 0);
             }
-            // Move camera up
-            if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
+            if (Gdx.input.isKeyPressed(Input.Keys.UP)) { // Move camera up
                 camera.translate(0, cameraSpeed);
             }
-            // Move camera down
-            if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+            if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) { // Move camera down
                 camera.translate(0, -cameraSpeed);
             }
-
             // Ensure camera follows the character
             camera.position.set(character.getX() + character.getWidth() / 2, character.getY() + character.getHeight() / 2, 0);
             camera.update();
         }
-
+        
+        private void checkCollisionWithEduPopsObjects() {
+            Rectangle characterBounds = character.getBounds();
+            for (RectangleMapObject eduPopsObject : eduPopsObjects.getByType(RectangleMapObject.class)) {
+                Rectangle eduPopsObjectBounds = eduPopsObject.getRectangle();
+                if (characterBounds.overlaps(eduPopsObjectBounds)) {
+                    if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+                        if (!hud.active) {
+                            character.setCanMove(false);
+                            hud.eduPops(eduPopsObject.getName());
+                        }
+                    }
+                }
+            }
+        }
+        
+        
         @Override
         public void resize(int width, int height) {
-
         }
-
         @Override
         public void pause() {
-
         }
-
         @Override
         public void resume() {
-
         }
-
         @Override
         public void hide() {
-
         }
-
         @Override
         public void dispose() {
             game.batch.dispose();

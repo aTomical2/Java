@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="200" height="200" tilewidth="8" tileheight="8" infinite="0" nextlayerid="33" nextobjectid="49">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="200" height="200" tilewidth="8" tileheight="8" infinite="0" nextlayerid="34" nextobjectid="52">
  <tileset firstgid="1" source="citytileset1.tsx"/>
  <tileset firstgid="1313" source="Tileset1Actual.tsx"/>
  <tileset firstgid="2313" source="citytileset2.tsx"/>
@@ -1474,6 +1474,10 @@
   <object id="25" name="Upper" x="806.5" y="335.5" width="73" height="65"/>
   <object id="23" name="Left" x="175" y="735.5" width="73" height="57"/>
   <object id="26" name="Lower" x="807.5" y="1288" width="73" height="57.5"/>
+ </objectgroup>
+ <objectgroup id="33" name="edupops">
+  <object id="49" name="Houses" x="844" y="924" width="86.6667" height="38.6667"/>
+  <object id="50" name="Stadium" x="476" y="960" width="132" height="161.333"/>
  </objectgroup>
  <group id="27" name="train">
   <layer id="10" name="trainstopsbase" width="200" height="200">

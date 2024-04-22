@@ -99,9 +99,7 @@ public class Hud {
         levelLabel = new Label("1", new Label.LabelStyle (font, Color.WHITE));
         WorldLabel = new Label("Level", new Label.LabelStyle (font, Color.WHITE));
 
-
-        // using tables structures the hud on the screen
-        // the tables will expand to fit the whole screen and the padding will be equal
+        // using tables structures the hud on the screen; the tables will expand to fit the whole screen and the padding will be equal
         table.add(CarbonCrunchersLabel).expandX().padTop(10);
         table.add(WorldLabel).expandX().padTop(10);
         table.add(timeLabel).expandX().padTop(10);
@@ -253,5 +251,29 @@ public class Hud {
 
     public Skin getSkin() {
         return skin;
+    }
+
+    public void eduPops(String objectName) {
+        String factText = ""; // Initialize with empty text
+
+        // Determine the fact text based on the object name
+        if (objectName.equals("Stadium")) {
+            factText = "Stadium fact here.";
+        } else if (objectName.equals("Houses")) {
+            factText = "House fact here.";
+        } // Add more conditions for other objects if needed
+
+        // Display the popup box with the appropriate fact text
+        popupBox = new PopupBox("Did you know...", skin, factText, stage);
+        popupBox.show(stage);
+
+        // Add event listeners to the "Yes" and "No" buttons
+        TextButton closeButton = (TextButton) popupBox.getButtonTable().getCells().get(0).getActor(); // Assuming "Yes" button is added first
+        closeButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                // Handle button click event if needed
+            }
+        });
     }
 }
