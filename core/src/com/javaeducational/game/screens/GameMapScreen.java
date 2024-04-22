@@ -228,6 +228,11 @@ public class GameMapScreen implements Screen {
         // Render the HUD stage
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
         hud.stage.draw();
+        
+        // Check if timer has expired
+        if (hud.isTimerExpired()) {
+            hud.levelEnd(); // Call the levelEnd method to show the popup
+        }
     }
     public boolean bikemovepath(float newX, float newY, float width, float height) {
         Rectangle newRect = new Rectangle(newX, newY, width, height);
