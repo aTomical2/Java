@@ -71,6 +71,9 @@ public class GameMapScreen implements Screen {
     Vector2 startPoint;
     Vector2 endPoint;
 
+    private MapLayer eduPopsLayer;
+    private MapObjects eduPopObjects;
+
     private Hud hud;
 
     // Gem position and dimensions
@@ -136,6 +139,8 @@ public class GameMapScreen implements Screen {
         bikeStands = bikeStandsLayer.getObjects();
         bikepathslayer = map.getLayers().get("bikepaths");
         bikepaths = bikepathslayer.getObjects();
+        eduPopsLayer = map.getLayers().get("edupops");
+        eduPopObjects = eduPopsLayer.getObjects();
 }
 
     private void relocateGem() {
