@@ -37,7 +37,7 @@ public class GameOverScreen implements Screen {
                     "--------------------------- \n\n" +
                     "Gems Collected: \t" + gemsCollected + " \n\n" +
                     "Carbon Footprint: \t" + carbonFootprint + " \n\n" +
-                    "Score: \t" + 0 + " \n\n" +
+                    "Score: \t" + level2score + " \n\n" +
                     "--------------------------- \n\n" +
                     "Level Score: \t" + level2score + " \n\n" +
                     "Total Score: \t" + (level1score + level2score), com.badlogic.gdx.graphics.Color.WHITE, game.getWidth() / 2, com.badlogic.gdx.utils.Align.center, true);
