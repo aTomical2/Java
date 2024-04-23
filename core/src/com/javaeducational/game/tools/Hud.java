@@ -1,16 +1,12 @@
 package com.javaeducational.game.tools;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -23,9 +19,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.javaeducational.game.EducationGame;
 import com.javaeducational.game.entities.Character;
 import com.javaeducational.game.screens.GameMapScreen;
-import com.javaeducational.game.screens.GameOverScreen;
 import com.javaeducational.game.screens.LevelChangeScreen;
-import com.javaeducational.game.tools.PopupBox;
 
 
 public class Hud {

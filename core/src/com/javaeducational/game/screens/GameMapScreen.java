@@ -102,7 +102,7 @@ public class GameMapScreen implements Screen {
         // Initialize the renderer
         renderer = new OrthogonalTiledMapRenderer(map);
 
-        // Initialize solidLayer - Assuming you have a reference to the solid layer
+        // Initialize solidLayer
         solidLayer = (TiledMapTileLayer) map.getLayers().get("solid2");
 
         // Initialize other map-related variables
@@ -143,13 +143,12 @@ public class GameMapScreen implements Screen {
 
     private void relocateGem() {
         // Example random positions, adjust as needed
-        gem.setX((float) Math.random() * (1600 - gem.getWidth())); // mapWidth needs to be defined
-        gem.setY((float) Math.random() * (1600 - gem.getHeight())); // mapHeight needs to be defined
+        gem.setX((float) Math.random() * (1600 - gem.getWidth()));
+        gem.setY((float) Math.random() * (1600 - gem.getHeight()));
     }
 
     public void render(float delta) {
-        // Handle user input for camera movement and character control
-        handleInput();
+        handleInput();        // Handle user input for camera movement and character control
         checkCollisionWithBikeStand();
         bikemovepath(character.getX(), character.getY(), character.getWidth(), character.getHeight());
         checkCollisionWithEduPopsObjects();
@@ -181,16 +180,16 @@ public class GameMapScreen implements Screen {
         // Render the gem
         gem.render(game.batch);
 
-    // Check for collision between character and gem
-    if (character.getBounds().overlaps(gem.getBounds())) {
-    // Increment gems collected
-    gemsCollected++;
-    System.out.println("Gem collected! Total gems: " + gemsCollected);
-    // Increment score by the gem's value
-    Hud.addScore(gem.getValue());
-    // Relocate gem to a new position
-    relocateGem();
-    }
+        // Check for collision between character and gem
+        if (character.getBounds().overlaps(gem.getBounds())) {
+        // Increment gems collected
+        gemsCollected++;
+        System.out.println("Gem collected! Total gems: " + gemsCollected);
+        // Increment score by the gem's value
+        Hud.addScore(gem.getValue());
+        // Relocate gem to a new position
+        relocateGem();
+        }
 
         game.batch.end();  // Ensure all sprites are rendered before ending the batch
 
@@ -225,7 +224,7 @@ public class GameMapScreen implements Screen {
         hud.stage.act();
         hud.update(deltaTime, gemsCollected);
 
-        // Render the HUD stage
+        // Render HUD stage
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
         hud.stage.draw();
         if (hud.isTimerExpired()) {

@@ -1,9 +1,6 @@
 package com.javaeducational.game.entities;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 
 public class Bike {
     private Texture texture; // Texture for the bike
@@ -25,7 +22,6 @@ public class Bike {
     public Texture getTexture() {
         return texture;
     }
-
     public boolean isOnBike() {
         return this.onBike;  }
     public float getbikewidth() {

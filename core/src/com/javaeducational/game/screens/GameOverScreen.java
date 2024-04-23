@@ -83,29 +83,20 @@ public class GameOverScreen implements Screen {
             gameFont.draw(game.batch, levelStatsLayout, x, y);
             stage.draw();
             game.batch.end();
-
         }
 
         @Override
         public void resize(int width, int height) {
-
         }
-
         @Override
         public void pause() {
-
         }
-
         @Override
         public void resume() {
-
         }
-
         @Override
         public void hide() {
-
         }
-
         @Override
         public void dispose() {
             stage.dispose();
