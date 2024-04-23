@@ -21,23 +21,26 @@ public class GameOverScreen implements Screen {
         private TextButton buttonContinue, buttonExit;
         private GlyphLayout levelStatsLayout;
         float x, y;
+        private int level2score;
         private final GameOverScreen gameOverScreen = this;
 
-        public GameOverScreen(EducationGame game) {
+        public GameOverScreen(EducationGame game, int gemsCollected, int carbonFootprint, int score, int level1score) {
             this.game = game;
             this.gameFont = new BitmapFont(Gdx.files.internal("fonts/Press_Start_2p.fnt"));
             this.buttonSkin = new Skin(Gdx.files.internal("button.json"), new TextureAtlas(Gdx.files.internal("button.atlas")));
             this.buttonContinue = new TextButton("Main Menu", buttonSkin, "default");
             this.buttonExit = new TextButton("Quit Game", buttonSkin, "default");
             this.levelStatsLayout = new GlyphLayout();
+            this.level2score = score - carbonFootprint;
             levelStatsLayout.setText(gameFont, "Level 2 complete! \n\n Game over! \n\n" +
-                    "Total Game Stats: \n\n" +
+                    "Level 2 Stats: \n\n" +
                     "--------------------------- \n\n" +
-                    "Gems Collected: " + 0 + " \n\n" +
-                    "Carbon Footprint: " + 0 + " \n\n" +
-                    "Score: " + 0 + " \n\n" +
+                    "Gems Collected: \t" + gemsCollected + " \n\n" +
+                    "Carbon Footprint: \t" + carbonFootprint + " \n\n" +
+                    "Score: \t" + 0 + " \n\n" +
                     "--------------------------- \n\n" +
-                    "Total Score: " + 0, com.badlogic.gdx.graphics.Color.WHITE, game.getWidth() / 2, com.badlogic.gdx.utils.Align.center, true);
+                    "Level Score: \t" + level2score + " \n\n" +
+                    "Total Score: \t" + (level1score + level2score), com.badlogic.gdx.graphics.Color.WHITE, game.getWidth() / 2, com.badlogic.gdx.utils.Align.center, true);
         }
 
         @Override

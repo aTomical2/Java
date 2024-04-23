@@ -25,6 +25,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.javaeducational.game.entities.Character;
 import com.javaeducational.game.screens.GameMapScreen;
+import com.javaeducational.game.screens.GameOverScreen;
 import com.javaeducational.game.screens.LevelChangeScreen;
 import com.javaeducational.game.tools.PopupBox;
 
@@ -60,9 +61,9 @@ public class Hud {
 
     public Hud (EducationGame game, TiledMap map, Character character, GameMapScreen gameMapScreen) {
         this.game = game;
-        score = 0;
+        this.score = 0;
         timeCount = 0;
-        worldTimer = 5;
+        worldTimer = 50;
         timerExpired = false;
         this.gameMapScreen = gameMapScreen;
 
@@ -75,8 +76,8 @@ public class Hud {
 
         this.skin = new Skin(Gdx.files.internal("popup/uiskin.json"));
 
-        BitmapFont font = new BitmapFont(); // Default font
-        font.getData().setScale(2); // Scale the font size by a factor of 2
+        BitmapFont font = new BitmapFont(Gdx.files.internal("fonts/Press_Start_2p.fnt")); // Default font
+//        font.getData().setScale(2); // Scale the font size by a factor of 2
 
         //scoreLabel = new Label (String.format("%06d", score),new Label.LabelStyle(new BitmapFont(), Color.WHITE));
         //CarbonCrunchersLabel= new Label ("Carbon Crunchers",new Label.LabelStyle(new BitmapFont(), Color.WHITE));
@@ -102,11 +103,11 @@ public class Hud {
         // initialising the widgets as int or str
         Label.LabelStyle labelStyle = new Label.LabelStyle(font, Color.WHITE);
         countdownLabel = new Label(String.format("%01d", worldTimer), labelStyle);
-        scoreLabel = new Label(String.format("%02d", score), labelStyle);
-        CarbonCrunchersLabel = new Label("Carbon Crunchers", labelStyle);
-        timeLabel= new Label("Time", new Label.LabelStyle(font, Color.WHITE));
-        levelLabel = new Label("1", new Label.LabelStyle (font, Color.WHITE));
-        WorldLabel = new Label("Level", new Label.LabelStyle (font, Color.WHITE));
+        scoreLabel = new Label(String.format("%03d", score), labelStyle);
+        CarbonCrunchersLabel = new Label("Score\n", labelStyle);
+        timeLabel= new Label("Time\n", new Label.LabelStyle(font, Color.WHITE));
+        levelLabel = new Label("" + gameMapScreen.getLevel(), new Label.LabelStyle (font, Color.WHITE));
+        WorldLabel = new Label("Level\n", new Label.LabelStyle (font, Color.WHITE));
 
 
         // using tables structures the hud on the screen
@@ -126,29 +127,24 @@ public class Hud {
         timeCount += dt;
         if (timeCount >= 1) {
             worldTimer--;
-            countdownLabel.setText(String.format("%06d", worldTimer));
+            countdownLabel.setText(String.format("%01d", worldTimer));
             timeCount = 0;
         }
-        if (worldTimer < 0){
+        if (worldTimer <= 0){
             character.setCanMove(false);
             timerExpired = true;
         }
         // Update the score label with the current gems collected
-        scoreLabel.setText(String.format("%06d", score));
+        scoreLabel.setText(String.format("%03d", score));
     }
 
     public static void addScore(int  value) {
         score+=value;
-        scoreLabel.setText((String.format("%06d", score)));
+        scoreLabel.setText((String.format("%03d", score)));
     }
 
     public boolean isTimerExpired() {
         return timerExpired;
-    }
-
-    public void levelEnd() {
-        gameMapScreen.dispose();
-        game.setScreen(new LevelChangeScreen(game));
     }
 
     public void takePublicTransport(String type, String stationName, MapObjects stations) {
@@ -234,5 +230,9 @@ public class Hud {
 
     public Skin getSkin() {
         return skin;
+    }
+
+    public static int getScore() {
+        return score;
     }
 }

@@ -46,7 +46,7 @@ public class MainMenuScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 mainMenuScreen.dispose();
-                game.setScreen(new GameMapScreen(game));
+                game.setScreen(new GameMapScreen(game, 1));
             }
         });
 

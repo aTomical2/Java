@@ -21,23 +21,25 @@ public class LevelChangeScreen implements Screen {
     private TextButton buttonContinue, buttonExit;
     private GlyphLayout levelStatsLayout;
     float x, y;
+    private int level1Score;
     private final LevelChangeScreen levelChangeScreen = this;
 
-    public LevelChangeScreen(EducationGame game) {
+    public LevelChangeScreen(EducationGame game, int gemsCollected, int carbonFootprint, int score) {
         this.game = game;
         this.gameFont = new BitmapFont(Gdx.files.internal("fonts/Press_Start_2p.fnt"));
         this.buttonSkin = new Skin(Gdx.files.internal("button.json"), new TextureAtlas(Gdx.files.internal("button.atlas")));
         this.buttonContinue = new TextButton("Continue", buttonSkin, "default");
         this.buttonExit = new TextButton("Quit Game", buttonSkin, "default");
         this.levelStatsLayout = new GlyphLayout();
+        this.level1Score = score - carbonFootprint;
         levelStatsLayout.setText(gameFont, "Level 1 complete! \n\n Are you ready for level 2? \n\n" +
-                "Level Stats: \n\n" +
+                "Level 1 Stats: \n\n" +
                 "--------------------------- \n\n" +
-                "Gems Collected: " + 0 + " \n\n" +
-                "Carbon Footprint: " + 0 + " \n\n" +
-                "Score: " + 0 + " \n\n" +
+                "Gems Collected: \t" + gemsCollected + " \n\n" +
+                "Carbon Footprint: \t" + carbonFootprint + " \n\n" +
+                "Score: \t" + score + " \n\n" +
                 "--------------------------- \n\n" +
-                "Total Score: " + 0, com.badlogic.gdx.graphics.Color.WHITE, game.getWidth() / 2, com.badlogic.gdx.utils.Align.center, true);
+                "Level Score: \t" + level1Score, com.badlogic.gdx.graphics.Color.WHITE, game.getWidth() / 2, com.badlogic.gdx.utils.Align.center, true);
     }
 
     @Override
@@ -52,7 +54,7 @@ public class LevelChangeScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 levelChangeScreen.dispose();
-                game.setScreen(new GameMapScreen(game));
+                game.setScreen(new GameMapScreen(game, 2, level1Score));
             }
         });
 

@@ -82,12 +82,22 @@ public class GameMapScreen implements Screen {
     private int gemWidth = 32;
     private int gemHeight = 32;
 
+    //Set Level + track score
+    private int level;
+    private int level1Score;
+
     private GameMapScreen gameMapScreen = this;
 
-    public GameMapScreen(EducationGame game) {
+    public GameMapScreen(EducationGame game, int level) {
         this.game = game;
+        this.level = level;
     }
 
+    public GameMapScreen(EducationGame game, int level, int level1Score) {
+        this.game = game;
+        this.level = level;
+        this.level1Score = level1Score;
+    }
     @Override
     public void show() {
         // Create camera
@@ -192,10 +202,7 @@ public class GameMapScreen implements Screen {
     relocateGem();
     }
 
-
         game.batch.end();  // Ensure all sprites are rendered before ending the batch
-
-
 
         // Handle bus station collision and interaction logic
         for (RectangleMapObject rectangleBusObject : busStations.getByType(RectangleMapObject.class)) {
@@ -232,10 +239,15 @@ public class GameMapScreen implements Screen {
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
         hud.stage.draw();
         if (hud.isTimerExpired()) {
-            gameMapScreen.dispose();
-            game.setScreen(new LevelChangeScreen(game));
+            if (level == 1) {
+                game.setScreen(new LevelChangeScreen(game, gemsCollected, carbonFootprint, hud.getScore()));
+            }
+            if (level == 2) {
+                game.setScreen(new GameOverScreen(game, gemsCollected, carbonFootprint, hud.getScore(), level1Score));
+            }
         }
     }
+
     public boolean bikemovepath(float newX, float newY, float width, float height) {
         Rectangle newRect = new Rectangle(newX, newY, width, height);
         boolean isOnPath = false;
@@ -335,6 +347,7 @@ public class GameMapScreen implements Screen {
             renderer.dispose();
             character.dispose();
             gem.dispose();
+
         }
 
     public int getGemsCollected() {
@@ -351,5 +364,9 @@ public class GameMapScreen implements Screen {
 
     public void setCarbonFootprint(int carbonFootprint) {
         this.carbonFootprint += carbonFootprint;
+    }
+
+    public int getLevel() {
+        return level;
     }
 }
