@@ -5,10 +5,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.MapLayer;
-import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
-import com.badlogic.gdx.maps.objects.RectangleMapObject;
-import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Rectangle;
@@ -143,13 +140,7 @@ public class Character {
         // Initialize font
         font = new BitmapFont();
     }
-    public void setOnBikepath(boolean onBike) {
-        this.onBike = onBike;
-        if (!onBike) {
-            // Handle additional logic for when the character dismounts the bike, if necessary
-            this.bike = null;  // Assuming you have a 'bike' object or similar
-        }
-    }
+
     public Bike getBike() {
         return this.bike;
     }
@@ -160,9 +151,7 @@ public class Character {
         this.onBike = onBike;
     }
 
-
     public void handleInput() {
-
         if (!canMove) {
             return;
         }
@@ -212,9 +201,7 @@ public class Character {
             // Update position if the new position is on a valid path or if not restricted
             x = newX;
             y = newY;
-        } else {
         }
-
         // Check collision with map boundaries and solid tiles
         if (newX >= 0 && newX + width <= mapWidthInTiles * tileWidth &&
                 !collidesWithSolidTiles(newX, newY)) {

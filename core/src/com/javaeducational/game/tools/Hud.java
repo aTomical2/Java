@@ -1,6 +1,8 @@
 package com.javaeducational.game.tools;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -20,9 +22,14 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.javaeducational.game.EducationGame;
 import com.javaeducational.game.entities.Character;
+import com.javaeducational.game.screens.GameMapScreen;
+import com.javaeducational.game.screens.GameOverScreen;
+import com.javaeducational.game.screens.LevelChangeScreen;
+import com.javaeducational.game.tools.PopupBox;
 
 
 public class Hud {
+    private EducationGame game;
     public Stage stage;
     private Viewport viewport;
     private TiledMap map;
@@ -35,6 +42,10 @@ public class Hud {
     private PopupBox popupBox;
     private Skin skin;
 
+    // Import Screens
+    private GameMapScreen gameMapScreen;
+    private LevelChangeScreen levelChangeScreen;
+
     private static Label scoreLabel;
     private Label CarbonCrunchersLabel;
     private Label timeLabel;
@@ -46,41 +57,24 @@ public class Hud {
     Character character;
     public boolean active;
 
-    public Hud (SpriteBatch sb, TiledMap map, Character character) {
-        score = 0;
+    public Hud (EducationGame game, TiledMap map, Character character, GameMapScreen gameMapScreen) {
+        this.game = game;
+        this.score = 0;
         timeCount = 0;
-        worldTimer = 100;
+        worldTimer = 50;
         timerExpired = false;
-        this.carbonFootprint = 0;
+        this.gameMapScreen = gameMapScreen;
 
         this.active = false;
         this.character = character;
         this.map = map;
 
         viewport = new FitViewport(EducationGame.WIDTH, EducationGame.HEIGHT, new OrthographicCamera());
-        stage = new Stage(viewport , sb);
+        stage = new Stage(viewport , game.batch);
 
         this.skin = new Skin(Gdx.files.internal("popup/uiskin.json"));
 
-        BitmapFont font = new BitmapFont(); // Default font
-        font.getData().setScale(2); // Scale the font size by a factor of 2
-
-        //scoreLabel = new Label (String.format("%06d", score),new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        //CarbonCrunchersLabel= new Label ("Carbon Crunchers",new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-
-        // Declare and initialize world coordinates
-        float worldX = 100; // Example value
-        float worldY = 200; // Example value
-
-        // Create a vector representing the world coordinates
-        Vector3 worldCoordinates = new Vector3(worldX, worldY, 0);
-
-        // Convert world coordinates to screen coordinates
-        //Camera.unproject(worldCoordinates);
-
-        // Extract screen coordinates
-        float screenX = worldCoordinates.x;
-        float screenY = worldCoordinates.y;
+        BitmapFont font = new BitmapFont(Gdx.files.internal("fonts/Press_Start_2p.fnt")); // Default font
 
         Table table = new Table();
         table.top();
@@ -89,13 +83,13 @@ public class Hud {
         // initialising the widgets as int or str
         Label.LabelStyle labelStyle = new Label.LabelStyle(font, Color.WHITE);
         countdownLabel = new Label(String.format("%01d", worldTimer), labelStyle);
-        scoreLabel = new Label(String.format("%02d", score), labelStyle);
-        CarbonCrunchersLabel = new Label("Carbon Crunchers", labelStyle);
-        timeLabel= new Label("Time", new Label.LabelStyle(font, Color.WHITE));
-        levelLabel = new Label("1", new Label.LabelStyle (font, Color.WHITE));
-        WorldLabel = new Label("Level", new Label.LabelStyle (font, Color.WHITE));
+        scoreLabel = new Label(String.format("%03d", score), labelStyle);
+        CarbonCrunchersLabel = new Label("Score\n", labelStyle);
+        timeLabel= new Label("Time\n", new Label.LabelStyle(font, Color.WHITE));
+        levelLabel = new Label("" + gameMapScreen.getLevel(), new Label.LabelStyle (font, Color.WHITE));
+        WorldLabel = new Label("Level\n", new Label.LabelStyle (font, Color.WHITE));
 
-        // using tables structures the hud on the screen; the tables will expand to fit the whole screen and the padding will be equal
+        // the tables will expand to fit the whole screen and the padding will be equal
         table.add(CarbonCrunchersLabel).expandX().padTop(10);
         table.add(WorldLabel).expandX().padTop(10);
         table.add(timeLabel).expandX().padTop(10);
@@ -111,56 +105,24 @@ public class Hud {
         timeCount += dt;
         if (timeCount >= 1) {
             worldTimer--;
-            countdownLabel.setText(String.format("%06d", worldTimer));
+            countdownLabel.setText(String.format("%01d", worldTimer));
             timeCount = 0;
         }
-        if (worldTimer < 1){
+        if (worldTimer <= 0){
             character.setCanMove(false);
-            levelEnd();
+            timerExpired = true;
         }
         // Update the score label with the current gems collected
-        scoreLabel.setText(String.format("%06d", score));
+        scoreLabel.setText(String.format("%03d", score));
     }
 
     public static void addScore(int  value) {
         score+=value;
-        scoreLabel.setText((String.format("%06d", score)));
+        scoreLabel.setText((String.format("%03d", score)));
     }
 
     public boolean isTimerExpired() {
         return timerExpired;
-    }
-
-    public void levelEnd() {
-        popupBox = new PopupBox("Time's up!", skin, "Level 1 Complete. Ready for Level 2?", stage);
-        popupBox.show(stage);
-
-        // Add event listeners to the "Yes" and "No" buttons
-        TextButton yesButton = (TextButton) popupBox.getButtonTable().getCells().get(0).getActor(); // Assuming "Yes" button is added first
-        yesButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                // Handle "Yes" button click
-//                boolean continueGame = popupBox.getResult();
-//                if (!continueGame) {
-//                    // Player chose not to continue, so exit the game
-//                    Gdx.app.exit();
-//                } else {
-//                    // Player chose to continue, handle it accordingly
-//                    // For example, reset the timer or start the next level
-//                }
-            }
-        });
-
-        TextButton noButton = (TextButton) popupBox.getButtonTable().getCells().get(1).getActor(); // Assuming "No" button is added second
-        noButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                // Handle "No" button click
-                popupBox.hide(); // Close the popup box
-                // You can add any other actions here if needed
-            }
-        });
     }
 
     public void takePublicTransport(String type, String stationName, MapObjects stations) {
@@ -191,7 +153,6 @@ public class Hud {
                 int count = 0;
                 // Get Station Names and Coordinates
                 for (RectangleMapObject rectangleObject : stations.getByType(RectangleMapObject.class)) {
-                    System.out.println(rectangleObject.getName());
                     if (stationName == rectangleObject.getName()) {
                         continue;
                     }
@@ -210,12 +171,12 @@ public class Hud {
                         for (RectangleMapObject rectangleBusObject : stations.getByType(RectangleMapObject.class)) {
                             if (selectedStation.equals(rectangleBusObject.getName())) {
                                 if (type == "bus") {
+                                    gameMapScreen.setCarbonFootprint(50);
                                     carbonFootprint += 50;
                                     worldTimer -= 10;
-
                                 }
                                 if (type == "train") {
-                                    carbonFootprint += 25;
+                                    gameMapScreen.setCarbonFootprint(25);
                                     worldTimer -= 5;
                                 }
 
@@ -244,7 +205,6 @@ public class Hud {
             }
         });
     }
-
     public Skin getSkin() {
         return skin;
     }
@@ -295,5 +255,8 @@ public class Hud {
                 active = false;
             }
         });
+    }
+    public static int getScore() {
+        return score;
     }
 }

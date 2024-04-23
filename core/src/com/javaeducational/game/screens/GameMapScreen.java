@@ -15,7 +15,6 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.javaeducational.game.entities.Bus;
 import com.javaeducational.game.entities.Character;
 import com.javaeducational.game.EducationGame;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -41,7 +40,11 @@ public class GameMapScreen implements Screen {
 
     private Gem gem; // Gem instance
 
-    private int gemsCollected = 0;    // Gem counter
+    // Gem counter
+    private int gemsCollected = 0;
+
+    // CarbonFootprint
+    private int carbonFootprint = 0;
 
     // Variables related to map and collision
     private TiledMapTileLayer solidLayer; // Assuming solid layer is available
@@ -58,7 +61,6 @@ public class GameMapScreen implements Screen {
     private MapLayer eduPopsLayer; // edupopups
     private MapObjects eduPopsObjects;
     // Import bus class
-    Bus bus;
     Vector2 startPoint;
     Vector2 endPoint;
 
@@ -70,10 +72,22 @@ public class GameMapScreen implements Screen {
     private int gemWidth = 32;
     private int gemHeight = 32;
 
-    public GameMapScreen(EducationGame game) {
+    //Set Level + track score
+    private int level;
+    private int level1Score;
+
+    private GameMapScreen gameMapScreen = this;
+
+    public GameMapScreen(EducationGame game, int level) {
         this.game = game;
+        this.level = level;
     }
 
+    public GameMapScreen(EducationGame game, int level, int level1Score) {
+        this.game = game;
+        this.level = level;
+        this.level1Score = level1Score;
+    }
     @Override
     public void show() {
         // Create camera
@@ -104,7 +118,7 @@ public class GameMapScreen implements Screen {
                 mapWidthInTiles,
                 mapHeightInTiles);
 
-        hud = new Hud(game.batch, map, character);
+        hud = new Hud(game, map, character, gameMapScreen);
 
         objectLayer = map.getLayers().get("solid2");
         // Check if the objectLayer is not null before accessing its objects
@@ -214,12 +228,16 @@ public class GameMapScreen implements Screen {
         // Render the HUD stage
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
         hud.stage.draw();
-        
-        // Check if timer has expired
         if (hud.isTimerExpired()) {
-            hud.levelEnd(); // Call the levelEnd method to show the popup
+            if (level == 1) {
+                game.setScreen(new LevelChangeScreen(game, gemsCollected, carbonFootprint, hud.getScore()));
+            }
+            if (level == 2) {
+                game.setScreen(new GameOverScreen(game, gemsCollected, carbonFootprint, hud.getScore(), level1Score));
+            }
         }
     }
+
     public boolean bikemovepath(float newX, float newY, float width, float height) {
         Rectangle newRect = new Rectangle(newX, newY, width, height);
         boolean isOnPath = false;
@@ -319,4 +337,19 @@ public class GameMapScreen implements Screen {
             character.dispose();
             gem.dispose();
         }
+    public int getGemsCollected() {
+        return gemsCollected;
     }
+    public void setGemsCollected(int gemsCollected) {
+        this.gemsCollected += gemsCollected;
+    }
+    public int getCarbonFootprint() {
+        return carbonFootprint;
+    }
+    public void setCarbonFootprint(int carbonFootprint) {
+        this.carbonFootprint += carbonFootprint;
+    }
+    public int getLevel() {
+        return level;
+    }
+}
