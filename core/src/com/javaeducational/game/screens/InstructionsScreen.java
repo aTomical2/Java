@@ -1,7 +1,6 @@
 package com.javaeducational.game.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
@@ -13,9 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.javaeducational.game.EducationGame;
-import org.w3c.dom.css.Rect;
-
-import java.awt.*;
 
 public class InstructionsScreen implements Screen {
     private EducationGame game;
@@ -25,7 +21,7 @@ public class InstructionsScreen implements Screen {
     private TextButton buttonExit;
     private GlyphLayout instructionsLayout;
     final InstructionsScreen instructionsScreen = this;
-    private final String instructions = "In this game your objective is to navigate the map and collect as many gems as possible within the time limit. You can use 4 modes of transport: Walking, Bike, Bus, & Train to reach the gems. The more Gems you collect the higher your score will be, but be careful! Using faster modes of transport will reduce your time left and increase your Carbon Footprint which is deducted from your final score. Your goal is to collect as many gems as possible until you run out of time while minimizing your environmental impact. Have fun!";
+    private final String instructions = "Welcome to Carbon Cruncher: Tiggy's Adventures.\n\nIn this game your objective is to navigate the map and collect as many gems as possible within the time limit, while minimizing your environmental impact. \n\n You can use 4 modes of transport: Walking, Bike, Bus, & Train to reach the Gems. The more Gems you collect, the higher your score will be. \n\nBut be careful! Using faster modes of transport will reduce your remaining time and increase your Carbon Footprint. This can reduce your final score :( \n\n Have fun!";
     float x, y;
 
     public InstructionsScreen(EducationGame game) {
@@ -72,24 +68,16 @@ public class InstructionsScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-
     }
-
     @Override
     public void pause() {
-
     }
-
     @Override
     public void resume() {
-
     }
-
     @Override
     public void hide() {
-
     }
-
     @Override
     public void dispose() {
         stage.dispose();
@@ -97,6 +85,4 @@ public class InstructionsScreen implements Screen {
         buttonSkin.dispose();
         Gdx.input.setInputProcessor(stage);
     }
-
-    //create exit function
 }

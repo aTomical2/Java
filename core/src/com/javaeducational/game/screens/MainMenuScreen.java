@@ -22,7 +22,6 @@ public class MainMenuScreen implements Screen {
     Skin buttonSkin;
     final MainMenuScreen mainMenuScreen = this;
 
-
     public MainMenuScreen(EducationGame game) {
         this.game = game;
         this.gameFont = new BitmapFont(Gdx.files.internal("fonts/Press_Start_2p.fnt"));
@@ -46,7 +45,7 @@ public class MainMenuScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 mainMenuScreen.dispose();
-                game.setScreen(new GameMapScreen(game));
+                game.setScreen(new GameMapScreen(game, 1));
             }
         });
 
@@ -86,22 +85,15 @@ public class MainMenuScreen implements Screen {
     @Override
     public void resize(int width, int height) {
     }
-
     @Override
     public void pause() {
-
     }
-
     @Override
     public void resume() {
-
     }
-
     @Override
     public void hide() {
-
     }
-
     @Override
     public void dispose() {
         stage.dispose();

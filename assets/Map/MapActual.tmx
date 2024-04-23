@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.8" tiledversion="1.8.0" orientation="orthogonal" renderorder="right-down" width="200" height="200" tilewidth="8" tileheight="8" infinite="0" nextlayerid="32" nextobjectid="27">
+<map version="1.10" tiledversion="1.10.2" orientation="orthogonal" renderorder="right-down" width="200" height="200" tilewidth="8" tileheight="8" infinite="0" nextlayerid="34" nextobjectid="69">
  <tileset firstgid="1" source="citytileset1.tsx"/>
  <tileset firstgid="1313" source="Tileset1Actual.tsx"/>
  <tileset firstgid="2313" source="citytileset2.tsx"/>
@@ -1455,12 +1455,41 @@
   <object id="11" name="T Junction" x="425.532" y="1402.56" width="17" height="32" rotation="269.783"/>
   <object id="12" name="Wood's Station" x="685.532" y="1400.56" width="17" height="32" rotation="269.783"/>
  </objectgroup>
+ <objectgroup id="32" name="bikepaths">
+  <object id="28" x="192" y="658" width="2"/>
+  <object id="34" x="634" y="406" width="628" height="22"/>
+  <object id="36" x="1290" y="424"/>
+  <object id="39" x="686" y="716" width="26" height="596"/>
+  <object id="41" x="216" y="642" width="294" height="14"/>
+  <object id="42" x="176" y="636" width="34" height="46"/>
+  <object id="43" x="514" y="636" width="36" height="52"/>
+  <object id="44" x="682" y="1310" width="52" height="42"/>
+  <object id="45" x="680" y="658" width="58" height="58"/>
+  <object id="47" x="594" y="406" width="34" height="46"/>
+  <object id="48" x="1274" y="406" width="36" height="46"/>
+ </objectgroup>
  <objectgroup id="31" name="train_stations">
   <object id="21" name="Central" x="710.5" y="735" width="73" height="57"/>
   <object id="24" name="Right" x="1023" y="736.5" width="73" height="57"/>
   <object id="25" name="Upper" x="806.5" y="335.5" width="73" height="65"/>
   <object id="23" name="Left" x="175" y="735.5" width="73" height="57"/>
   <object id="26" name="Lower" x="807.5" y="1288" width="73" height="57.5"/>
+ </objectgroup>
+ <objectgroup id="33" name="edupops">
+  <object id="49" name="Houses" x="844" y="924" width="86.6667" height="38.6667"/>
+  <object id="50" name="Stadium" x="476" y="960" width="132" height="161.333"/>
+  <object id="52" name="Ind_Estate" x="358.667" y="452" width="76" height="80"/>
+  <object id="53" x="460" y="492"/>
+  <object id="54" name="Tree" x="969.333" y="60" width="61.3333" height="90.6667"/>
+  <object id="56" name="Forest" x="1270.67" y="146.667" width="213.333" height="94.6667"/>
+  <object id="60" name="River" x="304" y="858.667" width="86.6667" height="70.6667"/>
+  <object id="61" name="Lake" x="1050.67" y="92" width="113.333" height="96"/>
+  <object id="62" name="Road" x="1096" y="884" width="49.3333" height="121.333"/>
+  <object id="63" name="Garden" x="836" y="1073.33" width="36" height="89.3333"/>
+  <object id="64" name="Train" x="1321.33" y="794.667" width="202.667" height="18.6667"/>
+  <object id="65" name="Bike" x="994.667" y="400" width="154.667" height="26.6667"/>
+  <object id="66" name="Mushrooms" x="1342.67" y="76" width="36.6667" height="23.3333"/>
+  <object id="68" name="Bus" x="133.333" y="1249.33" width="38.6667" height="135.333"/>
  </objectgroup>
  <group id="27" name="train">
   <layer id="10" name="trainstopsbase" width="200" height="200">
