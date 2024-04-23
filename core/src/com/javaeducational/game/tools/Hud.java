@@ -1,14 +1,14 @@
 package com.javaeducational.game.tools;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.maps.MapLayer;
-import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -16,14 +16,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.javaeducational.game.EducationGame;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.javaeducational.game.entities.Character;
-import com.javaeducational.game.tools.PopupBox;
 
 
 public class Hud {
@@ -258,11 +254,28 @@ public class Hud {
 
         // Determine the fact text based on the object name
         if (objectName.equals("Stadium")) {
-            factText = "Stadium fact here.";
+            factText = "The Men's FIFA World Cup in Qatar (2022) produced 3.63 Million Tonnes of CO2. This is the equivalent of powering 417,450 homes for a year (https://www.statista.com/statistics/1454802/carbon-emissions-world-cups/#:~:text=FIFA%20World%20Cup%20carbon%20emissions%202010%2D2022&text=The%202022%20FIFA%20World%20Cup,2018%20World%20Cup%20in%20Russia.)";
         } else if (objectName.equals("Houses")) {
-            factText = "House fact here.";
-        } // Add more conditions for other objects if needed
-
+            factText = "The construction of modern house costs 15-100 tonnes of CO2 (https://climate.mit.edu/ask-mit/how-much-co2-emitted-building-new-house#:~:text=Depending%20on%20size%2C%20materials%2C%20and,might%20emit%20over%20its%20lifetime.)";
+        } else if (objectName.equals("Tree")) {
+            factText = "Trees take carbon dioxide from the air and store it as carbon in the timber, so big trees are carbon sinks!";
+        } else if (objectName.equals("Forest")) {
+            factText = "Annual removal of carbon dioxide from the atmosphere by Irish forests exceeds 6 million tonnes per year (https://www.treecouncil.ie/carbon-footprint)";
+        } else if (objectName.equals("Ind_Estate")) {
+            factText = "The commercial sector in Ireland produced 374,000 tonnes of CO2 in 2022 (https://www.seai.ie/data-and-insights/seai-statistics/key-statistics/co2/)";
+        } else if (objectName.equals("River")) {
+            factText = "Rivers contain up to 3x the concentrated amount of CO2 compared to the atmosphere (https://www.bbc.com/future/article/20210323-climate-change-the-rivers-that-breathe-greenhouse-gases)";
+        } else if (objectName.equals("Lake")) {
+            factText = "Freshwater lakes account for ~20% of all global CO2 fossil fuel emissions the atmosphere (https://www.weforum.org/agenda/2022/12/small-lakes-increased-what-to-know-climate-change/)";
+        } else if (objectName.equals("Road")) {
+            factText = "Transport in the EU is responsible for ~18% of all emissions in the EU (https://www.europarl.europa.eu/topics/en/article/20190313STO31218/co2-emissions-from-cars-facts-and-figures-infographics)";
+        } else if (objectName.equals("Garden")) {
+            factText = "When maintaining your garden, Petrol/ Gas powered lawnmowers are incredibly harmful for the environment (https://psci.princeton.edu/tips/2020/5/11/law-maintenance-and-climate-change)";
+        } else if (objectName.equals("Train")) {
+            factText = "Trains are particularly low-carbon ways to travel. Taking a train instead of a car for medium-length distances would cut your emissions by around 80%. (https://ourworldindata.org/travel-carbon-footprint#:~:text=Trains%20are%20particularly%20low%2Dcarbon,your%20emissions%20by%20around%2086%25.)";
+        } else if (objectName.equals("Bike")) {
+            factText = "Choosing a bike over a car just once a day can reduce the average person's transportation-related emissions by 67 (https://www.future.green/futureblog/save-carbon-biking#:~:text=Reducing%20Carbon%20Emissions,of%20CO2%20per%20mile%20traveled.)";
+        }
         // Display the popup box with the appropriate fact text
         popupBox = new PopupBox("Did you know...", skin, factText, stage);
         popupBox.show(stage);
