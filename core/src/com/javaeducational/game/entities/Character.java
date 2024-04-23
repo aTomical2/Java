@@ -212,11 +212,7 @@ public class Character {
             // Update position if the new position is on a valid path or if not restricted
             x = newX;
             y = newY;
-        } else {
-
-            System.out.println("Movement restricted: Off path");
         }
-
         // Check collision with map boundaries and solid tiles
         if (newX >= 0 && newX + width <= mapWidthInTiles * tileWidth &&
                 !collidesWithSolidTiles(newX, newY)) {

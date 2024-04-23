@@ -1,6 +1,7 @@
 package com.javaeducational.game.tools;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
@@ -23,10 +24,13 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.javaeducational.game.entities.Character;
+import com.javaeducational.game.screens.GameMapScreen;
+import com.javaeducational.game.screens.LevelChangeScreen;
 import com.javaeducational.game.tools.PopupBox;
 
 
 public class Hud {
+    private EducationGame game;
     public Stage stage;
     private Viewport viewport;
     private TiledMap map;
@@ -39,6 +43,10 @@ public class Hud {
     private PopupBox popupBox;
     private Skin skin;
 
+    // Import Screens
+    private GameMapScreen gameMapScreen;
+    private LevelChangeScreen levelChangeScreen;
+
     private static Label scoreLabel;
     private Label CarbonCrunchersLabel;
     private Label timeLabel;
@@ -50,19 +58,20 @@ public class Hud {
     Character character;
     public boolean active;
 
-    public Hud (SpriteBatch sb, TiledMap map, Character character) {
+    public Hud (EducationGame game, TiledMap map, Character character, GameMapScreen gameMapScreen) {
+        this.game = game;
         score = 0;
         timeCount = 0;
-        worldTimer = 100;
+        worldTimer = 5;
         timerExpired = false;
-        this.carbonFootprint = 0;
+        this.gameMapScreen = gameMapScreen;
 
         this.active = false;
         this.character = character;
         this.map = map;
 
         viewport = new FitViewport(EducationGame.WIDTH, EducationGame.HEIGHT, new OrthographicCamera());
-        stage = new Stage(viewport , sb);
+        stage = new Stage(viewport , game.batch);
 
         this.skin = new Skin(Gdx.files.internal("popup/uiskin.json"));
 
@@ -120,9 +129,9 @@ public class Hud {
             countdownLabel.setText(String.format("%06d", worldTimer));
             timeCount = 0;
         }
-        if (worldTimer < 1){
+        if (worldTimer < 0){
             character.setCanMove(false);
-            levelEnd();
+            timerExpired = true;
         }
         // Update the score label with the current gems collected
         scoreLabel.setText(String.format("%06d", score));
@@ -138,35 +147,8 @@ public class Hud {
     }
 
     public void levelEnd() {
-        popupBox = new PopupBox("Time's up!", skin, "Level 1 Complete. Ready for Level 2?", stage);
-        popupBox.show(stage);
-
-        // Add event listeners to the "Yes" and "No" buttons
-        TextButton yesButton = (TextButton) popupBox.getButtonTable().getCells().get(0).getActor(); // Assuming "Yes" button is added first
-        yesButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                // Handle "Yes" button click
-//                boolean continueGame = popupBox.getResult();
-//                if (!continueGame) {
-//                    // Player chose not to continue, so exit the game
-//                    Gdx.app.exit();
-//                } else {
-//                    // Player chose to continue, handle it accordingly
-//                    // For example, reset the timer or start the next level
-//                }
-            }
-        });
-
-        TextButton noButton = (TextButton) popupBox.getButtonTable().getCells().get(1).getActor(); // Assuming "No" button is added second
-        noButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                // Handle "No" button click
-                popupBox.hide(); // Close the popup box
-                // You can add any other actions here if needed
-            }
-        });
+        gameMapScreen.dispose();
+        game.setScreen(new LevelChangeScreen(game));
     }
 
     public void takePublicTransport(String type, String stationName, MapObjects stations) {
@@ -197,7 +179,6 @@ public class Hud {
                 int count = 0;
                 // Get Station Names and Coordinates
                 for (RectangleMapObject rectangleObject : stations.getByType(RectangleMapObject.class)) {
-                    System.out.println(rectangleObject.getName());
                     if (stationName == rectangleObject.getName()) {
                         continue;
                     }
@@ -216,12 +197,12 @@ public class Hud {
                         for (RectangleMapObject rectangleBusObject : stations.getByType(RectangleMapObject.class)) {
                             if (selectedStation.equals(rectangleBusObject.getName())) {
                                 if (type == "bus") {
+                                    gameMapScreen.setCarbonFootprint(50);
                                     carbonFootprint += 50;
                                     worldTimer -= 10;
-
                                 }
                                 if (type == "train") {
-                                    carbonFootprint += 25;
+                                    gameMapScreen.setCarbonFootprint(25);
                                     worldTimer -= 5;
                                 }
 

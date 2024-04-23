@@ -49,6 +49,9 @@ public class GameMapScreen implements Screen {
     // Gem counter
     private int gemsCollected = 0;
 
+    // CarbonFootprint
+    private int carbonFootprint = 0;
+
     // Variables related to map and collision
     private TiledMapTileLayer solidLayer; // Assuming solid layer is available
     private int tileWidth; // Assuming tile width in pixels
@@ -78,6 +81,8 @@ public class GameMapScreen implements Screen {
     private int gemY = 100 / 2;
     private int gemWidth = 32;
     private int gemHeight = 32;
+
+    private GameMapScreen gameMapScreen = this;
 
     public GameMapScreen(EducationGame game) {
         this.game = game;
@@ -113,8 +118,7 @@ public class GameMapScreen implements Screen {
                 mapWidthInTiles,
                 mapHeightInTiles);
 
-        hud = new Hud(game.batch, map, character);
-
+        hud = new Hud(game, map, character, gameMapScreen);
 
         objectLayer = map.getLayers().get("solid2");
         // Check if the objectLayer is not null before accessing its objects
@@ -149,7 +153,6 @@ public class GameMapScreen implements Screen {
         handleInput();
         checkCollisionWithBikeStand();
         bikemovepath(character.getX(), character.getY(), character.getWidth(), character.getHeight());
-
 
         // Clear screen
         ScreenUtils.clear(0, 0, 0, 1);
@@ -228,6 +231,10 @@ public class GameMapScreen implements Screen {
         // Render the HUD stage
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
         hud.stage.draw();
+        if (hud.isTimerExpired()) {
+            gameMapScreen.dispose();
+            game.setScreen(new LevelChangeScreen(game));
+        }
     }
     public boolean bikemovepath(float newX, float newY, float width, float height) {
         Rectangle newRect = new Rectangle(newX, newY, width, height);
@@ -329,4 +336,20 @@ public class GameMapScreen implements Screen {
             character.dispose();
             gem.dispose();
         }
+
+    public int getGemsCollected() {
+        return gemsCollected;
     }
+
+    public void setGemsCollected(int gemsCollected) {
+        this.gemsCollected += gemsCollected;
+    }
+
+    public int getCarbonFootprint() {
+        return carbonFootprint;
+    }
+
+    public void setCarbonFootprint(int carbonFootprint) {
+        this.carbonFootprint += carbonFootprint;
+    }
+}
