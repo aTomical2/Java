@@ -15,7 +15,6 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.javaeducational.game.entities.Bus;
 import com.javaeducational.game.entities.Character;
 import com.javaeducational.game.EducationGame;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -68,11 +67,6 @@ public class GameMapScreen implements Screen {
     // Train Section
     private MapLayer trainLayer;
     private MapObjects trainStations;
-
-    // Import bus class
-    Bus bus;
-    Vector2 startPoint;
-    Vector2 endPoint;
 
     private Hud hud;
 
@@ -285,13 +279,10 @@ public class GameMapScreen implements Screen {
             }
         }
 
-
         if (!collisionDetected && character.inBikeStandCollision) {
             character.inBikeStandCollision = false;  // Reset the collision flag when no longer colliding
         }
     }
-
-
 
     // Handle user input for camera movement and character control
         private void handleInput() {
@@ -314,7 +305,6 @@ public class GameMapScreen implements Screen {
             if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
                 camera.translate(0, -cameraSpeed);
             }
-
             // Ensure camera follows the character
             camera.position.set(character.getX() + character.getWidth() / 2, character.getY() + character.getHeight() / 2, 0);
             camera.update();
@@ -322,24 +312,16 @@ public class GameMapScreen implements Screen {
 
         @Override
         public void resize(int width, int height) {
-
         }
-
         @Override
         public void pause() {
-
         }
-
         @Override
         public void resume() {
-
         }
-
         @Override
         public void hide() {
-
         }
-
         @Override
         public void dispose() {
             game.batch.dispose();
@@ -347,25 +329,19 @@ public class GameMapScreen implements Screen {
             renderer.dispose();
             character.dispose();
             gem.dispose();
-
         }
-
     public int getGemsCollected() {
         return gemsCollected;
     }
-
     public void setGemsCollected(int gemsCollected) {
         this.gemsCollected += gemsCollected;
     }
-
     public int getCarbonFootprint() {
         return carbonFootprint;
     }
-
     public void setCarbonFootprint(int carbonFootprint) {
         this.carbonFootprint += carbonFootprint;
     }
-
     public int getLevel() {
         return level;
     }

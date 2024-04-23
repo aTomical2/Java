@@ -1,7 +1,6 @@
 package com.javaeducational.game.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
@@ -13,9 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.javaeducational.game.EducationGame;
-import org.w3c.dom.css.Rect;
-
-import java.awt.*;
 
 public class InstructionsScreen implements Screen {
     private EducationGame game;
@@ -98,5 +94,4 @@ public class InstructionsScreen implements Screen {
         Gdx.input.setInputProcessor(stage);
     }
 
-    //create exit function
 }

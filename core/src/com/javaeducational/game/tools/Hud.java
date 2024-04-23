@@ -5,8 +5,6 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.maps.MapLayer;
-import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -77,24 +75,6 @@ public class Hud {
         this.skin = new Skin(Gdx.files.internal("popup/uiskin.json"));
 
         BitmapFont font = new BitmapFont(Gdx.files.internal("fonts/Press_Start_2p.fnt")); // Default font
-//        font.getData().setScale(2); // Scale the font size by a factor of 2
-
-        //scoreLabel = new Label (String.format("%06d", score),new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-        //CarbonCrunchersLabel= new Label ("Carbon Crunchers",new Label.LabelStyle(new BitmapFont(), Color.WHITE));
-
-        // Declare and initialize world coordinates
-        float worldX = 100; // Example value
-        float worldY = 200; // Example value
-
-        // Create a vector representing the world coordinates
-        Vector3 worldCoordinates = new Vector3(worldX, worldY, 0);
-
-        // Convert world coordinates to screen coordinates
-        //Camera.unproject(worldCoordinates);
-
-        // Extract screen coordinates
-        float screenX = worldCoordinates.x;
-        float screenY = worldCoordinates.y;
 
         Table table = new Table();
         table.top();
@@ -109,8 +89,6 @@ public class Hud {
         levelLabel = new Label("" + gameMapScreen.getLevel(), new Label.LabelStyle (font, Color.WHITE));
         WorldLabel = new Label("Level\n", new Label.LabelStyle (font, Color.WHITE));
 
-
-        // using tables structures the hud on the screen
         // the tables will expand to fit the whole screen and the padding will be equal
         table.add(CarbonCrunchersLabel).expandX().padTop(10);
         table.add(WorldLabel).expandX().padTop(10);
@@ -227,11 +205,9 @@ public class Hud {
             }
         });
     }
-
     public Skin getSkin() {
         return skin;
     }
-
     public static int getScore() {
         return score;
     }

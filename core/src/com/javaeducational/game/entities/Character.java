@@ -140,13 +140,7 @@ public class Character {
         // Initialize font
         font = new BitmapFont();
     }
-    public void setOnBikepath(boolean onBike) {
-        this.onBike = onBike;
-        if (!onBike) {
-            // Handle additional logic for when the character dismounts the bike, if necessary
-            this.bike = null;  // Assuming you have a 'bike' object or similar
-        }
-    }
+
     public Bike getBike() {
         return this.bike;
     }
@@ -157,9 +151,7 @@ public class Character {
         this.onBike = onBike;
     }
 
-
     public void handleInput() {
-
         if (!canMove) {
             return;
         }
