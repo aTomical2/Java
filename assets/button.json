@@ -23,12 +23,21 @@
 },
 "com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle": {
 	"default": {
-		"font": "Press_Start_2p",
-		"fontColor": "Inactive",
-		"downFontColor": "Active",
-		"overFontColor": "Active",
-		"focusedFontColor": "Active",
-		"pressedOffsetY": 5
+		"font": "default-font",
+		"up": "button-up",
+		"down": "button-down",
+		"over": "button-over",
+		"pressedOffsetX": 1,
+		"pressedOffsetY": -1
+	},
+
+	"outline": {
+		"font": "default-font",
+		"up": "button-up-outline",
+		"down": "button-down-outline",
+		"over": "button-over-outline",
+		"pressedOffsetX": 1,
+		"pressedOffsetY": -1
 	}
 }
 }

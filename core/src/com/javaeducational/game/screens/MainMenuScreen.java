@@ -12,6 +12,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.javaeducational.game.EducationGame;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.Color;
+
 
 public class MainMenuScreen implements Screen {
     private final EducationGame game;
@@ -28,9 +31,9 @@ public class MainMenuScreen implements Screen {
         this.gameFont = new BitmapFont(Gdx.files.internal("fonts/Press_Start_2p.fnt"));
         this.gameTitleGlyph = new GlyphLayout();
         this.buttonSkin = new Skin(Gdx.files.internal("button.json"), new TextureAtlas(Gdx.files.internal("button.atlas")));
-        this.buttonPlay = new TextButton("Play", buttonSkin, "default");
-        this.buttonInstructions = new TextButton("Instructions", buttonSkin, "default");
-        this.buttonExit = new TextButton("Exit", buttonSkin, "default");
+        this.buttonPlay = new TextButton("Play", buttonSkin, "outline");
+        this.buttonInstructions = new TextButton("Instructions", buttonSkin, "outline");
+        this.buttonExit = new TextButton("Exit", buttonSkin, "outline");
     }
 
     @Override
@@ -74,14 +77,26 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        ScreenUtils.clear(0.424f, 0.792f, 0.627f,1f);
+        ScreenUtils.clear(0.424f, 0.792f, 0.627f, 1f);
         gameTitleGlyph.setText(gameFont, "Carbon Cruncher: Tiggy's Adventures");
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         game.batch.begin();
-        gameFont.draw(game.batch, gameTitleGlyph, (Gdx.graphics.getWidth() - gameTitleGlyph.width) / 2, (Gdx.graphics.getHeight() + gameTitleGlyph.height) / 1.25f);
+
+        float titleX = (Gdx.graphics.getWidth() - gameTitleGlyph.width) / 2;
+        float titleY = (Gdx.graphics.getHeight() + gameTitleGlyph.height) / 1.25f;
+
+        gameFont.draw(game.batch, gameTitleGlyph, titleX, titleY);
+
+        // Drawing rectangular edge around the game title
+        game.shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        game.shapeRenderer.setColor(Color.WHITE);
+        game.shapeRenderer.rect(titleX - 10, titleY - 10, gameTitleGlyph.width + 20, gameTitleGlyph.height + 20);
+        game.shapeRenderer.end();
+
         stage.draw();
         game.batch.end();
     }
+
 
     @Override
     public void resize(int width, int height) {
