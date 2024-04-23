@@ -275,18 +275,33 @@ public class Hud {
             factText = "Trains are particularly low-carbon ways to travel. Taking a train instead of a car for medium-length distances would cut your emissions by around 80%. (https://ourworldindata.org/travel-carbon-footprint#:~:text=Trains%20are%20particularly%20low%2Dcarbon,your%20emissions%20by%20around%2086%25.)";
         } else if (objectName.equals("Bike")) {
             factText = "Choosing a bike over a car just once a day can reduce the average person's transportation-related emissions by 67 (https://www.future.green/futureblog/save-carbon-biking#:~:text=Reducing%20Carbon%20Emissions,of%20CO2%20per%20mile%20traveled.)";
+        } else if (objectName.equals("Mushrooms")) {
+            factText = "Mushrooms: The carbon footprint of mushrooms is much smaller than most other sources of proteins and vegetables (https://www.americanmushroom.org/main/sustainability/#:~:text=The%20carbon%20footprint%20of%20mushrooms,per%20pound%20of%20food%20consumed.)";
         }
         // Display the popup box with the appropriate fact text
         popupBox = new PopupBox("Did you know...", skin, factText, stage);
+        // Hide the "Yes" and "No" buttons
+        popupBox.hideButtons();
+
         popupBox.show(stage);
 
         // Add event listeners to the "Yes" and "No" buttons
-        TextButton closeButton = (TextButton) popupBox.getButtonTable().getCells().get(0).getActor(); // Assuming "Yes" button is added first
+        TextButton closeButton = (TextButton) popupBox.getButtonTable().getCells().get(0).getActor();
         closeButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 // Handle button click event if needed
             }
         });
+                // Add event listener to "No" button
+                noButton.addListener(new ChangeListener() {
+                    @Override
+                    public void changed(ChangeEvent event, Actor actor) {
+                        popupBox.hide();
+                        popupBox.remove();
+                        character.setCanMove(true);
+                        active = false;
+                    }
+                });
     }
 }
