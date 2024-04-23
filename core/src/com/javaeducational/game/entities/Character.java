@@ -83,7 +83,7 @@ public class Character {
         this.y= 900 /2;
         this.width = 32;
         this.height = 32;
-        this.speed = 250;
+        this.speed = 100;
         this.name = "TigglyWigglyBigglyDiggly Purcell";
         this.solidLayer = solidLayer;
         this.tileWidth = tileWidth;
@@ -193,9 +193,9 @@ public class Character {
             newX += speed * delta;
         }
         if (isOnBike()) {
-            speed = 500;  // Increased speed when on the bike
+            speed = 200;  // Increased speed when on the bike
         } else {
-            speed = 250;  // Normal walking speed when not on the bike
+            speed = 100;  // Normal walking speed when not on the bike
         }
         if (gameMapScreen.bikemovepath(newX, newY, width, height)) {
             // Update position if the new position is on a valid path or if not restricted
