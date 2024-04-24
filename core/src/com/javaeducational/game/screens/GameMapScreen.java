@@ -38,7 +38,7 @@ public class GameMapScreen implements Screen {
 
     private Character character; // Character instance
 
-    private Gem gem; // Gem instance
+    private Gem gem, gem2; // Gem instance
 
     // Gem counter
     private int gemsCollected = 0;
@@ -138,6 +138,9 @@ public class GameMapScreen implements Screen {
         // Initialize gem
         gem = new Gem("Map/blueheart.png", gemX, gemY, gemWidth, gemHeight);
         }
+        if (level == 2) {
+             gem2 = new Gem("Map/blueheart.png", gemX - 500, gemY + 1000, gemWidth, gemHeight);
+        }
 
         trainLayer = map.getLayers().get("train_stations");
         trainStations = trainLayer.getObjects();
@@ -162,7 +165,6 @@ public class GameMapScreen implements Screen {
             gem.setX((float) Math.random() * (1600 - gem.getWidth()));
             gem.setY((float) Math.random() * (1600 - gem.getHeight()));
         }
-
     }
 
     public void render(float delta) {
@@ -195,6 +197,9 @@ public class GameMapScreen implements Screen {
         }
         // Render the gem
         gem.render(game.batch);
+        if (level == 2) {
+            gem2.render(game.batch);
+        }
 
         // Check for collision between character and gem
         if (character.getBounds().overlaps(gem.getBounds())) {
@@ -206,6 +211,20 @@ public class GameMapScreen implements Screen {
         // Relocate gem to a new position
         relocateGem();
         }
+        // Check for collision between character and gem for level 2
+        if (level == 2) {
+            if (character.getBounds().overlaps(gem2.getBounds())) {
+                // Increment gems collected
+                gemsCollected++;
+                System.out.println("Gem collected! Total gems: " + gemsCollected);
+                // Increment score by the gem's value
+                Hud.addScore(gem2.getValue());
+                // Relocate gem to a new position
+                gem2.setX((float) Math.random() * (1600 - gem.getWidth()));
+                gem2.setY((float) Math.random() * (1600 - gem.getHeight()));
+            }
+        }
+
         game.batch.end();  // Ensure all sprites are rendered before ending the batch
 
         // Handle bus station collision and interaction logic
