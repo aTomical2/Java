@@ -216,16 +216,20 @@ public class Hud {
                         for (RectangleMapObject rectangleBusObject : stations.getByType(RectangleMapObject.class)) {
                             if (selectedStation.equals(rectangleBusObject.getName())) {
                                 if (type == "bus") {
-                                    carbonFootprint += 50;
+                                    carbonFootprint -= 50;
                                     worldTimer -= 10;
+                                    addScore(carbonFootprint);
 
                                 }
                                 if (type == "train") {
-                                    carbonFootprint += 25;
+                                    carbonFootprint -= 25;
                                     worldTimer -= 5;
+                                    addScore(carbonFootprint);
                                 }
 
                                 System.out.println("Your Carbon Footprint is now: " + carbonFootprint);
+                                System.out.println("Your score has gone down! Mind your carbonfootprint. Your score is now: " + score);
+                                System.out.println("Watch your time, think about using more time efficient transport");
                                 stationPopup.hide();
                                 stationPopup.remove();
                                 character.takePublicTransport(rectangleBusObject.getRectangle().getX(), rectangleBusObject.getRectangle().getY());

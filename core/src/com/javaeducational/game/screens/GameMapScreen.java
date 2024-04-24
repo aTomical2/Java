@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
@@ -34,6 +36,7 @@ public class GameMapScreen implements Screen {
     public static TiledMap map;
     private MapObjects bikeStands;
     private MapLayer bikeStandsLayer;
+    private Sprite arrowSprite;
 
     private MapObjects bikepaths;
     private MapLayer bikepathslayer;
@@ -70,6 +73,7 @@ public class GameMapScreen implements Screen {
     Bus bus;
     Vector2 startPoint;
     Vector2 endPoint;
+
 
     private Hud hud;
 
@@ -136,12 +140,24 @@ public class GameMapScreen implements Screen {
         bikeStands = bikeStandsLayer.getObjects();
         bikepathslayer = map.getLayers().get("bikepaths");
         bikepaths = bikepathslayer.getObjects();
+        Texture arrowTexture = new Texture(Gdx.files.internal("character/arrow.png"));
+        arrowSprite = new Sprite(arrowTexture);
+        arrowSprite.setSize(32, 32);
+        arrowSprite.setOriginCenter();
 }
 
     private void relocateGem() {
         // Example random positions, adjust as needed
         gem.setX((float) Math.random() * (1600 - gem.getWidth())); // mapWidth needs to be defined
         gem.setY((float) Math.random() * (1600 - gem.getHeight())); // mapHeight needs to be defined
+    }
+    private void updateArrow() {
+        Vector2 characterPosition = new Vector2(character.getX() + character.getWidth() / 2, character.getY() + character.getHeight() / 2);
+        Vector2 gemPosition = new Vector2(gem.getX() + gem.getWidth() / 2, gem.getY() + gem.getHeight() / 2);
+        Vector2 directionToGem = new Vector2(gemPosition).sub(characterPosition);
+        float angleToGem = directionToGem.angleDeg();
+        arrowSprite.setRotation(angleToGem);
+        arrowSprite.setPosition(characterPosition.x, characterPosition.y+60 - arrowSprite.getHeight() / 2);
     }
 
     public void render(float delta) {
@@ -173,6 +189,10 @@ public class GameMapScreen implements Screen {
         } else {
             character.handleInput();
             character.render(game.batch);
+        }
+        if (!isVisible(gem)) {
+            updateArrow();
+            arrowSprite.draw(game.batch);
         }
 
         // Render the gem
@@ -229,6 +249,16 @@ public class GameMapScreen implements Screen {
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
         hud.stage.draw();
     }
+    private boolean isVisible(Gem gem) {
+        float cameraLeftX = camera.position.x - camera.viewportWidth / 2;
+        float cameraRightX = camera.position.x + camera.viewportWidth / 2;
+        float cameraBottomY = camera.position.y - camera.viewportHeight / 2;
+        float cameraTopY = camera.position.y + camera.viewportHeight / 2;
+
+        return gem.getX() >= cameraLeftX && gem.getX() <= cameraRightX &&
+                gem.getY() >= cameraBottomY && gem.getY() <= cameraTopY;
+    }
+
     public boolean bikemovepath(float newX, float newY, float width, float height) {
         Rectangle newRect = new Rectangle(newX, newY, width, height);
         boolean isOnPath = false;
@@ -260,6 +290,7 @@ public class GameMapScreen implements Screen {
                 if (!character.inBikeStandCollision) {
                     character.toggleBikeState();
                     character.inBikeStandCollision = true;
+                    Hud.addScore(20);
                     System.out.println("Collision with Bike Stand Detected. Bike state toggled to: " + character.isOnBike());
                 }
                 break;
@@ -328,5 +359,6 @@ public class GameMapScreen implements Screen {
             renderer.dispose();
             character.dispose();
             gem.dispose();
+            arrowSprite.getTexture().dispose();
         }
     }

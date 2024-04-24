@@ -1,8 +1,6 @@
 package com.javaeducational.game.entities;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
@@ -12,7 +10,6 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.javaeducational.game.screens.GameMapScreen;
 
 
@@ -71,6 +68,8 @@ public class Character {
 
     private Animation<TextureRegion> currentAnimation;
     private TextureRegion currentFrame;
+
+    private SpriteBatch spriteArrow;
 
     private float stateTime;
 
@@ -143,6 +142,8 @@ public class Character {
         // Initialize font
         font = new BitmapFont();
     }
+    Sprite arrowSprite = new Sprite(new Texture(Gdx.files.internal("character/arrow.png")));
+
     public void setOnBikepath(boolean onBike) {
         this.onBike = onBike;
         if (!onBike) {
@@ -212,9 +213,6 @@ public class Character {
             // Update position if the new position is on a valid path or if not restricted
             x = newX;
             y = newY;
-        } else {
-
-            System.out.println("Movement restricted: Off path");
         }
 
         // Check collision with map boundaries and solid tiles
