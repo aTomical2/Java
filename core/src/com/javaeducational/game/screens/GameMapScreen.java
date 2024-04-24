@@ -347,12 +347,12 @@ public class GameMapScreen implements Screen {
                         if (!hud.active) {
                             character.setCanMove(false);
                             hud.eduPops(eduPopsObject.getName());
+                            Hud.addScore(5);
                         }
                     }
                 }
             }
         }
-        
         
         @Override
         public void resize(int width, int height) {
