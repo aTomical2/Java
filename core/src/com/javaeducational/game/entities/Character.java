@@ -83,7 +83,7 @@ public class Character {
         this.width = 32;
         this.height = 32;
         this.speed = 100;
-        this.name = "TigglyWigglyBigglyDiggly Purcell";
+        this.name = "Tiggy";
         this.solidLayer = solidLayer;
         this.tileWidth = tileWidth;
         this.tileHeight = tileHeight;

@@ -55,7 +55,7 @@ public class Hud {
         this.game = game;
         this.score = 0;
         timeCount = 0;
-        worldTimer = 50;
+        worldTimer = 100;
         timerExpired = false;
         this.gameMapScreen = gameMapScreen;
 

@@ -67,7 +67,7 @@ public class GameMapScreen implements Screen {
     private Hud hud;
 
     // Gem position and dimensions
-    private int gemX = 900 / 2;
+    private int gemX = 1000;
     private int gemY = 100 / 2;
     private int gemWidth = 32;
     private int gemHeight = 32;
@@ -97,13 +97,23 @@ public class GameMapScreen implements Screen {
 
         // Load the map
         TmxMapLoader mapLoader = new TmxMapLoader();
-        map = mapLoader.load("Map/MapActual.tmx");
+        if (level == 1) {
+            map = mapLoader.load("Map/MapActual.tmx");
+        }
+        if (level == 2) {
+            map = mapLoader.load("Map/MapActual2.tmx");
+        }
 
         // Initialize the renderer
         renderer = new OrthogonalTiledMapRenderer(map);
 
         // Initialize solidLayer
-        solidLayer = (TiledMapTileLayer) map.getLayers().get("solid2");
+        if (level == 1) {
+            solidLayer = (TiledMapTileLayer) map.getLayers().get("solidLevel1");
+        }
+        if (level == 2) {
+            solidLayer = (TiledMapTileLayer) map.getLayers().get("solid2");
+        }
 
         // Initialize other map-related variables
         tileWidth = (int) solidLayer.getTileWidth();
@@ -143,8 +153,16 @@ public class GameMapScreen implements Screen {
 
     private void relocateGem() {
         // Example random positions, adjust as needed
-        gem.setX((float) Math.random() * (1600 - gem.getWidth()));
-        gem.setY((float) Math.random() * (1600 - gem.getHeight()));
+        //820 / 780
+        if (level == 1) {
+            gem.setX((float) Math.random() * (1600 - gem.getWidth() - 820) + 820);
+            gem.setY((float) Math.random() * (1600 - gem.getHeight() - 780));
+        }
+        if (level == 2) {
+            gem.setX((float) Math.random() * (1600 - gem.getWidth()));
+            gem.setY((float) Math.random() * (1600 - gem.getHeight()));
+        }
+
     }
 
     public void render(float delta) {
@@ -154,7 +172,7 @@ public class GameMapScreen implements Screen {
         checkCollisionWithEduPopsObjects();
 
         // Clear screen
-        ScreenUtils.clear(0, 0, 0, 1);
+        ScreenUtils.clear(0.22f, 0.53f, 0,1f);
 
         // Update camera
         camera.update();
@@ -166,7 +184,6 @@ public class GameMapScreen implements Screen {
 
         // Move the character based on user input
         character.handleInput();
-
         // Start batch for rendering sprites
         game.batch.begin();
         if (character.getBike() != null && character.getBike().isOnBike()) {
@@ -176,7 +193,6 @@ public class GameMapScreen implements Screen {
             character.handleInput();
             character.render(game.batch);
         }
-
         // Render the gem
         gem.render(game.batch);
 
@@ -190,30 +206,33 @@ public class GameMapScreen implements Screen {
         // Relocate gem to a new position
         relocateGem();
         }
-
         game.batch.end();  // Ensure all sprites are rendered before ending the batch
 
         // Handle bus station collision and interaction logic
-        for (RectangleMapObject rectangleBusObject : busStations.getByType(RectangleMapObject.class)) {
-            Rectangle busStationRect = rectangleBusObject.getRectangle();
-            if (character.getBounds().overlaps(busStationRect)) {
-                if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-                    if (!hud.active) {
-                        character.setCanMove(false);
-                        hud.takePublicTransport("bus", rectangleBusObject.getName(), busStations);
+        if (level == 2) {
+            for (RectangleMapObject rectangleBusObject : busStations.getByType(RectangleMapObject.class)) {
+                Rectangle busStationRect = rectangleBusObject.getRectangle();
+                if (character.getBounds().overlaps(busStationRect)) {
+                    if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+                        if (!hud.active) {
+                            character.setCanMove(false);
+                            hud.takePublicTransport("bus", rectangleBusObject.getName(), busStations);
+                        }
                     }
                 }
             }
         }
 
         // Handle train station collision and interaction logic
-        for (RectangleMapObject rectangleBusObject : trainStations.getByType(RectangleMapObject.class)) {
-            Rectangle trainStationRect = rectangleBusObject.getRectangle();
-            if (character.getBounds().overlaps(trainStationRect)) {
-                if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-                    if (!hud.active) {
-                        character.setCanMove(false);
-                        hud.takePublicTransport("train", rectangleBusObject.getName(), trainStations);
+        if (level == 2) {
+            for (RectangleMapObject rectangleBusObject : trainStations.getByType(RectangleMapObject.class)) {
+                Rectangle trainStationRect = rectangleBusObject.getRectangle();
+                if (character.getBounds().overlaps(trainStationRect)) {
+                    if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+                        if (!hud.active) {
+                            character.setCanMove(false);
+                            hud.takePublicTransport("train", rectangleBusObject.getName(), trainStations);
+                        }
                     }
                 }
             }
