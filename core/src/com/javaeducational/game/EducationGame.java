@@ -1,5 +1,4 @@
 package com.javaeducational.game;
-
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.javaeducational.game.screens.MainMenuScreen;
@@ -17,13 +16,10 @@ public class EducationGame extends Game {
 		this.setScreen(new MainMenuScreen(this));
 		shapeRenderer = new ShapeRenderer();
 	}
-
 	@Override
 	public void render () {
 		super.render();
-
 	}
-
 	@Override
 	public void dispose () {
 		batch.dispose();

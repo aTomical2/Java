@@ -1,7 +1,6 @@
 package com.javaeducational.game.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
@@ -13,47 +12,86 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.javaeducational.game.EducationGame;
-import org.w3c.dom.css.Rect;
-
-import java.awt.*;
 
 public class InstructionsScreen implements Screen {
     private EducationGame game;
     private Stage stage;
     private BitmapFont gameFont;
     private Skin buttonSkin;
-    private TextButton buttonExit;
+    private TextButton buttonNext;
     private GlyphLayout instructionsLayout;
     final InstructionsScreen instructionsScreen = this;
-    private final String instructions = "Welcome to Carbon Cruncher: Tiggy's Adventures.\n\nYour objective is to: \n --> navigate the map \n --> collect as many gems as possible \n --> minimizing your environmental impact \n --> perform all steps within the time limit \n\n You can use 4 modes of transport: Walking, Bike, Bus, & Train to reach the Gems. The more Gems you collect, the higher your score will be. \n\nBut be careful! Using faster modes of transport will reduce your remaining time and increase your Carbon Footprint. This can reduce your final score :( \n\n Have fun!";
+
+    private final String instructions1 = "Welcome to Carbon Cruncher: Tiggy's Adventures!\n\n" +
+            "Modes of Transport:\n" +
+            "Choose from 4 eco-friendly modes to find gems!\n" +
+            "Level 1: Zone 1 only, no public transport.\n" +
+            "Level 2: Full map and public transport!\n" +
+            "Walking: No carbon footprint.\n" +
+            "Bike: Moderate speed, moderate footprint.\n" +
+            "Bus: Faster, +50 points, substantial footprint (-50 points).\n" +
+            "Train: Fastest, +25 points, footprint increase (-15 points).\n\n";
+    private final String instructions2 = "Scoring:\n" +
+            "- Gems: +200 points each!\n" +
+            "- Educational Popups: +5 points.\n\n";
+
+    private final String instructions3 = "**Beware!**\n" +
+            "Fast transport reduces time, increases footprint.\n" +
+            "Bus reduces score by 50 points, train by 15 points.\n" +
+            "Enjoy exploring, learning, and collecting gems!\n";
+
+
     float x, y;
+    private int currentInstructions = 1; // To track which set of instructions is being shown
 
     public InstructionsScreen(EducationGame game) {
         this.game = game;
         this.gameFont = new BitmapFont(Gdx.files.internal("fonts/Press_Start_2p.fnt"));
         this.buttonSkin = new Skin(Gdx.files.internal("button.json"), new TextureAtlas(Gdx.files.internal("button.atlas")));
-        this.buttonExit = new TextButton("X", buttonSkin, "default");
+        //this.buttonExit = new TextButton("X", buttonSkin, "default");
+        this.buttonNext = new TextButton("Next", buttonSkin, "default");
         this.instructionsLayout = new GlyphLayout();
+        updateInstructionsLayout();
 
-        instructionsLayout.setText(gameFont, instructions, com.badlogic.gdx.graphics.Color.WHITE, game.getWidth() / 2, com.badlogic.gdx.utils.Align.center, true);
+        //instructionsLayout.setText(gameFont, instructions, com.badlogic.gdx.graphics.Color.WHITE, game.getWidth() / 2, com.badlogic.gdx.utils.Align.center, true);
     }
 
+    private void updateInstructionsLayout() {
+        if (currentInstructions == 1) {
+            instructionsLayout.setText(gameFont, instructions1, com.badlogic.gdx.graphics.Color.WHITE, game.getWidth() / 2, com.badlogic.gdx.utils.Align.center, true);
+        } else if (currentInstructions == 2) {
+            instructionsLayout.setText(gameFont, instructions2, com.badlogic.gdx.graphics.Color.WHITE, game.getWidth() / 2, com.badlogic.gdx.utils.Align.center, true);
+        } else {
+            instructionsLayout.setText(gameFont, instructions3, com.badlogic.gdx.graphics.Color.WHITE, game.getWidth() / 2, com.badlogic.gdx.utils.Align.center, true);
+        }
+    }
     @Override
     public void show() {
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
         
-        buttonExit.setPosition((Gdx.graphics.getWidth()  - buttonExit.getWidth()) / 1.05f, (Gdx.graphics.getHeight() - buttonExit.getHeight()) / 1.05f);
-        buttonExit.addListener(new ClickListener() {
+        buttonNext.setPosition((Gdx.graphics.getWidth()  - buttonNext.getWidth()) / 1.05f, (Gdx.graphics.getHeight() - buttonNext.getHeight()) / 1.05f);
+        buttonNext.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                instructionsScreen.dispose();
-                game.setScreen(new MainMenuScreen(game));
+                if (currentInstructions == 1) {
+                    currentInstructions = 2;
+                    updateInstructionsLayout();
+                } else if (currentInstructions == 2) {
+                    currentInstructions = 3;
+                    updateInstructionsLayout();
+                    buttonNext.setText("Back");
+                } else {
+                    // Go back to main menu
+                    // If there are no more instructions, go back to main menu
+                    game.setScreen(new MainMenuScreen(game));
+                }
             }
         });
-//        stage.addActor(instructionsLayout);
-        stage.addActor(buttonExit);
+
+        stage.addActor(buttonNext);
     }
+
 
     @Override
     public void render(float delta) {
@@ -72,24 +110,16 @@ public class InstructionsScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
-
     }
-
     @Override
     public void pause() {
-
     }
-
     @Override
     public void resume() {
-
     }
-
     @Override
     public void hide() {
-
     }
-
     @Override
     public void dispose() {
         stage.dispose();
@@ -97,13 +127,4 @@ public class InstructionsScreen implements Screen {
         buttonSkin.dispose();
         Gdx.input.setInputProcessor(stage);
     }
-
-    //create exit function
-//            buttonPlay.addListener(new ClickListener() {
-//        @Override
-//        public void clicked(InputEvent event, float x, float y) {
-//            mainMenuScreen.dispose();
-//            game.setScreen(new GameMapScreen(game));
-//        }
-//    });
 }
