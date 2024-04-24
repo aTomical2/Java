@@ -63,7 +63,7 @@ public class Hud {
         this.character = character;
         this.map = map;
         if (gameMapScreen.getLevel() == 1) {
-            worldTimer = 5;
+            worldTimer = 25;
         }
         viewport = new FitViewport(EducationGame.WIDTH, EducationGame.HEIGHT, new OrthographicCamera());
         stage = new Stage(viewport , game.batch);
