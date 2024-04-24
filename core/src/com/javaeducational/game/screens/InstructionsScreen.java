@@ -80,7 +80,7 @@ public class InstructionsScreen implements Screen {
                 } else if (currentInstructions == 2) {
                     currentInstructions = 3;
                     updateInstructionsLayout();
-                    buttonNext.setText("Back to Menu");
+                    buttonNext.setText("Back");
                 } else {
                     // Go back to main menu
                     // If there are no more instructions, go back to main menu
