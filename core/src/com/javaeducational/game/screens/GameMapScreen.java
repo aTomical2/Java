@@ -83,7 +83,6 @@ public class GameMapScreen implements Screen {
 
     private String lastAccessedPopup = null;
 
-    
     private GameMapScreen gameMapScreen = this;
 
     public GameMapScreen(EducationGame game, int level) {
@@ -471,5 +470,4 @@ public class GameMapScreen implements Screen {
     public void saveGameResultsToFile(int level, int score, int gemsCollected, int carbonFootprint, String filename) {
         GameResultManager.saveLevelResults(level, score, gemsCollected, carbonFootprint, filename);
     }
-    
 }

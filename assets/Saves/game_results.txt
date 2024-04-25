@@ -9,3 +9,14 @@ Gems Collected: 1
 Carbon Footprint: 25
 
 =================
+Level 1:
+Score: 1100
+Gems Collected: 11
+Carbon Footprint: 0
+
+Level 2:
+Score: 2400
+Gems Collected: 24
+Carbon Footprint: 50
+
+=================

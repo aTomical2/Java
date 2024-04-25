@@ -23,7 +23,6 @@ import com.javaeducational.game.screens.LevelChangeScreen;
 import java.util.HashSet;
 import java.util.Set;
 
-
 public class Hud {
     private EducationGame game;
     public Stage stage;
@@ -120,7 +119,6 @@ public class Hud {
         score+=value;
         scoreLabel.setText((String.format("%03d", score)));
     }
-
     public boolean isTimerExpired() {
         return timerExpired;
     }
@@ -147,9 +145,7 @@ public class Hud {
                 if (type == "train") {
                     numStations = 4;
                 }
-
                 String[] stationNames = new String[numStations];
-
                 int count = 0;
                 // Get Station Names and Coordinates
                 for (RectangleMapObject rectangleObject : stations.getByType(RectangleMapObject.class)) {
@@ -246,8 +242,6 @@ public class Hud {
         active = true;
         eduPops.show(stage);
 
-
-        // Add event listener to "Close" button
         TextButton closeButton = (TextButton) eduPops.getButtonTable().getCells().get(0).getActor();
         closeButton.addListener(new ChangeListener() {
             @Override
