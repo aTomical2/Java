@@ -25,19 +25,19 @@ public class InstructionsScreen implements Screen {
     private final String instructions1 = "Welcome to Carbon Cruncher: Tiggy's Adventures!\n\n" +
             "Modes of Transport:\n" +
             "Choose from 4 eco-friendly modes to find gems!\n" +
-            "Level 1: Zone 1 only, no public transport.\n" +
-            "Level 2: Full map and public transport!\n" +
-            "Walking: No carbon footprint.\n" +
-            "Bike: Moderate speed, moderate footprint.\n" +
-            "Bus: Faster, +50 points, substantial footprint (-50 points).\n" +
-            "Train: Fastest, +25 points, footprint increase (-15 points).\n\n";
+            "Level 1: You have access to Zone 1 only. Public Transport is not unlocked yet.\n" +
+            "Level 2: Full map and public transport access!\n" +
+            "Walking: Does not effect your Carbon footprint Score.\n" +
+            "Bike: Collect those Gems faster, Carbon Footprint Score unaffected.\n" +
+            "Bus: Traverse faster, substantial Carbon Footprint (-50 points).\n" +
+            "Train: Most Environmentally Transport, footprint Increases moderately (-15 points).\n\n";
     private final String instructions2 = "Scoring:\n" +
             "- Gems: +200 points each!\n" +
             "- Educational Popups: +5 points.\n\n";
 
     private final String instructions3 = "**Beware!**\n" +
-            "Fast transport reduces time, increases footprint.\n" +
-            "Bus reduces score by 50 points, train by 15 points.\n" +
+            "Fast transport reduces time, but increases your Carbon Footprint.\n" +
+            "Bus reduces score by 50 points, train by 25 points.\n" +
             "Enjoy exploring, learning, and collecting gems!\n";
 
 

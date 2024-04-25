@@ -1,0 +1,11 @@
+Level 1:
+Score: 300
+Gems Collected: 3
+Carbon Footprint: 0
+
+Level 2:
+Score: 100
+Gems Collected: 1
+Carbon Footprint: 25
+
+=================
