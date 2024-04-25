@@ -40,7 +40,6 @@ public class InstructionsScreen implements Screen {
             "Bus reduces score by 50 points, train by 15 points.\n" +
             "Enjoy exploring, learning, and collecting gems!\n";
 
-
     float x, y;
     private int currentInstructions = 1; // To track which set of instructions is being shown
 
@@ -48,12 +47,9 @@ public class InstructionsScreen implements Screen {
         this.game = game;
         this.gameFont = new BitmapFont(Gdx.files.internal("fonts/Press_Start_2p.fnt"));
         this.buttonSkin = new Skin(Gdx.files.internal("button.json"), new TextureAtlas(Gdx.files.internal("button.atlas")));
-        //this.buttonExit = new TextButton("X", buttonSkin, "default");
         this.buttonNext = new TextButton("Next", buttonSkin, "default");
         this.instructionsLayout = new GlyphLayout();
         updateInstructionsLayout();
-
-        //instructionsLayout.setText(gameFont, instructions, com.badlogic.gdx.graphics.Color.WHITE, game.getWidth() / 2, com.badlogic.gdx.utils.Align.center, true);
     }
 
     private void updateInstructionsLayout() {

@@ -46,7 +46,6 @@ public class Hud {
     private Label countdownLabel;
     private Label WorldLabel;
     private Label levelLabel;
-    private int carbonFootprint;
 
     Character character;
     public boolean active;
@@ -168,7 +167,6 @@ public class Hud {
                             if (selectedStation.equals(rectangleBusObject.getName())) {
                                 if (type == "bus") {
                                     gameMapScreen.setCarbonFootprint(50);
-                                    carbonFootprint += 50;
                                     worldTimer -= 10;
                                 }
                                 if (type == "train") {
@@ -176,7 +174,6 @@ public class Hud {
                                     worldTimer -= 5;
                                 }
 
-                                System.out.println("Your Carbon Footprint is now: " + carbonFootprint);
                                 stationPopup.hide();
                                 stationPopup.remove();
                                 character.takePublicTransport(rectangleBusObject.getRectangle().getX(), rectangleBusObject.getRectangle().getY());

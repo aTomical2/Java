@@ -64,9 +64,7 @@ public class GameMapScreen implements Screen {
     private MapObjects trainStations;
     private MapLayer eduPopsLayer; // edupopups
     private MapObjects eduPopsObjects;
-    // Import bus class
-    Vector2 startPoint;
-    Vector2 endPoint;
+
     public Sprite arrowSprite, arrowSprite2;
     private Texture arrowTexture;
 
@@ -124,7 +122,6 @@ public class GameMapScreen implements Screen {
         arrow.setRotation(angleToGem);
         arrow.setPosition(characterPosition.x - arrow.getWidth() / 2, characterPosition.y - arrow.getHeight() / 2 - 60);
     }
-
 
     @Override
     public void show() {
@@ -201,7 +198,6 @@ public class GameMapScreen implements Screen {
 
     private void relocateGem() {
         // Example random positions, adjust as needed
-        //820 / 780
         if (level == 1) {
             gem.setX((float) Math.random() * (1600 - gem.getWidth() - 820) + 820);
             gem.setY((float) Math.random() * (1600 - gem.getHeight() - 780));
