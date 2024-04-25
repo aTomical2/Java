@@ -20,6 +20,7 @@ import com.javaeducational.game.EducationGame;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.javaeducational.game.entities.Gem;
 import com.javaeducational.game.tools.Hud;
+import com.javaeducational.game.tools.GameResultManager;
 
 public class GameMapScreen implements Screen {
     // Sprite batch for rendering
@@ -266,6 +267,8 @@ public class GameMapScreen implements Screen {
         game.batch.setProjectionMatrix(hud.stage.getCamera().combined);
         hud.stage.draw();
         if (hud.isTimerExpired()) {
+                saveGameResultsToFile(hud.getScore(), gemsCollected, carbonFootprint, "assets/game_results.txt");
+
             if (level == 1) {
                 game.setScreen(new LevelChangeScreen(game, gemsCollected, carbonFootprint, hud.getScore()));
             }
@@ -388,5 +391,8 @@ public class GameMapScreen implements Screen {
     }
     public int getLevel() {
         return level;
+    }
+    public void saveGameResultsToFile(int score, int gemsCollected, int carbonFootprint, String filename) {
+        GameResultManager.saveGameResults(score, gemsCollected, carbonFootprint, filename);
     }
 }
