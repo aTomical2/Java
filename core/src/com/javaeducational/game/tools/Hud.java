@@ -58,7 +58,7 @@ public class Hud {
         this.game = game;
         this.score = 0;
         timeCount = 0;
-        worldTimer = 10;
+        worldTimer = 100;
         timerExpired = false;
         this.gameMapScreen = gameMapScreen;
         this.displayedPopups = new HashSet<>();
@@ -67,7 +67,7 @@ public class Hud {
         this.character = character;
         this.map = map;
         if (gameMapScreen.getLevel() == 1) {
-            worldTimer = 10;
+            worldTimer = 25;
         }
         viewport = new FitViewport(EducationGame.WIDTH, EducationGame.HEIGHT, new OrthographicCamera());
         stage = new Stage(viewport , game.batch);
