@@ -39,10 +39,10 @@ public class Character {
 
     // Variables related to map and collision
     private TiledMapTileLayer solidLayer;
-    private int tileWidth; // tile width in pixels
-    private int tileHeight; // tile height in pixels
-    private int mapWidthInTiles; // map width in tiles
-    private int mapHeightInTiles; // map height in tiles
+    private int tileWidth;
+    private int tileHeight; 
+    private int mapWidthInTiles; 
+    private int mapHeightInTiles; 
     private Rectangle bounds; // Get bounds for collisions
     private boolean canMove;
 
@@ -249,7 +249,6 @@ public class Character {
             batch.draw(currentFrame, x, y, width, height);
         }
         font.draw(batch, name, x, y + height + 20);
-
     }
 
     // Method to check collision with solid tiles

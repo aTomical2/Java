@@ -28,9 +28,9 @@ public class GameResultManager {
             writer.write("Score: " + levelResults.score + "\n");
             writer.write("Gems Collected: " + levelResults.gemsCollected + "\n");
             writer.write("Carbon Footprint: " + levelResults.carbonFootprint + "\n");
-            writer.write("\n"); // Add a newline to separate the results for each level
+            writer.write("\n"); 
             if (level == 2) {
-                writer.write("=================\n"); // Add a line to separate levels
+                writer.write("=================\n"); // line to separate games
             }
         } catch (IOException e) {
             e.printStackTrace();

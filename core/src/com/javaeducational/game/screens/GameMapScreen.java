@@ -23,7 +23,6 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.javaeducational.game.entities.Gem;
 import com.javaeducational.game.tools.Hud;
 import com.javaeducational.game.tools.GameResultManager;
-
 import java.util.ArrayList;
 
 public class GameMapScreen implements Screen {
@@ -41,29 +40,27 @@ public class GameMapScreen implements Screen {
 
     private OrthogonalTiledMapRenderer renderer;
 
-    private Character character; // Character instance
+    private Character character;
 
-    private Gem gem, gem2; // Gem instance
+    private Gem gem, gem2;
 
-    // Gem counter
     private int gemsCollected = 0;
 
-    // CarbonFootprint
     private int carbonFootprint = 0;
 
     // Variables related to map and collision
-    private TiledMapTileLayer solidLayer; // Assuming solid layer is available
-    private int tileWidth; // Assuming tile width in pixels
-    private int tileHeight; // Assuming tile height in pixels
-    private int mapWidthInTiles; // Assuming map width in tiles
-    private int mapHeightInTiles; // Assuming map height is in tiles
+    private TiledMapTileLayer solidLayer;
+    private int tileWidth; // tile width in pixels
+    private int tileHeight; // tile height in pixels
+    private int mapWidthInTiles; // map width in tiles
+    private int mapHeightInTiles; // map height in tiles
     private MapLayer objectLayer;
     private MapObjects objects;
-    private MapLayer busLayer; // Bus Section
+    private MapLayer busLayer;
     private MapObjects busStations;
-    private MapLayer trainLayer;   // Train Section
+    private MapLayer trainLayer; 
     private MapObjects trainStations;
-    private MapLayer eduPopsLayer; // edupopups
+    private MapLayer eduPopsLayer;
     private MapObjects eduPopsObjects;
 
     public Sprite arrowSprite, arrowSprite2;
@@ -103,7 +100,7 @@ public class GameMapScreen implements Screen {
         return arrow;
     }
     public void updateArrow(Sprite arrow, Gem targetGem) {
-        if (targetGem == null || arrow == null) return; // Ensure both gem and arrow are not null
+        if (targetGem == null || arrow == null) return; 
 
         Vector2 characterPosition = new Vector2(character.getX() + character.getWidth() / 2, character.getY() + character.getHeight() / 2);
         Vector2 gemPosition = new Vector2(targetGem.getX() + targetGem.getWidth() / 2, targetGem.getY() + targetGem.getHeight() / 2);
@@ -114,7 +111,7 @@ public class GameMapScreen implements Screen {
         arrow.setPosition(characterPosition.x - arrow.getWidth() / 2, characterPosition.y - arrow.getHeight() / 2 + 60);
     }
     public void updateArrow2(Sprite arrow, Gem targetGem) {
-        if (targetGem == null || arrow == null) return; // Ensure both gem and arrow are not null
+        if (targetGem == null || arrow == null) return;
 
         Vector2 characterPosition = new Vector2(character.getX() + character.getWidth() / 2, character.getY() + character.getHeight() / 2);
         Vector2 gemPosition = new Vector2(targetGem.getX() + targetGem.getWidth() / 2, targetGem.getY() + targetGem.getHeight() / 2);
@@ -127,7 +124,6 @@ public class GameMapScreen implements Screen {
 
     @Override
     public void show() {
-        // Create camera
         camera = new OrthographicCamera();
         // Adjust viewport width and height to zoom out
         camera.setToOrtho(false, Gdx.graphics.getWidth() * .5f, Gdx.graphics.getHeight() * .5f);
@@ -214,7 +210,7 @@ public class GameMapScreen implements Screen {
     }
 
     public void render(float delta) {
-        handleInput();        // Handle user input for camera movement and character control
+        handleInput();      
         checkCollisionWithBikeStand();
         bikemovepath(character.getX(), character.getY(), character.getWidth(), character.getHeight());
         checkCollisionWithEduPopsObjects();
@@ -230,7 +226,6 @@ public class GameMapScreen implements Screen {
         renderer.setView(camera);
         renderer.render();
 
-        // Move the character based on user input
         character.handleInput();
         // Start batch for rendering sprites
         game.batch.begin();
@@ -259,25 +254,18 @@ public class GameMapScreen implements Screen {
                 arrowSprite2.draw(game.batch);
             }
         }
-        // Check for collision between character and gem
         if (character.getBounds().overlaps(gem.getBounds())) {
-        // Increment gems collected
         gemsCollected++;
         System.out.println("Gem collected! Total gems: " + gemsCollected);
-        // Increment score by the gem's value
         Hud.addScore(gem.getValue());
-        // Relocate gem to a new position
         relocateGem();
         }
         // Check for collision between character and gem for level 2
         if (level == 2) {
             if (character.getBounds().overlaps(gem2.getBounds())) {
-                // Increment gems collected
                 gemsCollected++;
                 System.out.println("Gem collected! Total gems: " + gemsCollected);
-                // Increment score by the gem's value
                 Hud.addScore(gem2.getValue());
-                // Relocate gem to a new position
                 gem2.setX((float) Math.random() * (1600 - gem.getWidth()));
                 gem2.setY((float) Math.random() * (1600 - gem.getHeight()));
             }
@@ -375,6 +363,7 @@ public class GameMapScreen implements Screen {
                 if (!character.inBikeStandCollision) {
                     character.toggleBikeState();
                     character.inBikeStandCollision = true;
+                    hud.addScore(20);
                     System.out.println("Collision with Bike Stand Detected. Bike state toggled to: " + character.isOnBike());
                 }
                 break;
@@ -386,23 +375,21 @@ public class GameMapScreen implements Screen {
         }
     }
 
-    // Handle user input for camera movement and character control
         private void handleInput() {
-            // Adjust camera speed based on your needs
             float cameraSpeed = 200 * Gdx.graphics.getDeltaTime();
-            if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) { // Move camera left
+            if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) { 
                 camera.translate(-cameraSpeed, 0);
             }
-            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) { // Move camera right
+            if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) { 
                 camera.translate(cameraSpeed, 0);
             }
-            if (Gdx.input.isKeyPressed(Input.Keys.UP)) { // Move camera up
+            if (Gdx.input.isKeyPressed(Input.Keys.UP)) { 
                 camera.translate(0, cameraSpeed);
             }
-            if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) { // Move camera down
+            if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) { 
                 camera.translate(0, -cameraSpeed);
             }
-            // Ensure camera follows the character
+            // Ensure camera follows character
             camera.position.set(character.getX() + character.getWidth() / 2, character.getY() + character.getHeight() / 2, 0);
             camera.update();
         }
@@ -448,19 +435,10 @@ public class GameMapScreen implements Screen {
             renderer.dispose();
             character.dispose();
             gem.dispose();
-            arrowTexture.dispose(); // Dispose of arrow texture
+            arrowTexture.dispose();
             if (level == 2 && gem2 != null) {
                 gem2.dispose();}
         }
-    public int getGemsCollected() {
-        return gemsCollected;
-    }
-    public void setGemsCollected(int gemsCollected) {
-        this.gemsCollected += gemsCollected;
-    }
-    public int getCarbonFootprint() {
-        return carbonFootprint;
-    }
     public void setCarbonFootprint(int carbonFootprint) {
         this.carbonFootprint += carbonFootprint;
     }

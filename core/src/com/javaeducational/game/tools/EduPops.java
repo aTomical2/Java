@@ -13,11 +13,9 @@ public class EduPops extends Dialog {
         Gdx.input.setInputProcessor(stage);
         text(text);
         
-        // Add "Close" button that returns true when clicked
         TextButton closeButton = new TextButton("Close", skin);
         button(closeButton, true);
 
-        // Set the size and position of the popup box
         setSize(300, 150);
         setPosition(Gdx.graphics.getWidth() / 2 - getWidth() / 2, Gdx.graphics.getHeight() / 2 - getHeight() / 2);
     }

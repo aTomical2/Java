@@ -13,13 +13,10 @@ public class PopupBox extends Dialog {
         Gdx.input.setInputProcessor(stage);
 
         text(text);
-        // Add "Yes" button that returns true when clicked
         button("Yes", true);
 
-        // Add "No" button that returns false when clicked
         button("No", false);
 
-        // Set the size and position of the popup box
         setSize(300, 150);
         setPosition(Gdx.graphics.getWidth() / 2 - getWidth() / 2, Gdx.graphics.getHeight() / 2 - getHeight() / 2);
     }

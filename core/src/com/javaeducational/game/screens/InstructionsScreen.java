@@ -37,7 +37,7 @@ public class InstructionsScreen implements Screen {
 
     private final String instructions3 = "**Beware!**\n\n" +
             "Fast transport reduces time, but increases your Carbon Footprint.\n\n" +
-            "Using the Bus reduces your score by 50 points, and the Train reduces your score by 25 points.\n\n" +
+            "Using the Bus reduces your time remaining by 10 seconds, and the Train reduces your time remaining by 5 seconds.\n\n" +
             "Enjoy exploring, learning, and collecting Gems!\n\n";
 
     float x, y;
@@ -78,7 +78,6 @@ public class InstructionsScreen implements Screen {
                     updateInstructionsLayout();
                     buttonNext.setText("Back");
                 } else {
-                    // Go back to main menu
                     // If there are no more instructions, go back to main menu
                     game.setScreen(new MainMenuScreen(game));
                 }

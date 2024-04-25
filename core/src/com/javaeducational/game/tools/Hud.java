@@ -19,7 +19,6 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.javaeducational.game.EducationGame;
 import com.javaeducational.game.entities.Character;
 import com.javaeducational.game.screens.GameMapScreen;
-import com.javaeducational.game.screens.LevelChangeScreen;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -39,7 +38,6 @@ public class Hud {
 
     // Import Screens
     private GameMapScreen gameMapScreen;
-    private LevelChangeScreen levelChangeScreen;
 
     private static Label scoreLabel;
     private Label CarbonCrunchersLabel;
@@ -57,7 +55,7 @@ public class Hud {
         this.game = game;
         this.score = 0;
         timeCount = 0;
-        worldTimer = 100;
+        worldTimer = 120;
         timerExpired = false;
         this.gameMapScreen = gameMapScreen;
         this.displayedPopups = new HashSet<>();
@@ -66,7 +64,7 @@ public class Hud {
         this.character = character;
         this.map = map;
         if (gameMapScreen.getLevel() == 1) {
-            worldTimer = 25;
+            worldTimer = 60;
         }
         viewport = new FitViewport(EducationGame.WIDTH, EducationGame.HEIGHT, new OrthographicCamera());
         stage = new Stage(viewport , game.batch);
@@ -111,7 +109,7 @@ public class Hud {
             character.setCanMove(false);
             timerExpired = true;
         }
-        // Update the score label with the current gems collected
+        // Update score label with the current gems collected
         scoreLabel.setText(String.format("%03d", score));
     }
 
@@ -133,11 +131,10 @@ public class Hud {
         TextButton yesButton = (TextButton) popupBox.getButtonTable().getCells().get(0).getActor();
         TextButton noButton = (TextButton) popupBox.getButtonTable().getCells().get(1).getActor();
 
-        // Add event listener to "Yes" button
         yesButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                popupBox.hide(); // Dispose the popup box;
+                popupBox.hide();
                 popupBox.remove();
 
                 int numStations = 8;
@@ -188,7 +185,6 @@ public class Hud {
             }
         });
 
-        // Add event listener to "No" button
         noButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
