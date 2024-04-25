@@ -4,8 +4,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.javaeducational.game.screens.MainMenuScreen;
 
 public class EducationGame extends Game {
-	public static final int WIDTH = 1800;
-	public static final int HEIGHT = 900;
+	public static final int WIDTH = 1300;
+	public static final int HEIGHT = 800;
 	public SpriteBatch batch;
 
 	@Override
