@@ -84,7 +84,6 @@ public class MainMenuScreen implements Screen {
     @Override
     public void render(float delta) {
         ScreenUtils.clear(0, 0, 0,1f);
-//        gameTitleGlyph.setText(gameFont, "Carbon Cruncher: Tiggy's Adventures");
 
         game.batch.begin();
 
