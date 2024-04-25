@@ -33,12 +33,11 @@ public class MainMenuScreen implements Screen {
         this.buttonPlay = new TextButton("Play", buttonSkin, "default");
         this.buttonExit = new TextButton("Exit", buttonSkin, "default");
         this.buttonInstructions = new TextButton("Instructions", buttonSkin, "default");
-    
-        // Load the background texture and create a texture region
+
         Texture backgroundTexture = new Texture(Gdx.files.internal("MainMenu/java_game_pic.jpg"));
         backgroundTexture.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
     
-        // Resize the texture region to match the screen dimensions
+        // Resizing the texture region to match the screen dimensions
         backgroundTextureRegion = new TextureRegion(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     }
 
