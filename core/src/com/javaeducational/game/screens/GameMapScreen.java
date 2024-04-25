@@ -180,7 +180,7 @@ public class GameMapScreen implements Screen {
              gem2 = new Gem("Map/blueheart.png", gemX - 500, gemY + 1000, gemWidth, gemHeight);
         }
         if (arrowTexture == null) {
-            arrowTexture = new Texture(Gdx.files.internal("character/arrow.png"));
+            arrowTexture = new Texture(Gdx.files.internal("Character/arrow.png"));
         }
         arrowSprite = createArrowSprite(); // Always create the first arrow
         if (level == 2) {

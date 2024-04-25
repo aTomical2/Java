@@ -35,7 +35,6 @@ public class GameOverScreen implements Screen {
             levelStatsLayout.setText(gameFont, "Level 2 complete! \n\n Game over! \n\n" +
                     "Level 2 Stats: \n\n" +
                     "--------------------------- \n\n" +
-                    "--------------------------- \n\n" +
                     "Gems Collected: \t" + gemsCollected + " \n\n" +
                     "Carbon Footprint: \t" + carbonFootprint + " \n\n" +
                     "Score: \t" + level2score + " \n\n" +
