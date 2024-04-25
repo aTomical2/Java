@@ -363,7 +363,6 @@ public class GameMapScreen implements Screen {
                 if (!character.inBikeStandCollision) {
                     character.toggleBikeState();
                     character.inBikeStandCollision = true;
-                    hud.addScore(20);
                     System.out.println("Collision with Bike Stand Detected. Bike state toggled to: " + character.isOnBike());
                 }
                 break;
