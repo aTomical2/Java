@@ -20,6 +20,8 @@ import com.javaeducational.game.EducationGame;
 import com.javaeducational.game.entities.Character;
 import com.javaeducational.game.screens.GameMapScreen;
 import com.javaeducational.game.screens.LevelChangeScreen;
+import java.util.HashSet;
+import java.util.Set;
 
 
 public class Hud {
@@ -47,6 +49,8 @@ public class Hud {
     private Label WorldLabel;
     private Label levelLabel;
 
+    public Set<String> displayedPopups;
+
     Character character;
     public boolean active;
 
@@ -57,6 +61,7 @@ public class Hud {
         worldTimer = 100;
         timerExpired = false;
         this.gameMapScreen = gameMapScreen;
+        this.displayedPopups = new HashSet<>();
 
         this.active = false;
         this.character = character;
@@ -203,6 +208,9 @@ public class Hud {
     }
 
     public void eduPops(String objectName) {
+        if (displayedPopups.contains(objectName)) {
+            return;
+        }
         String factText = ""; // Initialize with empty text
 
         // Determine the fact text based on the object name
@@ -235,7 +243,9 @@ public class Hud {
         }
         // Display the popup box with the appropriate fact text
         EduPops eduPops = new EduPops("Did you know...", skin, factText, stage);
+        active = true;
         eduPops.show(stage);
+
 
         // Add event listener to "Close" button
         TextButton closeButton = (TextButton) eduPops.getButtonTable().getCells().get(0).getActor();
@@ -246,9 +256,11 @@ public class Hud {
                 eduPops.remove();
                 character.setCanMove(true);
                 active = false;
+                displayedPopups.add(objectName);
             }
         });
     }
+
     public static int getScore() {
         return score;
     }
