@@ -23,22 +23,22 @@ public class InstructionsScreen implements Screen {
     final InstructionsScreen instructionsScreen = this;
 
     private final String instructions1 = "Welcome to Carbon Cruncher: Tiggy's Adventures!\n\n" +
-            "Modes of Transport:\n" +
-            "Choose from 4 eco-friendly modes to find gems!\n" +
-            "Level 1: You have access to Zone 1 only. Public Transport is not unlocked yet.\n" +
-            "Level 2: Full map and public transport access!\n" +
-            "Walking: Does not effect your Carbon footprint Score.\n" +
-            "Bike: Collect those Gems faster, Carbon Footprint Score unaffected.\n" +
-            "Bus: Traverse faster, substantial Carbon Footprint (-50 points).\n" +
-            "Train: Most Environmentally Transport, footprint Increases moderately (-15 points).\n\n";
-    private final String instructions2 = "Scoring:\n" +
-            "- Gems: +200 points each!\n" +
-            "- Educational Popups: +5 points.\n\n";
+            "Choose from 4 eco-friendly modes of Transport to find gems!\n\n" +
+            "Level 1: You are restricted to Zone 1. Public Transport is not unlocked yet.\n\n" +
+            "Level 2: Full map and public transport access!\n\n" +
+            "Walking: Does not effect your Carbon footprint Score.\n\n" +
+            "Bike: Collect those Gems faster, Carbon Footprint Score unaffected.\n\n";
+;
+    private final String instructions2 = "Scoring:\n\n" +
+            "- Gems: +200 points each!\n\n" +
+            "- Educational Popups: +5 points.\n\n" +
+            "- Bus: Traverse faster, substantial Carbon Footprint (-50 points).\n\n" +
+            "- Train: Most Environmentally Friendly Transport, Carbon Footprint Increases moderately (-15 points).\n\n";
 
-    private final String instructions3 = "**Beware!**\n" +
-            "Fast transport reduces time, but increases your Carbon Footprint.\n" +
-            "Bus reduces score by 50 points, train by 25 points.\n" +
-            "Enjoy exploring, learning, and collecting gems!\n";
+    private final String instructions3 = "**Beware!**\n\n" +
+            "Fast transport reduces time, but increases your Carbon Footprint.\n\n" +
+            "Using the Bus reduces your score by 50 points, and the Train reduces your score by 25 points.\n\n" +
+            "Enjoy exploring, learning, and collecting Gems!\n\n";
 
     float x, y;
     private int currentInstructions = 1; // To track which set of instructions is being shown
