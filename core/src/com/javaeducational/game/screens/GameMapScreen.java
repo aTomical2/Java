@@ -81,6 +81,8 @@ public class GameMapScreen implements Screen {
     private int level;
     private int level1Score;
 
+    private String lastAccessedPopup = null;
+
     
     private GameMapScreen gameMapScreen = this;
 
@@ -183,6 +185,9 @@ public class GameMapScreen implements Screen {
         arrowSprite = createArrowSprite(); // Always create the first arrow
         if (level == 2) {
             arrowSprite2 = createArrowSprite(); // Correctly create second arrow for level 2
+        }
+        if (level == 2) {
+            hud.displayedPopups.clear();
         }
 
         trainLayer = map.getLayers().get("train_stations");
@@ -402,22 +407,28 @@ public class GameMapScreen implements Screen {
             camera.position.set(character.getX() + character.getWidth() / 2, character.getY() + character.getHeight() / 2, 0);
             camera.update();
         }
-        
-        private void checkCollisionWithEduPopsObjects() {
-            Rectangle characterBounds = character.getBounds();
-            for (RectangleMapObject eduPopsObject : eduPopsObjects.getByType(RectangleMapObject.class)) {
-                Rectangle eduPopsObjectBounds = eduPopsObject.getRectangle();
-                if (characterBounds.overlaps(eduPopsObjectBounds)) {
-                    if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-                        if (!hud.active) {
-                            character.setCanMove(false);
-                            hud.eduPops(eduPopsObject.getName());
+
+    private void checkCollisionWithEduPopsObjects() {
+        Rectangle characterBounds = character.getBounds();
+        for (RectangleMapObject eduPopsObject : eduPopsObjects.getByType(RectangleMapObject.class)) {
+            Rectangle eduPopsObjectBounds = eduPopsObject.getRectangle();
+            if (characterBounds.overlaps(eduPopsObjectBounds)) {
+                if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+                    if (!hud.active) {
+                        String currentPopupName = eduPopsObject.getName();
+                        if (!currentPopupName.equals(lastAccessedPopup)) {
+                            // Reset the active flag and show the popup
+                            hud.active = true;
+                            hud.eduPops(currentPopupName);
                             Hud.addScore(5);
+                            lastAccessedPopup = currentPopupName; // Update the last accessed popup
                         }
+                        character.setCanMove(true);
                     }
                 }
             }
         }
+    }
         
         @Override
         public void resize(int width, int height) {
