@@ -20,6 +20,8 @@ import com.javaeducational.game.EducationGame;
 import com.javaeducational.game.entities.Character;
 import com.javaeducational.game.screens.GameMapScreen;
 import com.javaeducational.game.screens.LevelChangeScreen;
+import java.util.HashSet;
+import java.util.Set;
 
 
 public class Hud {
@@ -46,7 +48,8 @@ public class Hud {
     private Label countdownLabel;
     private Label WorldLabel;
     private Label levelLabel;
-    private int carbonFootprint;
+
+    public Set<String> displayedPopups;
 
     Character character;
     public boolean active;
@@ -55,14 +58,17 @@ public class Hud {
         this.game = game;
         this.score = 0;
         timeCount = 0;
-        worldTimer = 50;
+        worldTimer = 100;
         timerExpired = false;
         this.gameMapScreen = gameMapScreen;
+        this.displayedPopups = new HashSet<>();
 
         this.active = false;
         this.character = character;
         this.map = map;
-
+        if (gameMapScreen.getLevel() == 1) {
+            worldTimer = 25;
+        }
         viewport = new FitViewport(EducationGame.WIDTH, EducationGame.HEIGHT, new OrthographicCamera());
         stage = new Stage(viewport , game.batch);
 
@@ -166,7 +172,6 @@ public class Hud {
                             if (selectedStation.equals(rectangleBusObject.getName())) {
                                 if (type == "bus") {
                                     gameMapScreen.setCarbonFootprint(50);
-                                    carbonFootprint += 50;
                                     worldTimer -= 10;
                                 }
                                 if (type == "train") {
@@ -174,7 +179,6 @@ public class Hud {
                                     worldTimer -= 5;
                                 }
 
-                                System.out.println("Your Carbon Footprint is now: " + carbonFootprint);
                                 stationPopup.hide();
                                 stationPopup.remove();
                                 character.takePublicTransport(rectangleBusObject.getRectangle().getX(), rectangleBusObject.getRectangle().getY());
@@ -204,39 +208,44 @@ public class Hud {
     }
 
     public void eduPops(String objectName) {
+        if (displayedPopups.contains(objectName)) {
+            return;
+        }
         String factText = ""; // Initialize with empty text
 
         // Determine the fact text based on the object name
         if (objectName.equals("Stadium")) {
-            factText = "The Men's FIFA World Cup in Qatar (2022) produced 3.63 Million Tonnes of CO2. This is the equivalent of powering 417,450 homes for a year (https://www.statista.com/statistics/1454802/carbon-emissions-world-cups/#:~:text=FIFA%20World%20Cup%20carbon%20emissions%202010%2D2022&text=The%202022%20FIFA%20World%20Cup,2018%20World%20Cup%20in%20Russia.)";
+            factText = "The Men's FIFA World Cup in Qatar (2022) produced 3.63 Million Tonnes of CO2. This is the equivalent of powering 417,450 homes for a year."; // (https://www.statista.com/statistics/1454802/carbon-emissions-world-cups/#:~:text=FIFA%20World%20Cup%20carbon%20emissions%202010%2D2022&text=The%202022%20FIFA%20World%20Cup,2018%20World%20Cup%20in%20Russia.)
         } else if (objectName.equals("Houses")) {
-            factText = "The construction of modern house costs 15-100 tonnes of CO2 (https://climate.mit.edu/ask-mit/how-much-co2-emitted-building-new-house#:~:text=Depending%20on%20size%2C%20materials%2C%20and,might%20emit%20over%20its%20lifetime.)";
+            factText = "The construction of modern house costs 15-100 tonnes of CO2."; // (https://climate.mit.edu/ask-mit/how-much-co2-emitted-building-new-house#:~:text=Depending%20on%20size%2C%20materials%2C%20and,might%20emit%20over%20its%20lifetime.)
         } else if (objectName.equals("Tree")) {
             factText = "Trees take carbon dioxide from the air and store it as carbon in the timber, so big trees are carbon sinks!";
         } else if (objectName.equals("Forest")) {
-            factText = "Annual removal of carbon dioxide from the atmosphere by Irish forests exceeds 6 million tonnes per year (https://www.treecouncil.ie/carbon-footprint)";
+            factText = "Annual removal of carbon dioxide from the atmosphere by Irish forests exceeds 6 million tonnes per year!"; // (https://www.treecouncil.ie/carbon-footprint)
         } else if (objectName.equals("Ind_Estate")) {
-            factText = "The commercial sector in Ireland produced 374,000 tonnes of CO2 in 2022 (https://www.seai.ie/data-and-insights/seai-statistics/key-statistics/co2/)";
+            factText = "The commercial sector in Ireland produced 374,000 tonnes of CO2 in 2022."; // (https://www.seai.ie/data-and-insights/seai-statistics/key-statistics/co2/)
         } else if (objectName.equals("River")) {
-            factText = "Rivers contain up to 3x the concentrated amount of CO2 compared to the atmosphere (https://www.bbc.com/future/article/20210323-climate-change-the-rivers-that-breathe-greenhouse-gases)";
+            factText = "Rivers contain up to 3x the concentrated amount of CO2 compared to the atmosphere."; // (https://www.bbc.com/future/article/20210323-climate-change-the-rivers-that-breathe-greenhouse-gases)
         } else if (objectName.equals("Lake")) {
-            factText = "Freshwater lakes account for ~20% of all global CO2 fossil fuel emissions the atmosphere (https://www.weforum.org/agenda/2022/12/small-lakes-increased-what-to-know-climate-change/)";
+            factText = "Freshwater lakes account for ~20% of all global CO2 fossil fuel emissions the atmosphere"; // (https://www.weforum.org/agenda/2022/12/small-lakes-increased-what-to-know-climate-change/)
         } else if (objectName.equals("Road")) {
-            factText = "Transport in the EU is responsible for ~18% of all emissions in the EU (https://www.europarl.europa.eu/topics/en/article/20190313STO31218/co2-emissions-from-cars-facts-and-figures-infographics)";
+            factText = "Transport is responsible for ~18% of all emissions in the EU"; // (https://www.europarl.europa.eu/topics/en/article/20190313STO31218/co2-emissions-from-cars-facts-and-figures-infographics)
         } else if (objectName.equals("Garden")) {
-            factText = "When maintaining your garden, Petrol/ Gas powered lawnmowers are incredibly harmful for the environment (https://psci.princeton.edu/tips/2020/5/11/law-maintenance-and-climate-change)";
+            factText = "When maintaining your garden, Petrol/ Gas powered lawnmowers are incredibly harmful for the environment"; // (https://psci.princeton.edu/tips/2020/5/11/law-maintenance-and-climate-change)
         } else if (objectName.equals("Train")) {
-            factText = "Trains are particularly low-carbon ways to travel. Taking a train instead of a car for medium-length distances would cut your emissions by around 80%. (https://ourworldindata.org/travel-carbon-footprint#:~:text=Trains%20are%20particularly%20low%2Dcarbon,your%20emissions%20by%20around%2086%25.)";
+            factText = "Trains are particularly low-carbon ways to travel. Taking a train instead of a car for medium-length distances would cut your emissions by around 80%."; // (https://ourworldindata.org/travel-carbon-footprint#:~:text=Trains%20are%20particularly%20low%2Dcarbon,your%20emissions%20by%20around%2086%25.)
         } else if (objectName.equals("Bike")) {
-            factText = "Choosing a bike over a car just once a day can reduce the average person's transportation-related emissions by 67 (https://www.future.green/futureblog/save-carbon-biking#:~:text=Reducing%20Carbon%20Emissions,of%20CO2%20per%20mile%20traveled.)";
+            factText = "Choosing a bike over a car just once a day can reduce the average person's transportation-related emissions by 67."; // (https://www.future.green/futureblog/save-carbon-biking#:~:text=Reducing%20Carbon%20Emissions,of%20CO2%20per%20mile%20traveled.)
         } else if (objectName.equals("Mushrooms")) {
-            factText = "Mushrooms: The carbon footprint of mushrooms is much smaller than most other sources of proteins and vegetables (https://www.americanmushroom.org/main/sustainability/#:~:text=The%20carbon%20footprint%20of%20mushrooms,per%20pound%20of%20food%20consumed.)";
+            factText = "Mushrooms: The carbon footprint of mushrooms is much smaller than most other sources of proteins and vegetables."; // (https://www.americanmushroom.org/main/sustainability/#:~:text=The%20carbon%20footprint%20of%20mushrooms,per%20pound%20of%20food%20consumed.)
         } else if (objectName.equals("Bus")) {
-            factText = "Buses: Buses are more 50-66% more efficient than petrol or diesel cars! (https://ourworldindata.org/travel-carbon-footprint)";
+            factText = "Buses: Buses are more 50-66% more efficient than petrol or diesel cars!"; // (https://ourworldindata.org/travel-carbon-footprint)
         }
         // Display the popup box with the appropriate fact text
         EduPops eduPops = new EduPops("Did you know...", skin, factText, stage);
+        active = true;
         eduPops.show(stage);
+
 
         // Add event listener to "Close" button
         TextButton closeButton = (TextButton) eduPops.getButtonTable().getCells().get(0).getActor();
@@ -247,9 +256,11 @@ public class Hud {
                 eduPops.remove();
                 character.setCanMove(true);
                 active = false;
+                displayedPopups.add(objectName);
             }
         });
     }
+
     public static int getScore() {
         return score;
     }

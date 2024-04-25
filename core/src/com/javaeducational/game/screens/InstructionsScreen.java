@@ -18,38 +18,76 @@ public class InstructionsScreen implements Screen {
     private Stage stage;
     private BitmapFont gameFont;
     private Skin buttonSkin;
-    private TextButton buttonExit;
+    private TextButton buttonNext;
     private GlyphLayout instructionsLayout;
     final InstructionsScreen instructionsScreen = this;
-    private final String instructions = "Welcome to Carbon Cruncher: Tiggy's Adventures.\n\nIn this game your objective is to navigate the map and collect as many gems as possible within the time limit, while minimizing your environmental impact. \n\n You can use 4 modes of transport: Walking, Bike, Bus, & Train to reach the Gems. The more Gems you collect, the higher your score will be. \n\nBut be careful! Using faster modes of transport will reduce your remaining time and increase your Carbon Footprint. This can reduce your final score :( \n\n Have fun!";
+
+    private final String instructions1 = "Welcome to Carbon Cruncher: Tiggy's Adventures!\n\n" +
+            "Modes of Transport:\n" +
+            "Choose from 4 eco-friendly modes to find gems!\n" +
+            "Level 1: You have access to Zone 1 only. Public Transport is not unlocked yet.\n" +
+            "Level 2: Full map and public transport access!\n" +
+            "Walking: Does not effect your Carbon footprint Score.\n" +
+            "Bike: Collect those Gems faster, Carbon Footprint Score unaffected.\n" +
+            "Bus: Traverse faster, substantial Carbon Footprint (-50 points).\n" +
+            "Train: Most Environmentally Transport, footprint Increases moderately (-15 points).\n\n";
+    private final String instructions2 = "Scoring:\n" +
+            "- Gems: +200 points each!\n" +
+            "- Educational Popups: +5 points.\n\n";
+
+    private final String instructions3 = "**Beware!**\n" +
+            "Fast transport reduces time, but increases your Carbon Footprint.\n" +
+            "Bus reduces score by 50 points, train by 25 points.\n" +
+            "Enjoy exploring, learning, and collecting gems!\n";
+
     float x, y;
+    private int currentInstructions = 1; // To track which set of instructions is being shown
 
     public InstructionsScreen(EducationGame game) {
         this.game = game;
         this.gameFont = new BitmapFont(Gdx.files.internal("fonts/Press_Start_2p.fnt"));
         this.buttonSkin = new Skin(Gdx.files.internal("button.json"), new TextureAtlas(Gdx.files.internal("button.atlas")));
-        this.buttonExit = new TextButton("X", buttonSkin, "default");
+        this.buttonNext = new TextButton("Next", buttonSkin, "default");
         this.instructionsLayout = new GlyphLayout();
-
-        instructionsLayout.setText(gameFont, instructions, com.badlogic.gdx.graphics.Color.WHITE, game.getWidth() / 2, com.badlogic.gdx.utils.Align.center, true);
+        updateInstructionsLayout();
     }
 
+    private void updateInstructionsLayout() {
+        if (currentInstructions == 1) {
+            instructionsLayout.setText(gameFont, instructions1, com.badlogic.gdx.graphics.Color.WHITE, game.getWidth() / 2, com.badlogic.gdx.utils.Align.center, true);
+        } else if (currentInstructions == 2) {
+            instructionsLayout.setText(gameFont, instructions2, com.badlogic.gdx.graphics.Color.WHITE, game.getWidth() / 2, com.badlogic.gdx.utils.Align.center, true);
+        } else {
+            instructionsLayout.setText(gameFont, instructions3, com.badlogic.gdx.graphics.Color.WHITE, game.getWidth() / 2, com.badlogic.gdx.utils.Align.center, true);
+        }
+    }
     @Override
     public void show() {
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
         
-        buttonExit.setPosition((Gdx.graphics.getWidth()  - buttonExit.getWidth()) / 1.05f, (Gdx.graphics.getHeight() - buttonExit.getHeight()) / 1.05f);
-        buttonExit.addListener(new ClickListener() {
+        buttonNext.setPosition((Gdx.graphics.getWidth()  - buttonNext.getWidth()) / 1.05f, (Gdx.graphics.getHeight() - buttonNext.getHeight()) / 1.05f);
+        buttonNext.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                instructionsScreen.dispose();
-                game.setScreen(new MainMenuScreen(game));
+                if (currentInstructions == 1) {
+                    currentInstructions = 2;
+                    updateInstructionsLayout();
+                } else if (currentInstructions == 2) {
+                    currentInstructions = 3;
+                    updateInstructionsLayout();
+                    buttonNext.setText("Back");
+                } else {
+                    // Go back to main menu
+                    // If there are no more instructions, go back to main menu
+                    game.setScreen(new MainMenuScreen(game));
+                }
             }
         });
-//        stage.addActor(instructionsLayout);
-        stage.addActor(buttonExit);
+
+        stage.addActor(buttonNext);
     }
+
 
     @Override
     public void render(float delta) {
